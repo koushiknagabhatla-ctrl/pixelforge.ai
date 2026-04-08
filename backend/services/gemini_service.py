@@ -5,6 +5,9 @@ from io import BytesIO
 import asyncio
 from rembg import remove
 import base64
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Master System Instruction for Prompt Engineering
 PROMPT_OPTIMIZER_INSTRUCTION = (

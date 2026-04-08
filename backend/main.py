@@ -1,9 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from routers import generate, upload, user, chat, tools
+import os
 
+# Load environment variables FIRST before importing routers
 load_dotenv()
+
+from routers import generate, upload, user, chat, tools
 
 app = FastAPI(
     title="PixelForge AI API",
