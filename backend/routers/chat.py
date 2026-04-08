@@ -1,11 +1,12 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from services import deepseek_service
+from services.gemini_service import gemini_service
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
 
 class ChatRequest(BaseModel):
     message: str
+    model: str = "gemini-1.5-pro"
 
 class ChatResponse(BaseModel):
     reply: str
@@ -13,19 +14,19 @@ class ChatResponse(BaseModel):
 @router.post("/", response_model=ChatResponse)
 async def chat_with_forge(request: ChatRequest):
     """
-    Photography Expert Chat powered by DeepSeek.
+    Photography & Architecture Expert Chat powered by Gemini.
     """
     system_prompt = (
-        "You are the Pixel Forge Photography Expert. You have deep knowledge of "
-        "photography, lighting, camera settings (ISO, Aperture, Shutter Speed), "
-        "and digital post-processing. Answer questions professionally and concisely. "
-        "If a user asks about the forge tools, explain how they relate to photography."
+        "You are the Pixel Forge Archon, a master of photography, digital arts, and neural architecture. "
+        "User your deep knowledge of lighting, composition, and AI tools to assist the user. "
+        "Be concise, professional, and slightly mysterious/atmospheric in your tone."
     )
     
     try:
-        reply = await deepseek_service.prompt_deepseek(
-            prompt=request.message,
-            system_prompt=system_prompt
+        reply = await gemini_service.chat(
+            message=request.message,
+            system_prompt=system_prompt,
+            model_name=request.model
         )
         return ChatResponse(reply=reply)
     except Exception as e:

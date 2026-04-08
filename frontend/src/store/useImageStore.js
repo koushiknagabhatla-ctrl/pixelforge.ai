@@ -26,6 +26,32 @@ const useImageStore = create((set, get) => ({
     }
   },
 
+  runTool: async (tool, imageFile, userId) => {
+    set({ isGenerating: true, resultImage: null })
+    try {
+      const formData = new FormData()
+      formData.append('file', imageFile)
+      
+      const endpoint = tool === 'bg-remove' ? '/api/tools/bg-remove' : 
+                       tool === 'enhance' ? '/api/tools/enhance' : '/api/tools/denoise'
+
+      const { data } = await api.post(`${endpoint}?user_id=${userId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      
+      set({ 
+        resultImage: data.url, 
+        isGenerating: false 
+      })
+      toast.success('Tool Execution Successful')
+      await get().fetchHistory(userId)
+    } catch (error) {
+      console.error('Tool Failure:', error)
+      toast.error('Tool execution failed')
+      set({ isGenerating: false })
+    }
+  },
+
   fetchHistory: async (userId) => {
     try {
       const { data } = await api.get(`/api/user/history?user_id=${userId}`)

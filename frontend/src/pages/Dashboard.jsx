@@ -1,27 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import useAuthStore from '../store/useAuthStore';
-import useImageStore from '../store/useImageStore';
+import { useSearchParams } from 'react-router-dom';
 import { HiOutlineSparkles, HiOutlineDownload, HiOutlineEye, HiOutlineRefresh } from 'react-icons/hi';
 
 export default function Dashboard() {
   const { user } = useAuthStore();
-  const { isGenerating, resultImage, enhancedPrompt, history, generateImage, fetchHistory, clearResult } = useImageStore();
+  const { isGenerating, resultImage, enhancedPrompt, history, generateImage, runTool, fetchHistory, clearResult } = useImageStore();
   const [prompt, setPrompt] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const mode = searchParams.get('mode') || 'synth'; // Default to synth
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     if (user) fetchHistory(user.id);
   }, [user]);
 
+  const setMode = (newMode) => {
+    setSearchParams({ mode: newMode });
+  };
+
   const handleForge = () => {
-    if (!prompt.trim()) return;
-    generateImage(prompt, user.id);
+    if (mode === 'synth') {
+      if (!prompt.trim()) return;
+      generateImage(prompt, user.id);
+    } else {
+      if (!selectedFile) return;
+      runTool(mode === 'extract' ? 'bg-remove' : mode === 'enhance' ? 'enhance' : 'denoise', selectedFile, user.id);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-black pt-32 px-6 lg:px-12 pb-20">
+    <div className="min-h-screen bg-black pt-32 px-6 lg:px-12 pb-20 text-white">
       <div className="max-w-7xl mx-auto">
         
+        {/* Mode Selector Removed in favor of Sidebar Navigation */}
+
         {/* Forge Console */}
         <div className="max-w-4xl mx-auto mb-20">
           <motion.div
@@ -31,21 +48,40 @@ export default function Dashboard() {
           >
             <div className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] mb-10">AI Tools Infrastructure v2.0</div>
             
-            <div className="relative mb-8">
-              <textarea
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value.slice(0, 500))}
-                placeholder="Describe your vision..."
-                className="forge-input h-48 resize-none text-xl font-light"
-              />
-              <div className="absolute bottom-6 right-8 text-[10px] font-bold text-gray-700 uppercase tracking-widest">
-                {prompt.length} / 500
+            {mode === 'synth' ? (
+              <div className="relative mb-8">
+                <textarea
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value.slice(0, 500))}
+                  placeholder="Describe your vision..."
+                  className="forge-input h-48 resize-none text-xl font-light"
+                />
+                <div className="absolute bottom-6 right-8 text-[10px] font-bold text-gray-700 uppercase tracking-widest">
+                  {prompt.length} / 500
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="relative mb-8 p-12 border-2 border-dashed border-white/5 rounded-[2rem] hover:border-white/20 transition-all cursor-pointer group">
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="absolute inset-0 opacity-0 cursor-pointer" 
+                />
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-gray-600 group-hover:text-white transition-all">
+                    <HiOutlineDownload className="w-8 h-8 rotate-180" />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-600 group-hover:text-white">
+                    {selectedFile ? selectedFile.name : 'Ingest Visual Matrix (Upload Image)'}
+                  </span>
+                </div>
+              </div>
+            )}
 
             <button
               onClick={handleForge}
-              disabled={isGenerating || !prompt.trim()}
+              disabled={isGenerating || (mode === 'synth' ? !prompt.trim() : !selectedFile)}
               className={`w-full py-8 rounded-2xl font-black text-xs uppercase tracking-[0.4em] transition-all flex items-center justify-center gap-4 ${
                 isGenerating 
                 ? 'bg-white/5 text-gray-700' 
@@ -55,12 +91,12 @@ export default function Dashboard() {
               {isGenerating ? (
                 <>
                   <div className="w-5 h-5 border-2 border-gray-600 border-t-black rounded-full animate-spin" />
-                  Synthesizing Neural Matrix...
+                  Executing Neural Sequence...
                 </>
               ) : (
                 <>
                   <HiOutlineSparkles className="w-5 h-5" />
-                  Initialize Forge
+                  {mode === 'synth' ? 'Initialize Forge' : 'Begin Modulation'}
                 </>
               )}
             </button>

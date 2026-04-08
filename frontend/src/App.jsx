@@ -65,11 +65,11 @@ export default function App() {
 
   return (
     <div className="flex flex-col min-h-screen bg-black transition-colors duration-500">
-      {/* Navbar always at top */}
       <Navbar />
 
-        {/* Main content area */}
-        <main className="flex-1 relative min-w-0">
+      <div className="flex flex-1 pt-24 overflow-hidden">
+        {user && !isAuthPage && <Sidebar />}
+        <main className={`flex-1 relative min-w-0 transition-all duration-300 ${user && !isAuthPage ? 'lg:pl-[300px]' : ''}`}>
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
               <Route
@@ -134,5 +134,6 @@ export default function App() {
           </AnimatePresence>
         </main>
       </div>
-    )
+    </div>
+  )
 }

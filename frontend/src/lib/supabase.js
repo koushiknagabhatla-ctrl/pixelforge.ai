@@ -10,8 +10,8 @@ if (!supabaseUrl || !supabaseAnonKey) {
   )
 }
 
-// Fallback to dummy values to prevent crash during build/initialization
+// Fallback to valid-looking URL to avoid DNS errors, but will still fail authentication gracefully
 export const supabase = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder'
+  supabaseUrl || 'https://lib-empty.supabase.co',
+  supabaseAnonKey || 'empty'
 )

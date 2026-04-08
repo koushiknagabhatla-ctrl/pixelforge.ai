@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from routers import generate, upload, user, chat
+from routers import generate, upload, user, chat, tools
 
 load_dotenv()
 
@@ -30,6 +30,7 @@ app.include_router(generate.router)
 app.include_router(upload.router)
 app.include_router(user.router)
 app.include_router(chat.router)
+app.include_router(tools.router)
 
 
 @app.get("/")

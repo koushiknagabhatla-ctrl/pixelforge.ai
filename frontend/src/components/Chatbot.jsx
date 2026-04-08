@@ -9,6 +9,7 @@ const Chatbot = () => {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [model, setModel] = useState('gemini-1.5-pro'); // gemini-1.5-pro or gemini-1.5-flash
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -26,10 +27,10 @@ const Chatbot = () => {
     setLoading(true);
 
     try {
-      const response = await prompt_deepseek(input);
+      const response = await prompt_deepseek(input, model);
       setMessages((prev) => [...prev, { role: 'assistant', content: response }]);
     } catch (error) {
-      setMessages((prev) => [...prev, { role: 'assistant', content: "DeepSeek Intelligence Error: Synchronization Failed" }]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: "Gemini Neural Nexus Error: Synchronization Failed" }]);
     } finally {
       setLoading(false);
     }
@@ -60,7 +61,7 @@ const Chatbot = () => {
                         {msg.role === 'user' ? <HiOutlineUser className="w-3 h-3 text-gray-400" /> : <HiOutlineChip className="w-3 h-3 text-gray-400" />}
                     </div>
                     <span className="text-[9px] font-bold text-gray-600 uppercase tracking-[0.2em]">
-                        {msg.role === 'user' ? 'Architect' : 'GPT Archon v4'}
+                        {msg.role === 'user' ? 'Architect' : `Gemini ${model === 'gemini-1.5-pro' ? 'Pro' : 'Flash'} Archon`}
                     </span>
                   </div>
                   <div className={`p-4 lg:p-6 rounded-3xl text-sm leading-relaxed ${
@@ -98,32 +99,47 @@ const Chatbot = () => {
         <motion.div 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="glass-dark border border-white/10 rounded-[2rem] p-2 pr-4 shadow-2xl flex items-center gap-4 group focus-within:border-white/20 transition-all"
+            className="flex flex-col gap-2"
         >
-            <div className="w-12 h-12 rounded-[1.5rem] bg-white/5 flex items-center justify-center shrink-0 border border-white/5 text-gray-600">
-                <HiOutlineSparkles className="w-5 h-5 group-focus-within:text-white transition-colors" />
+            <div className="flex gap-2 mb-2">
+                {['gemini-1.5-pro', 'gemini-1.5-flash'].map(m => (
+                    <button 
+                        key={m}
+                        onClick={() => setModel(m)}
+                        className={`px-3 py-1 rounded-full text-[8px] font-bold uppercase tracking-widest transition-all ${
+                            model === m ? 'bg-white text-black' : 'bg-white/5 text-gray-600 hover:text-white'
+                        }`}
+                    >
+                        {m.split('-').pop().toUpperCase()}
+                    </button>
+                ))}
             </div>
-            
-            <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                placeholder="ask me something from photography"
-                className="flex-1 bg-transparent border-none outline-none text-white text-sm font-medium placeholder:text-gray-700 h-full py-4"
-            />
+            <div className="glass-dark border border-white/10 rounded-[2rem] p-2 pr-4 shadow-2xl flex items-center gap-4 group focus-within:border-white/20 transition-all">
+                <div className="w-12 h-12 rounded-[1.5rem] bg-white/5 flex items-center justify-center shrink-0 border border-white/5 text-gray-600">
+                    <HiOutlineSparkles className="w-5 h-5 group-focus-within:text-white transition-colors" />
+                </div>
+                
+                <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                    placeholder="ask me something from photography"
+                    className="flex-1 bg-transparent border-none outline-none text-white text-sm font-medium placeholder:text-gray-700 h-full py-4"
+                />
 
-            <button
-                onClick={handleSend}
-                disabled={loading || !input.trim()}
-                className={`p-4 rounded-[1.5rem] transition-all flex items-center justify-center ${
-                    loading || !input.trim() 
-                    ? 'bg-transparent text-gray-800' 
-                    : 'bg-white text-black active:scale-95 shadow-xl'
-                }`}
-            >
-                <HiOutlineArrowUp className="w-5 h-5" />
-            </button>
+                <button
+                    onClick={handleSend}
+                    disabled={loading || !input.trim()}
+                    className={`p-4 rounded-[1.5rem] transition-all flex items-center justify-center ${
+                        loading || !input.trim() 
+                        ? 'bg-transparent text-gray-800' 
+                        : 'bg-white text-black active:scale-95 shadow-xl'
+                    }`}
+                >
+                    <HiOutlineArrowUp className="w-5 h-5" />
+                </button>
+            </div>
         </motion.div>
         
         {/* Cinematic branding label */}

@@ -14,9 +14,11 @@ import useAuthStore from '../store/useAuthStore'
 import useEnhancementStore from '../store/useEnhancementStore'
 
 const navigation = [
-  { name: 'Home', path: '/', icon: HiOutlineHome },
-  { name: 'AI Tools', path: '/tools', icon: HiOutlinePhotograph },
-  { name: 'AI Chatbot', path: '/chatbot', icon: HiOutlineChatAlt2 },
+  { name: 'ai image generator', path: '/tools?mode=synth', icon: HiOutlinePhotograph },
+  { name: 'image enhancer', path: '/tools?mode=enhance', icon: HiOutlineRefresh },
+  { name: 'ai image denoise', path: '/tools?mode=denoise', icon: HiOutlineColorSwatch },
+  { name: 'ai background remover', path: '/tools?mode=extract', icon: HiOutlineEye },
+  { name: 'ai chatbot', path: '/chatbot', icon: HiOutlineChatAlt2 },
 ]
 
 export default function Sidebar() {
@@ -34,7 +36,7 @@ export default function Sidebar() {
       initial={{ x: -80, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="hidden lg:flex flex-col w-[280px] h-[calc(100vh-6rem)] glass-dark border-r border-white/5 p-6 z-40 fixed left-0 top-[6rem] mx-4 rounded-3xl"
+      className="flex flex-col w-[300px] h-[calc(100vh-8rem)] glass-dark border-r border-white/5 p-6 z-40 fixed left-0 top-[6rem] mx-4 rounded-3xl"
     >
       {/* Search Header Style */}
       <div className="px-4 mb-10 mt-4">
