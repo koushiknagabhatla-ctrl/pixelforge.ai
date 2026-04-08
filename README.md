@@ -149,6 +149,34 @@ pixelforge-ai/
 
 ---
 
+## 🌐 Deployment Guide
+
+To deploy Pixel Forge AI to production, we recommend a split-deployment strategy for maximum performance and stability.
+
+### 1. Frontend (Vercel)
+Vercel is the optimal choice for the React frontend.
+1.  Connect your GitHub repository to [Vercel](https://vercel.com).
+2.  Set the **Root Directory** to `frontend`.
+3.  Configure **Environment Variables**:
+    *   `VITE_SUPABASE_URL`: Your production Supabase URL.
+    *   `VITE_SUPABASE_ANON_KEY`: Your production Supabase Anon Key.
+    *   `VITE_API_URL`: The URL of your deployed backend (see below).
+4.  Deploy! The included `vercel.json` will handle SPA routing automatically.
+
+### 2. Backend (Render / Railway)
+Standard Python servers perform better on Render or Railway than on serverless functions.
+1.  Connect your GitHub repository to [Render](https://render.com).
+2.  Create a new **Web Service**.
+3.  Set the **Root Directory** to `backend`.
+4.  **Runtime**: Python.
+5.  **Build Command**: `pip install -r requirements.txt`.
+6.  **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`. (The included `Procfile` already contains this).
+7.  Configure **Environment Variables**:
+    *   Add all keys from your local `backend/.env` to the Render Dashboard.
+8.  Deploy! Once live, copy the URL and paste it into the frontend's `VITE_API_URL`.
+
+---
+
 > [!TIP]
 > **Pro Tip**: For the best experience, use high-resolution source images. The Forge AI performs best when it has a clear structural baseline to work from.
 
