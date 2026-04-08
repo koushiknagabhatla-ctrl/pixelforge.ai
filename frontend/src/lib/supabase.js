@@ -10,8 +10,8 @@ if (!supabaseUrl || !supabaseAnonKey) {
   )
 }
 
-// Fallback to valid-looking URL to avoid DNS errors, but will still fail authentication gracefully
+// Fallback to your ACTUAL URL to ensure Google Login works even if .env fails to load
 export const supabase = createClient(
-  supabaseUrl || 'https://lib-empty.supabase.co',
-  supabaseAnonKey || 'empty'
+  supabaseUrl || 'https://iljyupclxvjwqzltufru.supabase.co',
+  supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsanl1cGNseHZqd3F6bHR1ZnJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0OTI5NDMsImV4cCI6MjA5MTA2ODk0M30.dvNnFXVh5J0HLsx_29F0fF14K0fglErx1nmAwspEMK0'
 )
