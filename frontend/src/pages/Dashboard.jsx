@@ -1,4 +1,8 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
+import useAuthStore from '../store/useAuthStore';
+import useImageStore from '../store/useImageStore';
 import { HiOutlineSparkles, HiOutlineDownload, HiOutlineEye, HiOutlineRefresh } from 'react-icons/hi';
 
 export default function Dashboard() {
