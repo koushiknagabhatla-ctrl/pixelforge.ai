@@ -68,21 +68,14 @@ export default function App() {
       {/* Navbar always at top */}
       <Navbar />
 
-      <div className={`flex flex-1 ${!isAuthPage ? 'pt-24' : ''}`}>
-        {/* Sidebar on left - only if user is logged in and not on landing or auth pages */}
-        {user && !isAuthPage && location.pathname !== '/' && (
-          <Sidebar />
-        )}
-
         {/* Main content area */}
-        <main className={`flex-1 relative min-w-0 ${user && !isAuthPage && location.pathname !== '/' ? 'lg:ml-[320px]' : ''}`}>
+        <main className="flex-1 relative min-w-0">
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
-              {/* Gate the root Landing page */}
               <Route
                 path="/"
                 element={
-                  <ProtectedRoute allowGuest={false}>
+                  <ProtectedRoute allowGuest={true}>
                     <PageWrapper>
                       <Landing />
                     </PageWrapper>
@@ -141,6 +134,5 @@ export default function App() {
           </AnimatePresence>
         </main>
       </div>
-    </div>
-  )
+    )
 }

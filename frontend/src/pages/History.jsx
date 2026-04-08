@@ -1,121 +1,65 @@
-import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
-import EnhancementCard from '../components/EnhancementCard'
-import useAuthStore from '../store/useAuthStore'
-import useEnhancementStore from '../store/useEnhancementStore'
-import { HiOutlineClock, HiOutlineFilter } from 'react-icons/hi'
-
-const modeFilters = [
-  { id: 'all', label: 'All' },
-  { id: 'auto', label: 'Auto' },
-  { id: 'portrait', label: 'Portrait' },
-  { id: 'landscape', label: 'Landscape' },
-  { id: 'old_photo', label: 'Old Photo' },
-  { id: 'low_light', label: 'Low Light' },
-  { id: 'remove_bg', label: 'Remove BG' },
-  { id: 'denoise', label: 'Denoise' },
-]
+import React, { useEffect } from 'react';
+import { motion } from 'framer-motion';
+import useAuthStore from '../store/useAuthStore';
+import useImageStore from '../store/useImageStore';
+import { HiOutlineEye, HiOutlineDownload, HiOutlineTrash } from 'react-icons/hi';
 
 export default function History() {
-  const { user } = useAuthStore()
-  const { history, historyLoading, fetchHistory } = useEnhancementStore()
-  const [filter, setFilter] = useState('all')
+  const { user } = useAuthStore();
+  const { history, fetchHistory } = useImageStore();
 
   useEffect(() => {
-    if (user) {
-      fetchHistory(user.id, 50)
-    }
-  }, [user])
-
-  const filteredHistory =
-    filter === 'all'
-      ? history
-      : history.filter((item) => item.mode === filter)
+    if (user) fetchHistory(user.id);
+  }, [user]);
 
   return (
-    <div className="w-full bg-black min-h-screen text-white">
-      <div className="p-4 lg:p-8 animate-fade-in">
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mb-12"
-          >
-            <div className="flex items-center gap-3 mb-2">
-              <HiOutlineClock className="w-6 h-6 text-gray-500" />
-              <h1 className="text-2xl lg:text-3xl font-bold text-white uppercase tracking-tight">
-                Operations <span className="text-gray-500">History</span>
-              </h1>
-            </div>
-            <p className="text-gray-500 text-sm font-medium uppercase tracking-widest">
-              Archive of all architectural image modifications.
-            </p>
-          </motion.div>
-
-          {/* Filters */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="flex items-center gap-2 mb-12 overflow-x-auto pb-4 scrollbar-hide"
-          >
-            <HiOutlineFilter className="w-4 h-4 text-gray-600 flex-shrink-0" />
-            <div className="flex gap-2">
-                {modeFilters.map((m) => (
-                <button
-                    key={m.id}
-                    onClick={() => setFilter(m.id)}
-                    className={`px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${
-                    filter === m.id
-                        ? 'bg-white text-black'
-                        : 'bg-white/5 text-gray-500 hover:text-white border border-white/5 hover:border-white/10'
-                    }`}
-                >
-                    {m.label}
-                </button>
-                ))}
-            </div>
-          </motion.div>
-
-          {/* Grid */}
-          {historyLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="glass-card aspect-[4/3] animate-pulse rounded-2xl"
-                />
-              ))}
-            </div>
-          ) : filteredHistory.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-              {filteredHistory.map((item, i) => (
-                <div key={item.id} className="glass-card p-2 rounded-2xl group transition-all">
-                    <EnhancementCard enhancement={item} index={i} />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-32 glass-card rounded-3xl"
-            >
-              <HiOutlineClock className="w-16 h-16 text-gray-800 mx-auto mb-6" />
-              <p className="text-lg text-white font-bold uppercase tracking-widest mb-2">No Records Found</p>
-              <p className="text-sm text-gray-600 uppercase tracking-widest">
-                {filter !== 'all'
-                  ? 'No modifications match the current architecture filter.'
-                  : 'Start enhancing images to populate the operations ledger.'}
-              </p>
-            </motion.div>
-          )}
+    <div className="min-h-screen bg-black pt-32 px-6 lg:px-12 pb-20">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-20">
+          <span className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] block mb-2">Architectural Records</span>
+          <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter">Neural <span className="text-gray-600">Archive</span></h1>
         </div>
+
+        {history.length === 0 ? (
+          <div className="py-40 text-center glass-card rounded-[3rem]">
+            <p className="text-gray-500 font-light uppercase tracking-widest text-sm">The forge archives are empty.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            {history.map((record, i) => (
+              <motion.div
+                key={record.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
+                className="glass-card rounded-[2.5rem] p-4 flex flex-col group"
+              >
+                <div className="aspect-square rounded-[2rem] overflow-hidden relative mb-6">
+                  <img src={record.enhanced_url} alt="Historic Forge" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-4">
+                     <a href={record.enhanced_url} target="_blank" rel="noreferrer" className="p-4 bg-white text-black rounded-full hover:scale-110 transition-transform">
+                        <HiOutlineEye className="w-5 h-5" />
+                     </a>
+                     <a href={record.enhanced_url} download className="p-4 glass-button text-white rounded-full hover:scale-110 transition-transform">
+                        <HiOutlineDownload className="w-5 h-5" />
+                     </a>
+                  </div>
+                </div>
+                
+                <div className="px-4 pb-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.2em]">{new Date(record.created_at).toLocaleDateString()}</span>
+                    <span className="px-2 py-0.5 bg-white/5 border border-white/10 rounded-full text-[7px] font-bold text-gray-500 uppercase">Archive ID: {record.id.slice(0, 8)}</span>
+                  </div>
+                  <p className="text-gray-500 text-xs font-light italic line-clamp-2">
+                    "{record.original_url}"
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
-  )
+  );
 }
