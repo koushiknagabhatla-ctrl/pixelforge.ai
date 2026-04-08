@@ -1,0 +1,12 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+opencv-contrib-python>=4.10.0.84
+rembg>=2.0.57
+requests>=2.32.3
+numpy
+cloudinary
+supabase
+python-dotenv
+python-multipart
+httpx
+replicate

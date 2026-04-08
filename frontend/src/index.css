@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white font-['Outfit',sans-serif] selection:bg-white/20 selection:text-white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  /* Ultra-Premium Glassmorphism */
+  .glass-card {
+    @apply backdrop-blur-[25px] bg-white/[0.03] border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)];
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Grainy texture for frosted glass effect */
+  .glass-card::before {
+    content: "";
+    @apply absolute inset-0 pointer-events-none opacity-[0.03];
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  .glass-dark {
+    @apply backdrop-blur-[25px] bg-black/40 border border-white/5 shadow-2xl;
+  }
+
+  .glow-on-hover {
+    @apply hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-300;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-500;
+  }
+
+  /* Stitch UI Specifics */
+  .stitch-input-container {
+    @apply glass-card rounded-[2rem] p-4 flex flex-col gap-4 border-white/10 transition-all focus-within:border-white/20 focus-within:bg-white/[0.05];
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-white/10 rounded-full hover:bg-white/20 transition-all;
+}
+
+/* Base Animations */
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes motion-bg {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.animate-motion-bg {
+    background: linear-gradient(-45deg, #000, #0a0a0a, #111, #000);
+    background-size: 400% 400%;
+    animation: motion-bg 15s ease infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(2deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.animate-float {
+    animation: float 8s ease-in-out infinite;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
