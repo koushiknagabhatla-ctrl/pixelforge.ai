@@ -7,7 +7,9 @@ import {
   HiOutlineChatAlt2,
   HiOutlineColorSwatch,
   HiOutlineLogout,
-  HiOutlineClock
+  HiOutlineClock,
+  HiOutlineRefresh,
+  HiOutlineEye
 } from 'react-icons/hi'
 import { FcGoogle } from 'react-icons/fc'
 import useAuthStore from '../store/useAuthStore'
