@@ -3,7 +3,6 @@ import google.generativeai as genai
 from PIL import Image
 from io import BytesIO
 import asyncio
-from rembg import remove
 import base64
 from dotenv import load_dotenv
 
@@ -61,11 +60,12 @@ class GeminiService:
 
     async def remove_background(self, image_bytes: bytes) -> bytes:
         """
-        Removes the background from an image using rembg.
+        Removes the background from an image using rembg (Lazily Loaded).
         """
         try:
+            from rembg import remove
             # We use rembg as the primary provider for high-quality BG removal
-            result = remove(image_bytes)
+            result = await asyncio.to_thread(remove, image_bytes)
             return result
         except Exception as e:
             print(f"Background Removal Error: {e}")
