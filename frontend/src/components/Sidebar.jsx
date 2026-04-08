@@ -15,7 +15,7 @@ import useEnhancementStore from '../store/useEnhancementStore'
 
 const navigation = [
   { name: 'Home', path: '/', icon: HiOutlineHome },
-  { name: 'AI Tools', path: '/dashboard', icon: HiOutlinePhotograph },
+  { name: 'AI Tools', path: '/tools', icon: HiOutlinePhotograph },
   { name: 'AI Chatbot', path: '/chatbot', icon: HiOutlineChatAlt2 },
 ]
 

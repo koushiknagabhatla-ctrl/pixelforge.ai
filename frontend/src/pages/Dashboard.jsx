@@ -29,7 +29,7 @@ export default function Dashboard() {
             animate={{ opacity: 1, y: 0 }}
             className="glass-card p-10 rounded-[3rem] text-center"
           >
-            <div className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] mb-10">Forge Infrastructure v2.0</div>
+            <div className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] mb-10">AI Tools Infrastructure v2.0</div>
             
             <div className="relative mb-8">
               <textarea
@@ -114,8 +114,8 @@ export default function Dashboard() {
         <section className="pt-20 border-t border-white/5">
           <div className="flex items-center justify-between mb-12">
             <div>
-              <span className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] block mb-2">Architect's Records</span>
-              <h2 className="text-4xl font-black uppercase tracking-tighter">Previous <span className="text-gray-600">Forges</span></h2>
+              <span className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] block mb-2">Neural Archive</span>
+              <h2 className="text-4xl font-black uppercase tracking-tighter">Previous <span className="text-gray-600">Creations</span></h2>
             </div>
           </div>
 

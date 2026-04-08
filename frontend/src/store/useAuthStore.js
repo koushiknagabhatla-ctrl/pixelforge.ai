@@ -69,7 +69,7 @@ const useAuthStore = create((set, get) => ({
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin + '/dashboard',
+        redirectTo: window.location.origin + '/tools',
         queryParams: {
           prompt: 'select_account',
           access_type: 'offline',

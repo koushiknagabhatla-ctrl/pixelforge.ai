@@ -83,7 +83,7 @@ export default function App() {
                 }
               />
               <Route
-                path="/dashboard"
+                path="/tools"
                 element={
                   <ProtectedRoute>
                     <PageWrapper>

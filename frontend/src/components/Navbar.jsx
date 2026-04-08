@@ -21,17 +21,21 @@ export default function Navbar() {
       <div className="flex items-center gap-10">
         {user && (
           <div className="hidden md:flex items-center gap-10">
-            {['Dashboard', 'History'].map((item) => (
+            {[
+              { label: 'AI Tools', path: '/tools' },
+              { label: 'Chatbot', path: '/chatbot' },
+              { label: 'History', path: '/history' }
+            ].map((link) => (
               <NavLink
-                key={item}
-                to={`/${item.toLowerCase()}`}
+                key={link.path}
+                to={link.path}
                 className={({ isActive }) =>
                   `text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:text-white ${
                     isActive ? 'text-white' : 'text-gray-600'
                   }`
                 }
               >
-                {item}
+                {link.label}
               </NavLink>
             ))}
           </div>
