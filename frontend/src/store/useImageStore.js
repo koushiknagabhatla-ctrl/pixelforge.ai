@@ -54,7 +54,7 @@ const useImageStore = create((set, get) => ({
 
   fetchHistory: async (userId) => {
     try {
-      const { data } = await api.get(`/api/user/history?user_id=${userId}`)
+      const { data } = await api.get(`/api/history/${userId}`)
       set({ history: data })
     } catch (error) {
       console.error('History Retrieval Failed:', error)

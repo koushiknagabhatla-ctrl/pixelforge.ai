@@ -6,10 +6,12 @@ load_dotenv()
 
 class SupabaseService:
     def __init__(self):
-        self.supabase: Client = create_client(
-            os.getenv("SUPABASE_URL"),
-            os.getenv("SUPABASE_SERVICE_KEY"),
-        )
+        load_dotenv()
+        url = os.getenv("SUPABASE_URL")
+        key = os.getenv("SUPABASE_SERVICE_KEY")
+        if not url or not key:
+             print("WARNING: Supabase credentials missing in SupabaseService")
+        self.supabase: Client = create_client(url, key)
 
     async def get_user_credits(self, user_id: str) -> dict:
         """Get user's current credits and plan."""

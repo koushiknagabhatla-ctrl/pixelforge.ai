@@ -29,7 +29,10 @@ async def bg_remove(user_id: str, file: UploadFile = File(...)):
         
         return {"url": public_url}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        import traceback
+        print(f"BG-Removal Error: {e}")
+        print(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"BG-Removal Failed: {str(e)}")
 
 @router.post("/enhance")
 async def enhance(user_id: str, file: UploadFile = File(...)):
