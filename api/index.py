@@ -1,44 +1,41 @@
-import sys
 import os
-import traceback
-from pathlib import Path
+import sys
+import json
 
-# 1. Authoritative Path Resolution
-# Add project root to sys.path to resolve 'backend' package
-root_path = Path(__file__).parent.parent
-if str(root_path) not in sys.path:
-    sys.path.append(str(root_path))
+def handler(environ, start_response):
+    """
+    The Oracle Probe: Zero-Dependency WSGI Diagnostic Handler.
+    Used to find root-level Python crashes in Vercel Serverless.
+    """
+    # 1. Capture Environment State
+    diag_info = {
+        "status": "oracle_online",
+        "python_version": sys.version,
+        "cwd": os.getcwd(),
+        "sys_path": sys.path,
+        "installed_packages": [],
+        "env_vars": {k: "set" for k in os.environ},
+        "path_to_index": __file__
+    }
 
-# 2. Bridge-Level Exception Catching
-# If the backend fails to load, we want to see EXACTLY why (e.g. ModuleNotFoundError)
-try:
-    from backend.main import handler as mangum_handler
-    app = mangum_handler
-except Exception as e:
-    print(f"CRITICAL BACKEND STARTUP FAILURE: {str(e)}")
-    print(traceback.format_exc())
+    # 2. Try to list site-packages
+    try:
+        import pkg_resources
+        diag_info["installed_packages"] = [str(d) for d in pkg_resources.working_set]
+    except Exception as e:
+        diag_info["installed_packages_error"] = str(e)
+
+    # 3. Prepare Response
+    response_body = json.dumps(diag_info, indent=2).encode('utf-8')
+    status = '200 OK'
+    response_headers = [
+        ('Content-Type', 'application/json'),
+        ('Content-Length', str(len(response_body)))
+    ]
     
-    # Fallback to a bare-bones FastAPI app to report the error via HTTP
-    from fastapi import FastAPI
-    from fastapi.responses import JSONResponse
-    
-    app = FastAPI()
-    
-    @app.get("/api/health/")
-    async def health_emergency():
-        return JSONResponse(
-            status_code=500,
-            content={
-                "status": "emergency_bridge_active",
-                "error": str(e),
-                "traceback": traceback.format_exc(),
-                "cwd": os.getcwd(),
-                "sys_path": sys.path
-            }
-        )
-    
-    from mangum import Mangum
-    app = Mangum(app)
+    start_response(status, response_headers)
+    return [response_body]
 
 # Export for Vercel
-handler = app
+# Vercel's @vercel/python looks for 'app' or 'handler' or 'index'
+app = handler

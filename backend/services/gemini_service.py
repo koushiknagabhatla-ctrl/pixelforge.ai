@@ -70,16 +70,10 @@ class GeminiService:
 
     async def remove_background(self, image_bytes: bytes) -> bytes:
         """
-        Removes the background from an image using rembg (Lazily Loaded).
+        [DISABLED FOR DIAGNOSTICS] Removes the background from an image.
         """
-        try:
-            from rembg import remove
-            # We use rembg as the primary provider for high-quality BG removal
-            result = await asyncio.to_thread(remove, image_bytes)
-            return result
-        except Exception as e:
-            print(f"Background Removal Error: {e}")
-            raise e
+        print("Background removal is temporarily disabled for production diagnostics.")
+        return image_bytes
 
     async def enhance_image(self, image_bytes: bytes) -> bytes:
         """
