@@ -29,11 +29,12 @@ app.add_middleware(
 )
 
 # Include refreshed routers
-app.include_router(generate.router)
-app.include_router(upload.router)
-app.include_router(user.router)
-app.include_router(chat.router)
-app.include_router(tools.router)
+# Include centralized routers with mandatory /api prefix
+app.include_router(generate.router, prefix="/api", tags=["generation"])
+app.include_router(upload.router, prefix="/api", tags=["upload"])
+app.include_router(user.router, prefix="/api", tags=["user"])
+app.include_router(chat.router, prefix="/api", tags=["chat"])
+app.include_router(tools.router, prefix="/api", tags=["tools"])
 
 
 @app.get("/")

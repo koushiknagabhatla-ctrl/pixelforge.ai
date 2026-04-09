@@ -3,7 +3,7 @@ from services import gemini_service, cloudinary_service, supabase_service
 import base64
 from io import BytesIO
 
-router = APIRouter(prefix="/api/tools", tags=["tools"])
+router = APIRouter(prefix="/tools")
 
 @router.post("/bg-remove")
 async def bg_remove(user_id: str, file: UploadFile = File(...)):

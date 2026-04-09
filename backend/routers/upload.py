@@ -2,7 +2,7 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 from models.schemas import UploadResponse
 from services import cloudinary_service
 
-router = APIRouter(prefix="/api", tags=["upload"])
+router = APIRouter()
 
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 ALLOWED_TYPES = {"image/jpeg", "image/png", "image/webp"}

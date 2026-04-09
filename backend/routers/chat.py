@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from services.gemini_service import gemini_service
 
-router = APIRouter(prefix="/api/chat", tags=["chat"])
+router = APIRouter()
 
 class ChatRequest(BaseModel):
     message: str

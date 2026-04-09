@@ -14,7 +14,7 @@ class GenerateResponse(BaseModel):
     enhanced_prompt: str
     user_id: str
 
-router = APIRouter(prefix="/api", tags=["generation"])
+router = APIRouter()
 
 @router.post("/generate", response_model=GenerateResponse)
 async def generate_image(request: GenerateRequest):

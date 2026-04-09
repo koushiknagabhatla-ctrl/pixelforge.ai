@@ -7,7 +7,7 @@ from services import supabase_service
 from typing import List
 import uuid
 
-router = APIRouter(prefix="/api", tags=["user"])
+router = APIRouter()
 
 
 @router.get("/credits/{user_id}", response_model=UserCredits)

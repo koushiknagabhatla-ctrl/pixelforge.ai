@@ -19,20 +19,29 @@ PROMPT_OPTIMIZER_INSTRUCTION = (
 
 class GeminiService:
     def __init__(self):
+        self._configured = False
+        self.optimizer_model = None
+        self.image_model = None
+
+    def _configure_if_needed(self):
+        if self._configured:
+            return
+            
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
             print("WARNING: GEMINI_API_KEY not found in environment.")
+            return
+
         genai.configure(api_key=api_key)
-        
-        # Models initialization
         self.optimizer_model = genai.GenerativeModel("gemini-1.5-flash")
-        # Ensure the GEMINI_API_KEY has access to Imagen.
         self.image_model = genai.GenerativeModel("imagen-3.0-generate-001")
+        self._configured = True
 
     async def optimize_prompt(self, user_prompt: str) -> str:
         """
         Enhances a basic user prompt into a professional, descriptive one.
         """
+        self._configure_if_needed()
         try:
             response = self.optimizer_model.generate_content(
                 f"{PROMPT_OPTIMIZER_INSTRUCTION}\n\nUser Input: {user_prompt}"
@@ -47,6 +56,7 @@ class GeminiService:
         """
         Generates an image using Imagen 3.
         """
+        self._configure_if_needed()
         enhanced_prompt = await self.optimize_prompt(prompt)
         try:
             result = self.image_model.generate_content(enhanced_prompt)
@@ -120,6 +130,7 @@ class GeminiService:
         """
         Conversational AI powered by Gemini Pro or Flash.
         """
+        self._configure_if_needed()
         try:
             model = genai.GenerativeModel(
                 model_name=model_name,
