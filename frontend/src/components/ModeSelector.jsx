@@ -42,16 +42,10 @@ const modes = [
     icon: HiOutlineMoon,
   },
   {
-    id: 'remove_bg',
-    name: 'Remove Background',
-    description: 'Clean background removal',
-    icon: HiOutlineScissors,
-  },
-  {
-    id: 'denoise',
-    name: 'Denoise & Sharpen',
-    description: 'Reduce noise & sharpen',
-    icon: HiOutlineAdjustments,
+    id: 'low_light',
+    name: 'Low Light / Night',
+    description: 'Brighten dark photos',
+    icon: HiOutlineMoon,
   },
 ]
 

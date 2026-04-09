@@ -68,13 +68,6 @@ class GeminiService:
             print(f"Gemini Generation Error: {e}")
             raise e
 
-    async def remove_background(self, image_bytes: bytes) -> bytes:
-        """
-        [DISABLED FOR DIAGNOSTICS] Removes the background from an image.
-        """
-        print("Background removal is temporarily disabled for production diagnostics.")
-        return image_bytes
-
     async def enhance_image(self, image_bytes: bytes) -> bytes:
         """
         Enhances image details using Gemini 1.5 Pro/Flash Vision by describing and reconstructing
@@ -101,23 +94,6 @@ class GeminiService:
             return output.getvalue()
         except Exception as e:
             print(f"Image Enhancement Error: {e}")
-            return image_bytes
-
-    async def denoise_image(self, image_bytes: bytes) -> bytes:
-        """
-        Reduces noise in the image.
-        """
-        # Placeholder: Using PIL filters for basic denoising if AI denoise isn't available
-        try:
-            from PIL import ImageFilter
-            img = Image.open(BytesIO(image_bytes))
-            denoised = img.filter(ImageFilter.SMOOTH_MORE)
-            
-            output = BytesIO()
-            denoised.save(output, format="PNG")
-            return output.getvalue()
-        except Exception as e:
-            print(f"Denoise Error: {e}")
             return image_bytes
 
     async def chat(self, message: str, system_prompt: str, model_name: str = "gemini-1.5-pro") -> str:

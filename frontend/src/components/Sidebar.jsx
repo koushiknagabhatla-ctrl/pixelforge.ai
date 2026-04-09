@@ -18,8 +18,6 @@ import useEnhancementStore from '../store/useEnhancementStore'
 const navigation = [
   { name: 'ai image generator', path: '/tools?mode=synth', icon: HiOutlinePhotograph },
   { name: 'image enhancer', path: '/tools?mode=enhance', icon: HiOutlineRefresh },
-  { name: 'ai image denoise', path: '/tools?mode=denoise', icon: HiOutlineColorSwatch },
-  { name: 'ai background remover', path: '/tools?mode=extract', icon: HiOutlineEye },
   { name: 'ai chatbot', path: '/chatbot', icon: HiOutlineChatAlt2 },
 ]
 

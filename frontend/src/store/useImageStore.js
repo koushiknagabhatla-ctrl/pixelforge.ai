@@ -32,10 +32,7 @@ const useImageStore = create((set, get) => ({
       const formData = new FormData()
       formData.append('file', imageFile)
       
-      const endpoint = tool === 'bg-remove' ? '/tools/bg-remove' : 
-                       tool === 'enhance' ? '/tools/enhance' : '/tools/denoise'
-
-      const { data } = await api.post(`${endpoint}/`, formData, {
+      const { data } = await api.post('/tools/enhance/', formData, {
         params: { user_id: userId },
         headers: { 'Content-Type': 'multipart/form-data' }
       })
