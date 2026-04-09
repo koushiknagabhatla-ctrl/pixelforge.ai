@@ -1,11 +1,18 @@
 {
   "version": 2,
   "trailingSlash": true,
-  "functions": {
-    "api/index.py": {
-      "maxDuration": 30
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python",
+      "config": { "maxDuration": 30 }
+    },
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
     }
-  },
+  ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "api/index.py" },
     { "source": "/(.*)", "destination": "frontend/$1" }
