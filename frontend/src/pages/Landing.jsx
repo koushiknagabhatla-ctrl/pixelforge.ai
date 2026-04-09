@@ -1,81 +1,136 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import HeroSection from '../components/HeroSection';
-import Footer from '../components/Footer';
+import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
+import { HiOutlineArrowRight, HiOutlineLightningBolt, HiOutlineShieldCheck, HiOutlineCube } from 'react-icons/hi'
+import useAuthStore from '../store/useAuthStore'
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.3
+    }
+  }
+}
+
+const item = {
+  hidden: { y: 60, opacity: 0 },
+  show: { 
+    y: 0, 
+    opacity: 1, 
+    transition: { 
+      type: "spring", 
+      damping: 20, 
+      stiffness: 100 
+    } 
+  }
+}
+
+const features = [
+  { icon: HiOutlineLightningBolt, title: 'Extreme Velocity', desc: 'GPU-accelerated synthesis delivering results in sub-second cycles.' },
+  { icon: HiOutlineShieldCheck, title: 'Neural Integrity', desc: 'Bit-perfect restoration of architectural and photographic assets.' },
+  { icon: HiOutlineCube, title: 'Spatial Engine', desc: 'Proprietary 3D-aware depth estimation for immersive rendering.' }
+]
 
 export default function Landing() {
-  const capabilities = [
-    { tag: "Neural Foundry", title: "Unleash high-fidelity generations with precision latency controls.", desc: "Experience parallel synthesis architecture delivered through our proprietary neural clusters." },
-    { tag: "Precision Control", title: "Fine-tune every aspect of your synthesis with modular weights.", desc: "Professional grade management for architectural visualization and high-end concept art." },
-    { tag: "Real-time Sync", title: "Synchronize your forge assets across devices and cloud.", desc: "Seamless workflow integration with ultra-low latency infrastructure." }
-  ];
-
-  const realities = [
-    "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=400&q=80"
-  ];
+  const { user } = useAuthStore()
 
   return (
-    <div className="bg-[#050505] min-h-screen text-white relative">
-      <HeroSection />
+    <div className="relative min-h-screen flex flex-col items-center justify-center pt-20 pb-40 px-6 overflow-hidden">
+      {/* Background Mesh Flare - Local Enhancement */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none select-none" />
       
-      <main className="px-6 relative z-10">
-        {/* Engineered Capabilities Grid */}
-        <section className="max-w-7xl mx-auto py-40">
-           <div className="text-center mb-32">
-              <h2 className="text-[10px] font-black uppercase tracking-[1em] text-gray-700 mb-6">Engineered Capabilities</h2>
-              <div className="w-px h-16 bg-white/10 mx-auto" />
-           </div>
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="max-w-5xl w-full text-center relative z-10"
+      >
+        <motion.div variants={item} className="mb-6">
+          <span className="px-4 py-1.5 rounded-full glass border-white/5 text-[10px] sm:text-xs font-mono font-bold text-indigo-400 uppercase tracking-[0.3em]">
+            PixelForge Engine v10.0
+          </span>
+        </motion.div>
 
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {capabilities.map((cap, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.1, duration: 0.8 }}
-                  viewport={{ once: true }}
-                  className="glass-premium p-12 rounded-[40px] border-white/[0.03] group hover:border-white/10 transition-colors"
-                >
-                  <div className="text-[9px] font-black text-white px-3 py-1 bg-white/5 rounded-full inline-block uppercase tracking-[0.4em] mb-10 group-hover:bg-white group-hover:text-black transition-colors">
-                    {cap.tag}
-                  </div>
-                  <h3 className="text-2xl font-bold mb-8 leading-tight">{cap.title}</h3>
-                  <p className="text-[11px] font-medium text-gray-600 uppercase tracking-widest leading-relaxed">
-                    {cap.desc}
-                  </p>
-                </motion.div>
-              ))}
-           </div>
-        </section>
+        <motion.h1 
+          variants={item}
+          className="text-5xl sm:text-7xl lg:text-8xl font-black mb-10 tracking-tighter leading-[0.9] text-white"
+        >
+          {["FORGING", "THE", "FUTURE", "OF", "VISION"].map((word, i) => (
+            <motion.span 
+              key={i} 
+              className="inline-block mr-[0.2em] last:mr-0"
+              whileHover={{ scale: 1.05, color: '#6366f1' }}
+              transition={{ type: 'spring', stiffness: 400 }}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </motion.h1>
 
-        {/* Forged Realities Gallery */}
-        <section className="max-w-7xl mx-auto py-40">
-           <div className="text-center mb-32">
-              <h2 className="text-5xl archon-heading mb-6">Forged Realities</h2>
-              <div className="h-px w-32 bg-white mx-auto" />
-           </div>
+        <motion.p 
+          variants={item}
+          className="max-w-2xl mx-auto text-lg sm:text-xl text-slate-400 font-medium leading-relaxed mb-12"
+        >
+          An elite neural ecosystem for professional image synthesis, 
+          architectural restoration, and high-fidelity vision engineering.
+        </motion.p>
 
-           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              {realities.map((url, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                  className="aspect-[4/5] rounded-[32px] overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 group cursor-crosshair"
-                >
-                  <img src={url} alt="Forged Reality" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2000ms]" />
-                </motion.div>
-              ))}
-           </div>
-        </section>
-      </main>
+        <motion.div variants={item} className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-32">
+          <Link 
+            to={user ? "/chatbot" : "/login"}
+            className="group relative px-10 py-5 btn-primary overflow-hidden"
+          >
+            <span className="relative z-10 flex items-center gap-3 text-sm">
+              {user ? 'Enter Command Center' : 'Initialize Session'}
+              <HiOutlineArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </Link>
+          
+          {!user && (
+            <Link to="/signup" className="px-10 py-5 btn-secondary text-sm">
+              Create Index
+            </Link>
+          )}
+        </motion.div>
 
-      <Footer />
+        {/* Feature Grid with Bobbing Glass Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+           {features.map((f, i) => (
+             <motion.div
+               key={f.title}
+               variants={item}
+               whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(99,102,241,0.15)" }}
+               animate={{ y: [0, -4, 0] }}
+               transition={{ 
+                 y: { duration: 4, repeat: Infinity, ease: 'easeInOut', delay: i * 0.5 },
+                 default: { type: "spring", damping: 15 }
+               }}
+               className="glass p-8 text-left group transition-colors hover:border-indigo-500/30"
+             >
+                <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 shadow-inner">
+                    <f.icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-white">{f.title}</h3>
+                <p className="text-sm text-slate-500 leading-relaxed font-medium">
+                  {f.desc}
+                </p>
+             </motion.div>
+           ))}
+        </div>
+      </motion.div>
+
+      {/* Discovery Footer Hint */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.5, duration: 1 }}
+        className="absolute bottom-10 flex flex-col items-center gap-4 text-slate-600"
+      >
+          <span className="text-[10px] font-bold uppercase tracking-[0.5em]">Explore Architecture</span>
+          <div className="w-px h-12 bg-gradient-to-b from-indigo-500/40 to-transparent" />
+      </motion.div>
     </div>
-  );
+  )
 }

@@ -4,26 +4,25 @@ import Chatbot from '../components/Chatbot';
 
 export default function ChatbotPage() {
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden">
-        {/* Deep Field Atmospheric Elements */}
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-            <div className="absolute top-[10%] left-[5%] w-[600px] h-[600px] bg-white/[0.01] rounded-full blur-[150px]" />
-            <div className="absolute bottom-[10%] right-[5%] w-[800px] h-[800px] bg-white/[0.005] rounded-full blur-[200px]" />
-        </div>
-
-        <div className="max-w-7xl w-full px-6 lg:px-12 z-10">
+    <div className="min-h-screen pt-4 pb-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+        <div className="max-w-6xl w-full h-[calc(100vh-140px)] min-h-[500px] z-10">
             <motion.div
-                initial={{ opacity: 0, scale: 0.99 }}
+                initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                className="glass-glow glass-edge rounded-[3.5rem] overflow-hidden border-white/5 shadow-[0_0_100px_rgba(0,0,0,0.8)] h-[800px] max-h-[85vh] relative"
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="glass-strong h-full overflow-hidden relative shadow-2xl shadow-black/50"
             >
                 <Chatbot />
             </motion.div>
             
-            <div className="mt-8 text-center">
-                 <span className="text-[10px] font-black text-gray-800 uppercase tracking-[1em] opacity-30">Forge Intelligence • Propietary Neural Architecture</span>
-            </div>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+              className="mt-6 text-center"
+            >
+                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.8em]">PixelForge Neural Alpha v10.0</span>
+            </motion.div>
         </div>
     </div>
   );

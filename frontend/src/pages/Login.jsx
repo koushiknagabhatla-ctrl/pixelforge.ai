@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FcGoogle } from 'react-icons/fc'
@@ -10,8 +10,13 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const { signInWithGoogle, signInWithEmail } = useAuthStore()
+  const { signInWithGoogle, signInWithEmail, user } = useAuthStore()
   const navigate = useNavigate()
+
+  // Requirement #2: Immediate Redirect
+  useEffect(() => {
+    if (user) navigate('/chatbot', { replace: true })
+  }, [user, navigate])
 
   const handleEmailLogin = async (e) => {
     e.preventDefault()
@@ -19,8 +24,7 @@ export default function Login() {
     const toastId = toast.loading('Synchronizing identity...')
     try {
       await signInWithEmail(email, password)
-      toast.success('Welcome Back', { id: toastId })
-      navigate('/chatbot') // Directly to Chat for v8.0
+      toast.success('Access Granted', { id: toastId })
     } catch (error) {
       toast.error(error.message || 'Verification failed', { id: toastId })
     } finally {
@@ -37,77 +41,67 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-transparent relative overflow-hidden selection:bg-white selection:text-black">
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
       <motion.div
-        initial={{ opacity: 0, scale: 0.98, y: 10 }}
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className="relative glass-glow glass-edge p-10 w-full max-w-sm rounded-[2.5rem] border border-white/5 shadow-3xl"
+        className="w-full max-w-md glass-strong p-10 shadow-3xl border-white/10"
       >
-        {/* Compact Logo */}
-        <div className="flex flex-col items-center mb-10">
+        <div className="text-center mb-10">
           <motion.div 
             whileHover={{ rotate: 180 }}
-            transition={{ duration: 1 }}
-            className="w-11 h-11 rounded-2xl bg-white text-black flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+            transition={{ type: "spring", stiffness: 200 }}
+            className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center mx-auto mb-6 shadow-xl shadow-indigo-600/30"
           >
-            <span className="font-black text-xl leading-none">F</span>
+            <span className="font-bold text-xl text-white">P</span>
           </motion.div>
-          <h1 className="text-xl font-black text-white uppercase tracking-[0.5rem]">
-            Forge <span className="text-gray-700 font-light">AI</span>
-          </h1>
+          <h1 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">Initialize Session</h1>
+          <p className="text-sm text-slate-500 font-medium">Enter your neural bridge credentials.</p>
         </div>
 
-        <div className="text-center mb-10">
-            <h2 className="text-white font-bold uppercase tracking-[0.4em] text-[10px] mb-3">Identity Forge</h2>
-            <p className="text-gray-700 text-[9px] font-medium uppercase tracking-[0.2em] leading-relaxed max-w-[180px] mx-auto opacity-60">Authorize architectural access keys to begin session.</p>
-        </div>
-
-        {/* Google Auth (Compact) */}
         <motion.button
-          whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,1)' }}
+          whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-4 py-4 rounded-2xl bg-white/95 text-black font-black text-[9px] uppercase tracking-[0.2em] transition-all duration-300 mb-8 shadow-xl"
+          className="w-full h-14 glass flex items-center justify-center gap-4 text-sm font-bold uppercase tracking-widest text-white hover:bg-white/5 transition-all mb-8"
         >
-          <FcGoogle className="w-4 h-4" />
+          <FcGoogle className="w-5 h-5" />
           Sign in via Google
         </motion.button>
 
-        {/* Divider */}
-        <div className="flex items-center gap-4 mb-8 px-4">
+        <div className="flex items-center gap-4 mb-8">
           <div className="flex-1 h-px bg-white/5" />
-          <span className="text-[8px] text-gray-900 font-black uppercase tracking-widest">or</span>
+          <span className="text-[10px] text-slate-700 font-bold uppercase tracking-widest px-2">Secure Link</span>
           <div className="flex-1 h-px bg-white/5" />
         </div>
 
-        {/* Email Form (Compact) */}
-        <form onSubmit={handleEmailLogin} className="space-y-5">
+        <form onSubmit={handleEmailLogin} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-[8px] font-black text-gray-800 ml-4 block uppercase tracking-[0.3em] opacity-40">Email Domain</label>
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Email Address</label>
             <div className="relative group">
-              <HiOutlineMail className="absolute left-5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-800 group-focus-within:text-white transition-colors" />
+              <HiOutlineMail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="architect@forge.ai"
+                placeholder="architect@pixelforge.ai"
                 required
-                className="w-full pl-14 pr-6 py-4 bg-white/[0.01] border border-white/5 rounded-xl text-white text-[10px] font-medium placeholder-gray-900 focus:outline-none focus:border-white/10 transition-all shadow-inner"
+                className="w-full h-14 pl-14 pr-6 bg-white/[0.02] border border-white/5 rounded-xl text-white text-sm focus:outline-none input-glow transition-all"
               />
             </div>
           </div>
+
           <div className="space-y-2">
-            <label className="text-[8px] font-black text-gray-800 ml-4 block uppercase tracking-[0.3em] opacity-40">Secret Key</label>
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Secret Key</label>
             <div className="relative group">
-              <HiOutlineLockClosed className="absolute left-5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-800 group-focus-within:text-white transition-colors" />
+              <HiOutlineLockClosed className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full pl-14 pr-6 py-4 bg-white/[0.01] border border-white/5 rounded-xl text-white text-[10px] font-medium placeholder-gray-900 focus:outline-none focus:border-white/10 transition-all shadow-inner"
+                className="w-full h-14 pl-14 pr-6 bg-white/[0.02] border border-white/5 rounded-xl text-white text-sm focus:outline-none input-glow transition-all"
               />
             </div>
           </div>
@@ -115,24 +109,19 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-white/5 hover:bg-white/10 text-white border border-white/5 py-4 rounded-xl font-black text-[9px] uppercase tracking-[0.4em] transition-all active:scale-[0.98] disabled:opacity-50"
+            className="w-full h-14 btn-primary flex items-center justify-center gap-3"
           >
             {loading ? (
-              <div className="flex items-center justify-center gap-3">
-                <div className="w-3 h-3 border-2 border-white/10 border-t-white rounded-full animate-spin" />
-                Synchronizing...
-              </div>
+              <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
             ) : (
-              'Initialize'
+              <span className="text-sm font-bold uppercase tracking-widest">Authorize Access</span>
             )}
           </button>
         </form>
 
-        <p className="text-[8px] text-gray-800 font-bold uppercase tracking-[0.2em] text-center mt-12 opacity-60">
-          New to Forge?{' '}
-          <Link to="/signup" className="text-white hover:text-gray-400 transition-colors underline-offset-8">
-            Create Index
-          </Link>
+        <p className="text-center mt-10 text-xs text-slate-500 font-medium">
+          First deployment? {' '}
+          <Link to="/signup" className="text-indigo-400 hover:text-indigo-300 link-underscore">Create Index</Link>
         </p>
       </motion.div>
     </div>

@@ -1,40 +1,33 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FcGoogle } from 'react-icons/fc'
-import { HiOutlineMail, HiOutlineLockClosed } from 'react-icons/hi'
+import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUser } from 'react-icons/hi'
 import useAuthStore from '../store/useAuthStore'
 import toast from 'react-hot-toast'
 
 export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
-  const { signInWithGoogle, signUpWithEmail } = useAuthStore()
+  const { signUpWithEmail, signInWithGoogle, user } = useAuthStore()
   const navigate = useNavigate()
 
-  const handleEmailSignup = async (e) => {
+  // Requirement #2: Immediate Redirect
+  useEffect(() => {
+    if (user) navigate('/chatbot', { replace: true })
+  }, [user, navigate])
+
+  const handleSignup = async (e) => {
     e.preventDefault()
-
-    if (password !== confirmPassword) {
-      toast.error('Access keys do not match')
-      return
-    }
-
-    if (password.length < 6) {
-      toast.error('Access key must be 6+ characters')
-      return
-    }
-
     setLoading(true)
-    const toastId = toast.loading('Establishing identity protocol...')
+    const toastId = toast.loading('Architecting identity sequence...')
     try {
-      await signUpWithEmail(email, password)
-      toast.success('Protocol established. Verify your link.', { id: toastId })
-      navigate('/login')
+      await signUpWithEmail(email, password, name)
+      toast.success('Sequence Complete', { id: toastId })
     } catch (error) {
-      toast.error(error.message || 'Creation failed', { id: toastId })
+      toast.error(error.message || 'Architectural failure', { id: toastId })
     } finally {
       setLoading(false)
     }
@@ -44,96 +37,89 @@ export default function Signup() {
     try {
       await signInWithGoogle()
     } catch (error) {
-      toast.error('Neural link synchronization failed')
+      toast.error('Google synchronization failed')
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-black relative overflow-hidden">
-      {/* Background Elements (Static) */}
-      <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-white/5 rounded-full blur-[100px]" />
-      <div className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-gray-600/5 rounded-full blur-[120px]" />
-
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="relative glass-card p-10 w-full max-w-md rounded-3xl"
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="w-full max-w-md glass-strong p-10 shadow-3xl border-white/10"
       >
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-10">
-          <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 border border-white/10">
-            <span className="text-white font-bold text-lg leading-none">P</span>
-          </div>
-          <h1 className="text-xl font-bold text-white uppercase tracking-[0.3em]">
-            Pixel <span className="text-gray-500">Forge</span>
-          </h1>
-        </div>
-
         <div className="text-center mb-10">
-            <h2 className="text-white font-bold uppercase tracking-widest text-sm mb-2">Establish Identity</h2>
-            <p className="text-gray-500 text-[10px] uppercase tracking-widest leading-loose">Register your coordinates to initialize the forge environment.</p>
+          <motion.div 
+            whileHover={{ y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center mx-auto mb-6 shadow-xl shadow-indigo-600/30"
+          >
+            <span className="font-bold text-xl text-white">P</span>
+          </motion.div>
+          <h1 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">Create Index</h1>
+          <p className="text-sm text-slate-500 font-medium">Engineer your PixelForge identity.</p>
         </div>
 
-        {/* Google Auth */}
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleGoogleSignup}
-          className="w-full flex items-center justify-center gap-4 py-4 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest transition-all duration-300 mb-8 shadow-2xl"
+          className="w-full h-14 glass flex items-center justify-center gap-4 text-sm font-bold uppercase tracking-widest text-white hover:bg-white/5 transition-all mb-8"
         >
           <FcGoogle className="w-5 h-5" />
-          Neural Link: Google
+          Synchronize via Google
         </motion.button>
 
-        {/* Divider */}
         <div className="flex items-center gap-4 mb-8">
           <div className="flex-1 h-px bg-white/5" />
-          <span className="text-[10px] text-gray-700 font-bold uppercase tracking-[0.2em]">or</span>
+          <span className="text-[10px] text-slate-700 font-bold uppercase tracking-widest px-2">Primary Index</span>
           <div className="flex-1 h-px bg-white/5" />
         </div>
 
-        {/* Signup Form */}
-        <form onSubmit={handleEmailSignup} className="space-y-6">
-          <div>
-            <label className="text-[10px] font-bold text-gray-600 mb-2 block uppercase tracking-widest">Protocol Email</label>
-            <div className="relative">
-              <HiOutlineMail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+        <form onSubmit={handleSignup} className="space-y-5">
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Architect Name</label>
+            <div className="relative group">
+              <HiOutlineUser className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Full Identifier"
+                required
+                className="w-full h-14 pl-14 pr-6 bg-white/[0.02] border border-white/5 rounded-xl text-white text-sm focus:outline-none input-glow transition-all"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Email Domain</label>
+            <div className="relative group">
+              <HiOutlineMail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="identity@pixelforge.ai"
+                placeholder="architect@pixelforge.ai"
                 required
-                className="w-full pl-12 pr-4 py-4 bg-black/40 border border-white/5 rounded-xl text-white text-xs placeholder-gray-800 focus:outline-none focus:border-white/20 transition-all"
+                className="w-full h-14 pl-14 pr-6 bg-white/[0.02] border border-white/5 rounded-xl text-white text-sm focus:outline-none input-glow transition-all"
               />
             </div>
           </div>
-          <div>
-            <label className="text-[10px] font-bold text-gray-600 mb-2 block uppercase tracking-widest">Access Key</label>
-            <div className="relative">
-              <HiOutlineLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Secret Key</label>
+            <div className="relative group">
+              <HiOutlineLockClosed className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Min 6 characters"
+                placeholder="Minimum 8 characters"
                 required
-                className="w-full pl-12 pr-4 py-4 bg-black/40 border border-white/5 rounded-xl text-white text-xs placeholder-gray-800 focus:outline-none focus:border-white/20 transition-all"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="text-[10px] font-bold text-gray-600 mb-2 block uppercase tracking-widest">Confirm Access Key</label>
-            <div className="relative">
-              <HiOutlineLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                className="w-full pl-12 pr-4 py-4 bg-black/40 border border-white/5 rounded-xl text-white text-xs placeholder-gray-800 focus:outline-none focus:border-white/20 transition-all"
+                minLength={8}
+                className="w-full h-14 pl-14 pr-6 bg-white/[0.02] border border-white/5 rounded-xl text-white text-sm focus:outline-none input-glow transition-all"
               />
             </div>
           </div>
@@ -141,24 +127,19 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-white/5 hover:bg-white/10 text-white border border-white/10 py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all active:scale-[0.98] disabled:opacity-50"
+            className="w-full h-14 btn-primary flex items-center justify-center gap-3 mt-4"
           >
             {loading ? (
-              <div className="flex items-center justify-center gap-2">
-                <div className="w-4 h-4 border-2 border-white/10 border-t-white rounded-full animate-spin" />
-                Establishing Protocol...
-              </div>
+              <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
             ) : (
-              'Initialize Architecture'
+              <span className="text-sm font-bold uppercase tracking-widest">Construct Identity</span>
             )}
           </button>
         </form>
 
-        <p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest text-center mt-10">
-          Already Registered?{' '}
-          <Link to="/login" className="text-white hover:underline underline-offset-4 decoration-white/20">
-            Identify Now
-          </Link>
+        <p className="text-center mt-10 text-xs text-slate-500 font-medium">
+          Existing Architect? {' '}
+          <Link to="/login" className="text-indigo-400 hover:text-indigo-300 link-underscore">Initialize Login</Link>
         </p>
       </motion.div>
     </div>
