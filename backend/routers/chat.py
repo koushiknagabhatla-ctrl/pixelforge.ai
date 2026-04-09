@@ -28,16 +28,10 @@ async def chat_with_forge(request: Request):
         # Absolute enforcement of Llama 3 (Groq)
         model = "llama-3.3-70b-versatile"
         
-        system_prompt = (
-            "You are FORGE AI, a master of photography, digital arts, and neural architecture. "
-            "Use your deep knowledge of lighting, composition, and AI tools to assist the user. "
-            "Be concise, professional, and slightly mysterious/atmospheric in your tone. "
-            "Never mention Gemini, Llama, or Groq. You are simply Forge AI."
-        )
-        
+        # Raw Intelligence Handshake
         reply = await groq_service.chat(
             message=message,
-            system_prompt=system_prompt,
+            system_prompt="",
             model_name=model
         )
             
