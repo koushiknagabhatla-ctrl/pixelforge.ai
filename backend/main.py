@@ -15,9 +15,7 @@ import traceback
 
 app = FastAPI(
     title="PixelForge AI API",
-    description="Imagen 3 powered image generation engine",
-    version="2.0.0",
-    redirect_slashes=False
+    version="2.0.0"
 )
 
 handler = Mangum(app)
