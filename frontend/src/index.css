@@ -20,11 +20,18 @@
 }
 
 body {
-  background: var(--bg-color);
+  background: black url('/assets/bg_v2.png') no-repeat center center fixed;
+  background-size: cover;
   color: var(--text);
   font-family: 'Plus Jakarta Sans', sans-serif;
   overflow-x: hidden;
   font-size: 9.8px; /* ATOMIC METALLURGY SCALE */
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 9px; /* Tighter mobile baseline */
+  }
 }
 
 h1, h2, h3, h4 {
@@ -33,7 +40,7 @@ h1, h2, h3, h4 {
   letter-spacing: -0.06em;
 }
 
-/* 💠 ATOMIC ENGINE v21.0 */
+/* 💠 ATOMIC ENGINE v24.0 */
 .glass {
   background: linear-gradient(135deg, rgba(20, 20, 20, 0.8), rgba(5, 5, 5, 0.4));
   backdrop-filter: blur(20px);
@@ -75,7 +82,7 @@ h1, h2, h3, h4 {
   box-shadow: 0 60px 120px rgba(0, 0, 0, 1);
 }
 
-/* 💠 ATOMIC LIFT PROTOCOL (Damped) */
+/* ATOMIC LIFT */
 .glass-text-inner {
   display: inline-block;
   padding: 0.4rem 1.2rem;
@@ -88,11 +95,8 @@ h1, h2, h3, h4 {
   transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.glass-text-inner:hover, 
-.glass:hover, 
-.glass-strong:hover, 
-.glass-premium:hover {
-  transform: translateY(-4px); /* Damped Lift */
+.glass-text-inner:hover, .glass:hover, .glass-strong:hover, .glass-premium:hover {
+  transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 255, 255, 0.05);
 }
 
@@ -103,7 +107,7 @@ h1, h2, h3, h4 {
   -webkit-text-fill-color: transparent;
 }
 
-/* SHIMMER v21.0 */
+/* SHIMMER */
 .glass-text-inner::after {
   content: "";
   position: absolute;
@@ -120,36 +124,26 @@ h1, h2, h3, h4 {
   100% { transform: translate(30%, 30%) rotate(45deg); }
 }
 
-/* CINEMATIC UNDERLAY v22.1 — RESTORATION */
-.cinematic-underlay {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-size: cover;
-  background-position: center;
-  opacity: 0.65;
-  filter: blur(10px) saturate(1.4) contrast(1.1);
-  transform: scale(1.05);
-  animation: neural-pulse 20s infinite ease-in-out;
-}
-
-@keyframes neural-pulse {
-  0% { transform: scale(1.05) rotate(0deg); opacity: 0.5; }
-  50% { transform: scale(1.15) rotate(1.5deg); opacity: 0.8; }
-  100% { transform: scale(1.05) rotate(0deg); opacity: 0.5; }
-}
-
 .neural-grain {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   filter: contrast(300%) brightness(150%);
-  opacity: 0.06;
-  position: absolute;
+  opacity: 0.05;
+  position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: -10;
+  z-index: 50;
 }
 
-/* 🎩 Atomic Tool Sets */
+/* 📱 MOBILE NAV TOKEN */
+.mobile-nav-surface {
+  background: rgba(5, 5, 5, 0.8);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.8);
+}
+
+/* Atomic Tool Sets */
 .tool-surface {
   @apply glass-premium p-6 min-h-[350px] flex flex-col relative overflow-hidden;
 }

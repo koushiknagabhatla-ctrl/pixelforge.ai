@@ -7,6 +7,7 @@ import useAuthStore from './store/useAuthStore'
 import Navbar from './components/Navbar'
 import PageTransition from './components/PageTransition'
 import Sidebar from './components/Sidebar'
+import MobileNav from './components/MobileNav'
 
 // Lazy Pages
 const Landing = lazy(() => import('./pages/Landing'))
@@ -22,8 +23,8 @@ function ProtectedRoute({ children, allowGuest = false }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f]">
-        <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-transparent">
+        <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
       </div>
     )
   }
@@ -32,7 +33,7 @@ function ProtectedRoute({ children, allowGuest = false }) {
   return children
 }
 
-/* ===== Main App Architecture v10.0 ===== */
+/* ===== Main App Architecture v24.0 ===== */
 export default function App() {
   const { initialize, user } = useAuthStore()
   const location = useLocation()
@@ -52,19 +53,18 @@ export default function App() {
   const isAuthPage = ['/login', '/signup'].includes(location.pathname)
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0a0a0f] text-[#f8fafc] selection:bg-indigo-500/30">
-      {/* Velocity Background Foundation */}
-      <div className="bg-animated" />
+    <div className="flex flex-col min-h-screen bg-transparent text-[#f8fafc] selection:bg-white/10">
+      <div className="neural-grain" />
       
       <Navbar />
 
-      <div className="flex flex-1 pt-16 relative">
+      <div className="flex flex-1 pt-20 relative">
         {user && !isAuthPage && <Sidebar />}
         
-        <main className={`flex-1 relative min-w-0 transition-all duration-300 ${user && !isAuthPage ? 'lg:pl-[60px]' : ''}`}>
+        <main className={`flex-1 relative min-w-0 transition-all duration-300 ${user && !isAuthPage ? 'lg:pl-[80px]' : ''}`}>
           <Suspense fallback={
             <div className="min-h-[60vh] flex items-center justify-center">
-              <div className="w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+              <div className="w-6 h-6 border-2 border-white/10 border-t-white rounded-full animate-spin" />
             </div>
           }>
             <AnimatePresence mode="wait">
@@ -123,6 +123,8 @@ export default function App() {
           </Suspense>
         </main>
       </div>
+
+      {user && !isAuthPage && <MobileNav />}
     </div>
   )
 }

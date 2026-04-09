@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { 
   HiOutlineSparkles, 
@@ -32,7 +32,7 @@ export default function Sidebar() {
     <>
       <div 
         onMouseEnter={() => setIsHovered(true)}
-        className="fixed left-0 top-0 bottom-0 w-20 z-[75]"
+        className="fixed left-0 top-0 bottom-0 w-20 z-[75] hidden lg:block"
       />
 
       <motion.aside
@@ -46,12 +46,12 @@ export default function Sidebar() {
           borderRightColor: isHovered ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.02)'
         }}
         transition={{ type: "spring", stiffness: 450, damping: 40 }}
-        className="fixed left-0 top-0 bottom-0 z-[80] border-r flex flex-col p-6 pt-24 overflow-hidden selection:bg-white/10"
+        className="fixed left-0 top-0 bottom-0 z-[80] border-r hidden lg:flex flex-col p-6 pt-24 overflow-hidden selection:bg-white/10"
       >
         <div className="absolute inset-0 neural-grain opacity-[0.05] pointer-events-none" />
 
         {/* Brand Header */}
-        <div className="mb-14 px-1 whitespace-nowrap overflow-hidden hover-lift transition-transform">
+        <Link to="/" className="mb-14 px-1 whitespace-nowrap overflow-hidden hover-lift transition-transform cursor-pointer">
             <div className="flex items-center gap-5">
                 <div className="w-10 h-10 glass flex items-center justify-center shrink-0 border-white/5 shadow-2xl">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -62,10 +62,10 @@ export default function Sidebar() {
                   <div className="glass-text-inner !px-3 !py-1 mb-1">
                     <h2 className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Console</h2>
                   </div>
-                  <span className="text-[7px] font-bold text-gray-800 uppercase tracking-widest ml-1">SYSTEM v19.0</span>
+                  <span className="text-[7px] font-bold text-gray-800 uppercase tracking-widest ml-1">SYSTEM v24.0</span>
                 </motion.div>
             </div>
-        </div>
+        </Link>
 
         {/* Navigation */}
         <nav className="flex-1 space-y-4">
@@ -101,7 +101,10 @@ export default function Sidebar() {
         {/* Footer / Account & Sign Out */}
         <div className="pt-8 border-t border-white/5 space-y-3">
           {user && (
-            <div className="flex items-center gap-6 px-4 py-2 opacity-50 hover:opacity-100 transition-opacity whitespace-nowrap cursor-default overflow-hidden group hover-lift">
+            <button 
+              onClick={() => { if(window.confirm('Terminate Neural Link? (Sign Out)')) signOut() }}
+              className="flex items-center gap-6 px-4 py-2 opacity-50 hover:opacity-100 transition-opacity whitespace-nowrap cursor-pointer overflow-hidden group hover-lift w-full text-left"
+            >
                <div className="relative shrink-0">
                   <div className="w-6 h-6 rounded-full glass-strong flex items-center justify-center border border-white/10 relative z-10 shadow-inner">
                       <FcGoogle className="w-4 h-4" />
@@ -114,7 +117,7 @@ export default function Sidebar() {
                >
                  {user.email?.split('@')[0]}
                </motion.span>
-            </div>
+            </button>
           )}
 
           <button

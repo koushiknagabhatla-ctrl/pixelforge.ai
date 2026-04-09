@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   HiOutlineSparkles, 
   HiOutlineLightningBolt, 
@@ -14,7 +14,6 @@ import { useRef } from 'react';
 
 // Atomic Static Assets (Local)
 const ASSETS = {
-  bg: "/assets/bg_v2.png",
   nexus: "/assets/nexus.png",
   enhancer: "/assets/enhancer.png",
   entity: "/assets/entity.png"
@@ -34,25 +33,13 @@ const MotionSection = ({ children, className }) => (
 
 const Landing = () => {
   const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll();
-  const yParallax = useTransform(scrollYProgress, [0, 1], [0, -80]);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-transparent overflow-x-hidden pt-20 selection:bg-white/10 relative">
-      <div className="bg-animated" />
-      
-      {/* 🌌 VOLUMETRIC MOTION UNDERLAY */}
-      <motion.div 
-        style={{ y: yParallax }}
-        className="cinematic-underlay"
-      >
-        <img src={ASSETS.bg} alt="Neural Void" className="w-full h-full object-cover" />
-      </motion.div>
-      
-      <div className="absolute inset-0 neural-grain z-10" />
+    <div ref={containerRef} className="min-h-screen bg-transparent overflow-x-hidden pt-20 selection:bg-white/10 relative z-10">
+      <div className="absolute inset-0 neural-grain" />
 
       {/* 🏙️ HERO PRECISION (Atomic Scale) */}
-      <section className="relative min-h-[85vh] px-10 py-20 flex flex-col items-center justify-center text-center overflow-hidden z-20">
+      <section className="relative min-h-[85vh] px-10 py-20 flex flex-col items-center justify-center text-center overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-white/[0.01] blur-[150px] rounded-full -z-10" />
         
         <motion.div
@@ -64,7 +51,7 @@ const Landing = () => {
             <div className="inline-block">
                 <div className="glass-text-inner flex items-center gap-3">
                     <div className="w-1.2 h-1.2 rounded-full bg-white/40 animate-pulse" />
-                    <span className="text-[7.5px] font-black uppercase tracking-[0.5em] text-white/40">Atomic Framework v22.0</span>
+                    <span className="text-[7.5px] font-black uppercase tracking-[0.5em] text-white/40">Atomic Framework v23.0</span>
                 </div>
             </div>
 
@@ -78,7 +65,7 @@ const Landing = () => {
 
             <div className="max-w-xl mx-auto">
                 <div className="glass-text-inner !p-4 !px-10 border-white/5 bg-white/[0.005]">
-                    <p className="text-[9px] text-gray-400 font-bold max-w-lg mx-auto leading-relaxed uppercase tracking-[0.2em]">
+                    <p className="text-[9px] text-gray-500 font-bold max-w-lg mx-auto leading-relaxed uppercase tracking-[0.2em]">
                       A high-precision laboratory for neural asset synthesis. 
                       Surgical engineering for the modern creative architect.
                     </p>
@@ -101,7 +88,7 @@ const Landing = () => {
       </section>
 
       {/* 🏛️ THE MISSION */}
-      <MotionSection className="px-10 py-20 max-w-7xl mx-auto z-20 relative">
+      <MotionSection className="px-10 py-20 max-w-7xl mx-auto relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
             <div className="lg:col-span-7 space-y-8">
                 <div className="glass-text-inner !px-4 !py-1">
@@ -111,7 +98,7 @@ const Landing = () => {
                     <h2 className="text-2xl font-black text-white tracking-tight mb-5 underline decoration-white/5 underline-offset-8">
                         Neural Clarity.
                     </h2>
-                    <p className="text-[11px] text-gray-500 font-bold leading-loose uppercase tracking-widest">
+                    <p className="text-[11px] text-gray-600 font-bold leading-loose uppercase tracking-widest">
                         Pixel Forge bridges abstract imagination and digital materialization. Our engine synthesizes high-fidelity directives with surgical precision, manifesting concepts through direct neural handshakes with the world's most advanced synthetic cores.
                     </p>
                 </div>
@@ -123,7 +110,7 @@ const Landing = () => {
       </MotionSection>
 
       {/* 🛰️ CORE PROTOCOLS */}
-      <MotionSection className="px-10 py-20 z-20 relative bg-zinc-950/20">
+      <MotionSection className="px-10 py-20 relative bg-zinc-950/20">
         <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16 space-y-5">
                 <div className="glass-text-inner !px-4 !py-1">
@@ -159,7 +146,7 @@ const Landing = () => {
       </MotionSection>
 
       {/* 🗺️ TRAJECTORY */}
-      <MotionSection className="px-10 py-32 max-w-4xl mx-auto z-20 relative">
+      <MotionSection className="px-10 py-32 max-w-4xl mx-auto relative">
         <div className="text-center mb-16 space-y-5">
             <div className="glass-text-inner !px-4 !py-1">
                 <span className="text-[8px] font-black uppercase tracking-[0.4em] text-white/30">Trajectory</span>
@@ -191,7 +178,7 @@ const Landing = () => {
       </MotionSection>
 
       {/* 🏙️ FOOTER */}
-      <footer className="px-10 py-16 border-t border-white/5 mt-20 z-20 relative">
+      <footer className="px-10 py-16 border-t border-white/5 mt-20 relative">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
             <div className="space-y-3">
               <div className="flex items-center gap-3">
@@ -204,7 +191,7 @@ const Landing = () => {
                     <h2 className="text-[9px] font-black uppercase tracking-[0.4em]">Pixel Forge AI</h2>
                   </div>
               </div>
-              <p className="text-[8px] text-gray-800 font-bold uppercase tracking-widest ml-12">v22.0 Volumetric Matrix</p>
+              <p className="text-[8px] text-gray-800 font-bold uppercase tracking-widest ml-12">v23.0 Neural Skylight</p>
            </div>
            
            <div className="flex items-center gap-10 text-right">
