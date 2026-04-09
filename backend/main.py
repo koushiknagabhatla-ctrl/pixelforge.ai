@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from mangum import Mangum
 from dotenv import load_dotenv
 import os
 
@@ -12,7 +13,10 @@ app = FastAPI(
     title="PixelForge AI API",
     description="Imagen 3 powered image generation engine",
     version="2.0.0",
+    root_path="/api"
 )
+
+handler = Mangum(app)
 
 # Enhanced CORS for production reliability
 app.add_middleware(

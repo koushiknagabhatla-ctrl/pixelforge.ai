@@ -11,7 +11,7 @@ const useImageStore = create((set, get) => ({
   generateImage: async (prompt, userId) => {
     set({ isGenerating: true, resultImage: null, enhancedPrompt: null })
     try {
-      const { data } = await api.post('/generate', { prompt, user_id: userId })
+      const { data } = await api.post('/generate/', { prompt, user_id: userId })
       set({ 
         resultImage: data.image_url, 
         enhancedPrompt: data.enhanced_prompt,
@@ -35,7 +35,8 @@ const useImageStore = create((set, get) => ({
       const endpoint = tool === 'bg-remove' ? '/tools/bg-remove' : 
                        tool === 'enhance' ? '/tools/enhance' : '/tools/denoise'
 
-      const { data } = await api.post(`${endpoint}?user_id=${userId}`, formData, {
+      const { data } = await api.post(`${endpoint}/`, formData, {
+        params: { user_id: userId },
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       
@@ -54,7 +55,7 @@ const useImageStore = create((set, get) => ({
 
   fetchHistory: async (userId) => {
     try {
-      const { data } = await api.get(`/history/${userId}`)
+      const { data } = await api.get(`/history/${userId}/`)
       set({ history: Array.isArray(data) ? data : [] })
     } catch (error) {
       console.error('History Retrieval Failed:', error)
