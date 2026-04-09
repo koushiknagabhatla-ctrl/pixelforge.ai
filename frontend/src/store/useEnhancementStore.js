@@ -39,7 +39,7 @@ const useEnhancementStore = create((set, get) => ({
     formData.append('file', file)
 
     try {
-      const { data } = await api.post('/api/upload', formData, {
+      const { data } = await api.post('/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (e) => {
           const progress = Math.round((e.loaded * 100) / e.total)
@@ -103,7 +103,7 @@ const useEnhancementStore = create((set, get) => ({
     }, 1800)
 
     try {
-      const { data } = await api.post('/api/enhance', {
+      const { data } = await api.post('/enhance', {
         image_url: originalUrl,
         mode,
         scale,
@@ -159,8 +159,8 @@ const useEnhancementStore = create((set, get) => ({
   fetchHistory: async (userId, limit = 50) => {
     set({ historyLoading: true })
     try {
-      const { data } = await api.get(`/api/history/${userId}?limit=${limit}`)
-      set({ history: data, historyLoading: false })
+      const { data } = await api.get(`/history/${userId}?limit=${limit}`)
+      set({ history: Array.isArray(data) ? data : [], historyLoading: false })
     } catch (error) {
       set({ historyLoading: false })
       console.error('Failed to fetch history:', error)

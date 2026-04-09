@@ -76,7 +76,7 @@ export default function Sidebar() {
         </div>
         
         <div className="space-y-4">
-          {history.length > 0 ? history.slice(0, 6).map((item) => (
+          {(Array.isArray(history) ? history : []).length > 0 ? (Array.isArray(history) ? history : []).slice(0, 6).map((item) => (
             <motion.div 
               key={item.id}
               whileHover={{ x: 4 }}
