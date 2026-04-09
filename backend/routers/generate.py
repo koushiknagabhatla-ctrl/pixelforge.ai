@@ -16,7 +16,7 @@ class GenerateResponse(BaseModel):
 
 router = APIRouter()
 
-@router.post("/generate", response_model=GenerateResponse)
+@router.post("/generate/")
 async def generate_image(request: GenerateRequest):
     """
     Forge a new image using the Imagen 3 Engine powered by Gemini.

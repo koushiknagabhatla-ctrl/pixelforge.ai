@@ -13,10 +13,10 @@ app = FastAPI(
     title="PixelForge AI API",
     description="Imagen 3 powered image generation engine",
     version="2.0.0",
-    root_path="/api"
+    redirect_slashes=False
 )
 
-handler = Mangum(app)
+handler = Mangum(app, api_gateway_base_path="/api")
 
 # Enhanced CORS for production reliability
 app.add_middleware(

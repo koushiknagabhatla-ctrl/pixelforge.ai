@@ -10,13 +10,13 @@ import uuid
 router = APIRouter()
 
 
-@router.get("/credits/{user_id}", response_model=UserCredits)
+@router.get("/credits/{user_id}/", response_model=UserCredits)
 async def get_credits(user_id: str):
     """Get unlimited user credits"""
     return UserCredits(credits=9999, plan="unlimited")
 
 
-@router.get("/history/{user_id}", response_model=List[EnhancementRecord])
+@router.get("/history/{user_id}/", response_model=List[EnhancementRecord])
 async def get_history(user_id: str, limit: int = 50):
     """Get user's enhancement history."""
     history = await supabase_service.get_user_history(user_id, limit)
@@ -34,7 +34,7 @@ async def get_history(user_id: str, limit: int = 50):
     ]
 
 
-@router.post("/user/ensure")
+@router.post("/user/ensure/")
 async def ensure_user(user_id: str, email: str):
     """Ensure user exists in database (called after Supabase auth)."""
     user = await supabase_service.ensure_user_exists(user_id, email)

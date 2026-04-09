@@ -5,7 +5,7 @@ from io import BytesIO
 
 router = APIRouter(prefix="/tools")
 
-@router.post("/bg-remove")
+@router.post("/bg-remove/")
 async def bg_remove(user_id: str, file: UploadFile = File(...)):
     try:
         contents = await file.read()
@@ -34,7 +34,7 @@ async def bg_remove(user_id: str, file: UploadFile = File(...)):
         print(traceback.format_exc())
         raise HTTPException(status_code=500, detail=f"BG-Removal Failed: {str(e)}")
 
-@router.post("/enhance")
+@router.post("/enhance/")
 async def enhance(user_id: str, file: UploadFile = File(...)):
     try:
         contents = await file.read()
@@ -58,7 +58,7 @@ async def enhance(user_id: str, file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/denoise")
+@router.post("/denoise/")
 async def denoise(user_id: str, file: UploadFile = File(...)):
     try:
         contents = await file.read()
