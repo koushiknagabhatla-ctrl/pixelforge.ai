@@ -42,84 +42,83 @@ export default function Signup() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 relative overflow-hidden">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="w-full max-w-md glass-strong p-10 shadow-3xl border-white/10"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="w-full max-w-lg bg-[#0f0f13] p-12 rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/5"
       >
-        <div className="text-center mb-10">
-          <motion.div 
-            whileHover={{ y: -5 }}
-            transition={{ type: "spring", stiffness: 300 }}
-            className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center mx-auto mb-6 shadow-xl shadow-indigo-600/30"
-          >
-            <span className="font-bold text-xl text-white">P</span>
-          </motion.div>
-          <h1 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">Create Index</h1>
-          <p className="text-sm text-slate-500 font-medium">Engineer your PixelForge identity.</p>
+        <div className="text-center mb-12">
+          {/* Neural Badge */}
+          <div className="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(99,102,241,0.4)]">
+            <span className="font-black text-2xl text-white">P</span>
+          </div>
+          
+          <h1 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">Create Index</h1>
+          <p className="text-sm text-gray-500 font-bold uppercase tracking-widest">Engineer your PixelForge identity.</p>
         </div>
 
+        {/* Google Primary Anchor */}
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleGoogleSignup}
-          className="w-full h-14 glass flex items-center justify-center gap-4 text-sm font-bold uppercase tracking-widest text-white hover:bg-white/5 transition-all mb-8"
+          className="w-full h-16 bg-white/5 rounded-2xl flex items-center justify-center gap-4 group hover:bg-white/10 transition-all mb-12"
         >
-          <FcGoogle className="w-5 h-5" />
-          Synchronize via Google
+          <FcGoogle className="w-6 h-6" />
+          <span className="text-xs font-black text-white uppercase tracking-[0.2em]">Synchronize via Google</span>
         </motion.button>
 
-        <div className="flex items-center gap-4 mb-8">
+        {/* Divider */}
+        <div className="flex items-center gap-6 mb-12">
           <div className="flex-1 h-px bg-white/5" />
-          <span className="text-[10px] text-slate-700 font-bold uppercase tracking-widest px-2">Primary Index</span>
+          <span className="text-[10px] text-gray-700 font-black uppercase tracking-[0.5em]">Primary Index</span>
           <div className="flex-1 h-px bg-white/5" />
         </div>
 
-        <form onSubmit={handleSignup} className="space-y-5">
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Architect Name</label>
+        <form onSubmit={handleSignup} className="space-y-10">
+          <div className="space-y-4">
+            <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-2">Architect Name</label>
             <div className="relative group">
-              <HiOutlineUser className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
+              <HiOutlineUser className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within:text-white transition-colors" />
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Full Identifier"
                 required
-                className="w-full h-14 pl-14 pr-6 bg-white/[0.02] border border-white/5 rounded-xl text-white text-sm focus:outline-none input-glow transition-all"
+                className="w-full h-16 pl-16 pr-8 bg-white/[0.02] border border-white/5 rounded-2xl text-white text-sm focus:outline-none focus:border-white/10 transition-all font-medium"
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Email Domain</label>
+          <div className="space-y-4">
+            <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-2">Email Domain</label>
             <div className="relative group">
-              <HiOutlineMail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
+              <HiOutlineMail className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within:text-white transition-colors" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="architect@pixelforge.ai"
                 required
-                className="w-full h-14 pl-14 pr-6 bg-white/[0.02] border border-white/5 rounded-xl text-white text-sm focus:outline-none input-glow transition-all"
+                className="w-full h-16 pl-16 pr-8 bg-white/[0.02] border border-white/5 rounded-2xl text-white text-sm focus:outline-none focus:border-white/10 transition-all font-medium"
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Secret Key</label>
+          <div className="space-y-4">
+            <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-2">Secret Key</label>
             <div className="relative group">
-              <HiOutlineLockClosed className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-indigo-400 transition-colors" />
+              <HiOutlineLockClosed className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within:text-white transition-colors" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Minimum 8 characters"
+                placeholder="••••••••"
                 required
                 minLength={8}
-                className="w-full h-14 pl-14 pr-6 bg-white/[0.02] border border-white/5 rounded-xl text-white text-sm focus:outline-none input-glow transition-all"
+                className="w-full h-16 pl-16 pr-8 bg-white/[0.02] border border-white/5 rounded-2xl text-white text-sm focus:outline-none focus:border-white/10 transition-all font-medium"
               />
             </div>
           </div>
@@ -127,19 +126,19 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-14 btn-primary flex items-center justify-center gap-3 mt-4"
+            className="w-full h-16 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.4em] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center"
           >
             {loading ? (
-              <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+              <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
             ) : (
-              <span className="text-sm font-bold uppercase tracking-widest">Construct Identity</span>
+              'Construct Identity'
             )}
           </button>
         </form>
 
-        <p className="text-center mt-10 text-xs text-slate-500 font-medium">
+        <p className="text-center mt-12 text-[10px] text-gray-600 font-bold uppercase tracking-widest">
           Existing Architect? {' '}
-          <Link to="/login" className="text-indigo-400 hover:text-indigo-300 link-underscore">Initialize Login</Link>
+          <Link to="/login" className="text-white hover:underline underline-offset-4">Initialize Login</Link>
         </p>
       </motion.div>
     </div>

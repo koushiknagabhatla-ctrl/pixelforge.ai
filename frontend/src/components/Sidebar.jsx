@@ -48,11 +48,15 @@ export default function Sidebar() {
                ${isActive ? 'bg-white text-black shadow-[0_0_30px_rgba(255,255,255,0.1)]' : 'text-gray-500 hover:text-white hover:bg-white/5'}
              `}
            >
-             <item.icon className="w-6 h-6 shrink-0" />
-             <span className="text-[10px] font-black uppercase tracking-[0.2em]">
-                {item.name}
-             </span>
-             <HiChevronRight className={`ml-auto w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity ${isActive ? 'text-black' : 'text-white/20'}`} />
+             {({ isActive }) => (
+               <>
+                 <item.icon className="w-6 h-6 shrink-0" />
+                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">
+                    {item.name}
+                 </span>
+                 <HiChevronRight className={`ml-auto w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity ${isActive ? 'text-black' : 'text-white/20'}`} />
+               </>
+             )}
            </NavLink>
          ))}
       </nav>

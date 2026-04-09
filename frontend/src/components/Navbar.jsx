@@ -28,7 +28,14 @@ export default function Navbar() {
       </Link>
 
       {/* Actions */}
-      <div className="relative flex items-center gap-6">
+      <div className="relative flex items-center gap-8">
+        <a 
+          href="#about" 
+          className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-400 hover:text-white transition-colors"
+        >
+          About
+        </a>
+        
         {user ? (
             <div className="flex items-center gap-4">
                 <div className="hidden sm:flex flex-col items-end mr-4">
@@ -43,12 +50,9 @@ export default function Navbar() {
                 </button>
             </div>
         ) : (
-            <div className="flex items-center gap-4">
-                <Link to="/login" className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-colors">
+            <div className="flex items-center gap-6">
+                <Link to="/login" className="text-[10px] font-black uppercase tracking-[0.3em] text-white hover:opacity-70 transition-opacity">
                     Sign In
-                </Link>
-                <Link to="/signup" className="pill-button !py-3 !px-8 pill-primary !text-[10px]">
-                    Get Access
                 </Link>
             </div>
         )}
