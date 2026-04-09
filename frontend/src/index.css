@@ -119,7 +119,7 @@ code, .font-mono {
 }
 
 .tool-dropzone {
-  @apply relative group p-20 border border-white/5 rounded-[3rem] bg-white/[0.005] hover:bg-white/[0.015] transition-all duration-700 cursor-pointer overflow-hidden;
+  @apply relative p-20 border border-white/5 rounded-[3rem] bg-white/[0.005] hover:bg-white/[0.015] transition-all duration-700 cursor-pointer overflow-hidden;
 }
 
 .input-monochrome {
