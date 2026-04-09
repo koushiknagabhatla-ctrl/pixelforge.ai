@@ -1,24 +1,20 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from mangum import Mangum
-from dotenv import load_dotenv
 import os
 import traceback
-import importlib
 
-# 1. Immediate Environment Loading
-load_dotenv()
-
+# 1. Direct Ignition Foundation (v3.5)
+# We remove root_path and shadow routing to let Vercel manage the /api/ mapping.
 app = FastAPI(
     title="PixelForge AI Production Engine",
-    version="3.4.3",
-    docs_url="/api/docs",
-    openapi_url="/api/openapi.json",
+    version="3.5.0",
+    docs_url="/docs",
+    openapi_url="/openapi.json",
     redirect_slashes=False
 )
 
-# 2. Universal CORS Relief (USER-FIX #4 Alignment)
+# 2. Universal Handshake (CORS)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -27,35 +23,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 3. Global Emergency Exception Handler
+# 3. Exception Shield
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     return JSONResponse(
         status_code=500,
         content={
-            "error": "Internal Forge Crash",
+            "error": "Forge Internal Crash",
             "detail": str(exc),
-            "traceback": traceback.format_exc()
+            "traceback": traceback.format_exc() if os.getenv("VERCEL_ENV") != "production" else "Check Runtime Logs"
         }
     )
 
-# 4. Emergency Diagnostic Hub (User Requested Format)
-@app.get("/api/health/")
-@app.get("/api/health")
-@app.get("/health/")
+# 4. Diagnostic Oracle (v3.5)
 @app.get("/health")
+@app.get("/health/")
 async def health_check():
-    """Archon v3.4.3 - THE FINAL ALIGNMENT"""
+    """Archon v3.5 - FINAL IGNITION"""
     try:
         from backend.services.supabase_service import supabase_service
-        
-        env_status = {
-            "SUPABASE_URL": bool(os.getenv("SUPABASE_URL")),
-            "SUPABASE_KEY": bool(os.getenv("SUPABASE_SERVICE_KEY")),
-            "GEMINI_KEY": bool(os.getenv("GEMINI_API_KEY")),
-            "CLOUDINARY": bool(os.getenv("CLOUDINARY_API_KEY"))
-        }
-        
         db_connected = False
         if supabase_service.supabase:
             try:
@@ -65,56 +51,27 @@ async def health_check():
 
         return {
             "status": "online" if db_connected else "degraded",
-            "archon_v3_4_3": "Active",
-            "handshake": "Optimized",
-            "fix": "trailingSlash=False",
-            "environment_keys": env_status,
-            "database_connected": db_connected,
-            "deployment": os.getenv("VERCEL_ENV", "local")
+            "v": "3.5",
+            "mode": "Direct Ignition",
+            "database": db_connected,
+            "handshake": "Verified"
         }
     except Exception as e:
-        return JSONResponse(
-            status_code=503,
-            content={
-                "status": "error",
-                "message": "Archon Ignition Failure",
-                "detail": str(e)
-            }
-        )
-    except Exception as e:
-        return JSONResponse(
-            status_code=503,
-            content={
-                "status": "error",
-                "message": "Archon Ignition Failure",
-                "detail": str(e)
-            }
-        )
+        return {"status": "offline", "error": str(e)}
 
-# 5. Deferred Router Loading
-# SHADOW ROUTING: We register everything twice to handle Vercel's prefix stripping logic.
+# 5. Authoritative Router Inclusion
+# We use standard prefixes. Vercel's rewrite /api/(.*) -> api/index.py 
+# means the frontend's /api/user/ensure hits here as /user/ensure.
 try:
     from backend.routers import generate, upload, user, chat, tools
-    
-    # Prefix: /api
-    app.include_router(generate.router, prefix="/api", tags=["generation"])
-    app.include_router(upload.router, prefix="/api", tags=["upload"])
-    app.include_router(user.router, prefix="/api", tags=["user"])
-    app.include_router(chat.router, prefix="/api", tags=["chat"])
-    app.include_router(tools.router, prefix="/api", tags=["tools"])
-    
-    # Prefix: (Empty) - For environments where /api is stripped
-    app.include_router(generate.router, prefix="", tags=["generation_shadow"])
-    app.include_router(upload.router, prefix="", tags=["upload_shadow"])
-    app.include_router(user.router, prefix="", tags=["user_shadow"])
-    app.include_router(chat.router, prefix="", tags=["chat_shadow"])
-    app.include_router(tools.router, prefix="", tags=["tools_shadow"])
-    
+    app.include_router(generate.router, prefix="/generate", tags=["generation"])
+    app.include_router(upload.router, prefix="/upload", tags=["upload"])
+    app.include_router(user.router, prefix="/user", tags=["user"])
+    app.include_router(chat.router, prefix="/chat", tags=["chat"])
+    app.include_router(tools.router, prefix="/tools", tags=["tools"])
 except Exception as e:
-    print(f"ROUTER LOADING ERROR: {e}")
+    print(f"IGNITION CRITICAL ERROR: {e}")
 
 @app.get("/")
 async def root():
-    return {"status": "PixelForge Engine Ready", "v": "3.4.2", "mode": "Shadow Alignment"}
-
-handler = Mangum(app)
+    return {"status": "PixelForge Engine Ready", "version": "3.5.0"}
