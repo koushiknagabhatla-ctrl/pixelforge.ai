@@ -9,6 +9,10 @@ load_dotenv()
 
 from routers import generate, upload, user, chat, tools
 
+from fastapi import Request
+from fastapi.responses import JSONResponse
+import traceback
+
 app = FastAPI(
     title="PixelForge AI API",
     description="Imagen 3 powered image generation engine",
@@ -16,24 +20,31 @@ app = FastAPI(
     redirect_slashes=False
 )
 
-handler = Mangum(app, api_gateway_base_path="/api")
+handler = Mangum(app)
 
-# Enhanced CORS for production reliability
+# --- EMERGENCY FAIL-SAFE ---
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """Captures all 500 errors and returns JSON instead of Vercel crash page."""
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "Internal Forge Error",
+            "detail": str(exc),
+            "traceback": traceback.format_exc() if os.getenv("DEBUG") else "Secret"
+        }
+    )
+
+# --- EMERGENCY CORS RELIEVER ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "https://pixelforge-ai.vercel.app", # Replace with your actual Vercel project name
-        "*", 
-    ],
+    allow_origins=["*"], # Temporarily open for diagnostic purposes
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Include refreshed routers
-# Include centralized routers with mandatory /api prefix
 app.include_router(generate.router, prefix="/api", tags=["generation"])
 app.include_router(upload.router, prefix="/api", tags=["upload"])
 app.include_router(user.router, prefix="/api", tags=["user"])
@@ -45,11 +56,31 @@ app.include_router(tools.router, prefix="/api", tags=["tools"])
 async def root():
     return {
         "name": "PixelForge AI API",
-        "engine": "Imagen 3 + Gemini 1.5 Flash",
         "status": "ready",
+        "archon": "Active"
     }
 
 
-@app.get("/health")
-async def health():
-    return {"status": "healthy"}
+@app.get("/api/health/")
+async def health_check():
+    """Diagnostic Hub for checking environment and services."""
+    from services.supabase_service import supabase_service
+    from services.gemini_service import gemini_service
+    
+    env_vars = ["SUPABASE_URL", "SUPABASE_SERVICE_KEY", "GEMINI_API_KEY", "CLOUDINARY_CLOUD_NAME"]
+    missing = [v for v in env_vars if not os.getenv(v)]
+    
+    db_status = "Disconnected"
+    if supabase_service.supabase:
+        try:
+            supabase_service.supabase.table("users").select("count").limit(1).execute()
+            db_status = "Connected"
+        except Exception as e:
+            db_status = f"Error: {str(e)}"
+
+    return {
+        "status": "online",
+        "database": db_status,
+        "missing_env_vars": missing,
+        "environment": os.getenv("VERCEL_ENV", "local")
+    }

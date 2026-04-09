@@ -12,8 +12,12 @@ router = APIRouter()
 
 @router.get("/credits/{user_id}/", response_model=UserCredits)
 async def get_credits(user_id: str):
-    """Get unlimited user credits"""
-    return UserCredits(credits=9999, plan="unlimited")
+    """Get user's current credits and plan."""
+    try:
+        data = await supabase_service.get_user_credits(user_id)
+        return UserCredits(credits=data.get("credits", 0), plan=data.get("plan", "free"))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database Retrieval Failed: {str(e)}")
 
 
 @router.get("/history/{user_id}/", response_model=List[EnhancementRecord])
@@ -37,10 +41,13 @@ async def get_history(user_id: str, limit: int = 50):
 @router.post("/user/ensure/")
 async def ensure_user(user_id: str, email: str):
     """Ensure user exists in database (called after Supabase auth)."""
-    user = await supabase_service.ensure_user_exists(user_id, email)
-    if not user:
-        raise HTTPException(status_code=500, detail="Failed to create user")
-    return user
+    try:
+        user = await supabase_service.ensure_user_exists(user_id, email)
+        if not user:
+            raise HTTPException(status_code=503, detail="Database Initialization Failed: User could not be synchronized.")
+        return user
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"User Synchronization Crisis: {str(e)}")
 
 
 
