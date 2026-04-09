@@ -72,13 +72,14 @@
   display: none;
 }
 
-/* Transcendent Glass Architecture v6.0 */
+/* Transcendent Glass Architecture v7.0 - SOVEREIGN */
 .glass-glow {
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.015);
+  backdrop-filter: blur(48px);
+  -webkit-backdrop-filter: blur(48px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.02);
   position: relative;
 }
 
@@ -93,10 +94,29 @@
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.1) 100%);
+  background: linear-gradient(
+    145deg, 
+    rgba(255,255,255,0.18) 0%, 
+    rgba(255,255,255,0) 40%, 
+    rgba(255,255,255,0) 60%, 
+    rgba(255,255,255,0.08) 100%
+  );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
+}
+
+/* Silk Smooth Responsive Typography */
+@media (max-width: 768px) {
+  .archon-heading {
+    @apply text-2xl tracking-[0.2em];
+  }
+}
+
+@layer utilities {
+    .silk-transition {
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 }
