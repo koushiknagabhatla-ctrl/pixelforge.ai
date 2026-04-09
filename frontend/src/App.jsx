@@ -51,9 +51,12 @@ function PageWrapper({ children }) {
 
 import ErrorBoundary from './components/ErrorBoundary'
 
+import useUIStore from './store/useUIStore'
+
 /* ===== Main App ===== */
 export default function App() {
   const { initialize, user } = useAuthStore()
+  const { isSidebarMinimized } = useUIStore()
   const location = useLocation()
 
   // Initialize auth on mount
@@ -69,7 +72,13 @@ export default function App() {
 
       <div className="flex flex-1 pt-24 overflow-hidden">
         {user && !isAuthPage && <Sidebar />}
-        <main className={`flex-1 relative min-w-0 transition-all duration-300 ${user && !isAuthPage ? 'lg:pl-[300px]' : ''}`}>
+        <main 
+          className={`flex-1 relative min-w-0 transition-all duration-500 ease-in-out ${
+            user && !isAuthPage 
+              ? isSidebarMinimized ? 'lg:pl-[120px]' : 'lg:pl-[340px]' 
+              : ''
+          }`}
+        >
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
               <Route

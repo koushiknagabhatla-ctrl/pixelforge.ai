@@ -1,93 +1,81 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import HeroSection from '../components/HeroSection';
+import Footer from '../components/Footer';
 
 export default function Landing() {
-  const navigate = useNavigate();
+  const capabilities = [
+    { tag: "Neural Foundry", title: "Unleash high-fidelity generations with precision latency controls.", desc: "Experience parallel synthesis architecture delivered through our proprietary neural clusters." },
+    { tag: "Precision Control", title: "Fine-tune every aspect of your synthesis with modular weights.", desc: "Professional grade management for architectural visualization and high-end concept art." },
+    { tag: "Real-time Sync", title: "Synchronize your forge assets across devices and cloud.", desc: "Seamless workflow integration with ultra-low latency infrastructure." }
+  ];
+
+  const realities = [
+    "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=400&q=80"
+  ];
 
   return (
-    <div className="bg-black min-h-screen text-white relative">
-      <Navbar />
+    <div className="bg-[#050505] min-h-screen text-white relative">
+      <HeroSection />
       
-      <main className="pt-32 px-6">
-        {/* Dynamic Architect Hero */}
-        <section className="max-w-7xl mx-auto flex flex-col items-center text-center py-20">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1 }}
-            className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center font-black text-2xl text-black mb-12 shadow-[0_0_50px_rgba(255,255,255,0.2)]"
-          >
-            P
-          </motion.div>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-6xl md:text-8xl lg:text-9xl font-black text-gradient tracking-tighter mb-8"
-          >
-            PIXEL FORGE
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-lg md:text-2xl text-gray-500 max-w-2xl font-light uppercase tracking-[0.4em] mb-16"
-          >
-            The Architect's Console for Neural Image Synthesis
-          </motion.p>
-          
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="flex gap-6"
-          >
-            <button 
-              onClick={() => navigate('/signup')}
-              className="px-12 py-6 bg-white text-black font-black text-xs uppercase tracking-[0.4em] rounded-2xl hover:bg-gray-200 transition-all hover:scale-105 active:scale-95 shadow-2xl"
-            >
-              Enter Forge
-            </button>
-            <button 
-              onClick={() => navigate('/login')}
-              className="px-12 py-6 glass-button font-black text-xs uppercase tracking-[0.4em] rounded-2xl"
-            >
-              Sign In
-            </button>
-          </motion.div>
+      <main className="px-6 relative z-10">
+        {/* Engineered Capabilities Grid */}
+        <section className="max-w-7xl mx-auto py-40">
+           <div className="text-center mb-32">
+              <h2 className="text-[10px] font-black uppercase tracking-[1em] text-gray-700 mb-6">Engineered Capabilities</h2>
+              <div className="w-px h-16 bg-white/10 mx-auto" />
+           </div>
+
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {capabilities.map((cap, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.1, duration: 0.8 }}
+                  viewport={{ once: true }}
+                  className="glass-premium p-12 rounded-[40px] border-white/[0.03] group hover:border-white/10 transition-colors"
+                >
+                  <div className="text-[9px] font-black text-white px-3 py-1 bg-white/5 rounded-full inline-block uppercase tracking-[0.4em] mb-10 group-hover:bg-white group-hover:text-black transition-colors">
+                    {cap.tag}
+                  </div>
+                  <h3 className="text-2xl font-bold mb-8 leading-tight">{cap.title}</h3>
+                  <p className="text-[11px] font-medium text-gray-600 uppercase tracking-widest leading-relaxed">
+                    {cap.desc}
+                  </p>
+                </motion.div>
+              ))}
+           </div>
         </section>
 
-        {/* Feature Grid */}
-        <section className="max-w-7xl mx-auto py-40 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { tag: "Neural", title: "Imagen 3 Engine", desc: "Highest fidelity generation directly from Google's deep research neural networks." },
-            { tag: "Architecture", title: "Prompt Forge", desc: "Built-in Gemini Flash prompt enhancement layer for professional artistic results." },
-            { tag: "Cloud", title: "Vercel Optimized", desc: "Lightweight architecture built specifically for serverless performance and speed." }
-          ].map((feature, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              viewport={{ once: true }}
-              className="glass-card p-12 rounded-3xl"
-            >
-              <div className="text-[10px] font-black text-gray-700 uppercase tracking-[0.4em] mb-8">{feature.tag}</div>
-              <h3 className="text-3xl font-bold mb-6">{feature.title}</h3>
-              <p className="text-gray-500 font-light leading-relaxed">{feature.desc}</p>
-            </motion.div>
-          ))}
+        {/* Forged Realities Gallery */}
+        <section className="max-w-7xl mx-auto py-40">
+           <div className="text-center mb-32">
+              <h2 className="text-5xl archon-heading mb-6">Forged Realities</h2>
+              <div className="h-px w-32 bg-white mx-auto" />
+           </div>
+
+           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              {realities.map((url, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  viewport={{ once: true }}
+                  className="aspect-[4/5] rounded-[32px] overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 group cursor-crosshair"
+                >
+                  <img src={url} alt="Forged Reality" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2000ms]" />
+                </motion.div>
+              ))}
+           </div>
         </section>
       </main>
 
-      <footer className="py-20 border-t border-white/5 text-center">
-        <span className="text-[9px] font-black text-gray-800 uppercase tracking-[1em]">
-          Pixel Forge Architecture v2.0
-        </span>
-      </footer>
+      <Footer />
     </div>
   );
 }

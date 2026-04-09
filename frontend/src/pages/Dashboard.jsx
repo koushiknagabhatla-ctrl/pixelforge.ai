@@ -3,23 +3,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import useAuthStore from '../store/useAuthStore';
 import useImageStore from '../store/useImageStore';
-import { HiOutlineSparkles, HiOutlineDownload, HiOutlineEye, HiOutlineRefresh } from 'react-icons/hi';
+import { HiOutlineSparkles, HiOutlineDownload, HiOutlineEye, HiOutlineRefresh, HiOutlineCloudUpload } from 'react-icons/hi';
 
 export default function Dashboard() {
   const { user } = useAuthStore();
   const { isGenerating, resultImage, enhancedPrompt, history, generateImage, runTool, fetchHistory, clearResult } = useImageStore();
   const [prompt, setPrompt] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
-  const mode = searchParams.get('mode') || 'synth'; // Default to synth
+  const mode = searchParams.get('mode') || 'synth'; 
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     if (user) fetchHistory(user.id);
   }, [user]);
-
-  const setMode = (newMode) => {
-    setSearchParams({ mode: newMode });
-  };
 
   const handleForge = () => {
     if (mode === 'synth') {
@@ -27,7 +23,7 @@ export default function Dashboard() {
       generateImage(prompt, user.id);
     } else {
       if (!selectedFile) return;
-      runTool(mode === 'extract' ? 'bg-remove' : mode === 'enhance' ? 'enhance' : 'denoise', selectedFile, user.id);
+      runTool(mode, selectedFile, user.id);
     }
   };
 
@@ -38,47 +34,60 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-black pt-32 px-6 lg:px-12 pb-20 text-white">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[#050505] pt-12 px-6 lg:px-12 pb-20 text-white neural-grain">
+      <div className="max-w-6xl mx-auto">
         
-        {/* Mode Selector Removed in favor of Sidebar Navigation */}
+        {/* Navigation Indicator */}
+        <div className="mb-16 flex items-center justify-between">
+           <div className="flex flex-col">
+              <span className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] mb-2">Neural Workspace</span>
+              <h2 className="text-3xl archon-heading">{mode === 'synth' ? 'Matrix Synthesis' : 'Vision Modulation'}</h2>
+           </div>
+           <div className="hidden md:flex items-center gap-4 py-2 px-6 glass-premium rounded-full">
+              <div className="w-1.5 h-1.5 rounded-full bg-white/40 animate-pulse" />
+              <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest leading-none">Cluster Status: Active</span>
+           </div>
+        </div>
 
         {/* Forge Console */}
         <div className="max-w-4xl mx-auto mb-20">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-card p-10 rounded-[3rem] text-center"
+            className="glass-premium p-10 rounded-[40px] border-white/[0.03]"
           >
-            <div className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] mb-10">AI Tools Infrastructure v2.0</div>
-            
             {mode === 'synth' ? (
-              <div className="relative mb-8">
+              <div className="relative mb-10 group">
                 <textarea
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value.slice(0, 500))}
-                  placeholder="Describe your vision..."
-                  className="forge-input h-48 resize-none text-xl font-light"
+                  placeholder="Describe the architecture of your vision..."
+                  className="forge-input-premium h-64 resize-none text-2xl font-light tracking-wide transition-all"
                 />
-                <div className="absolute bottom-6 right-8 text-[10px] font-bold text-gray-700 uppercase tracking-widest">
+                <div className="absolute bottom-6 right-8 text-[10px] font-bold text-gray-700 uppercase tracking-widest opacity-40 group-focus-within:opacity-100 transition-opacity">
                   {prompt.length} / 500
                 </div>
               </div>
             ) : (
-              <div className="relative mb-8 p-12 border-2 border-dashed border-white/5 rounded-[2rem] hover:border-white/20 transition-all cursor-pointer group">
+              <div className="relative mb-10 p-20 border border-dashed border-white/5 rounded-[40px] hover:border-white/20 transition-all cursor-pointer group bg-white/[0.01]">
                 <input 
                   type="file" 
                   accept="image/*"
                   onChange={handleFileChange}
-                  className="absolute inset-0 opacity-0 cursor-pointer" 
+                  className="absolute inset-0 opacity-0 cursor-pointer z-10" 
                 />
-                <div className="flex flex-col items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-gray-600 group-hover:text-white transition-all">
-                    <HiOutlineDownload className="w-8 h-8 rotate-180" />
+                <div className="flex flex-col items-center gap-6">
+                  <div className="w-20 h-20 rounded-3xl bg-white/5 flex items-center justify-center text-gray-600 group-hover:text-white transition-all border border-white/5 group-hover:border-white/20">
+                    <HiOutlineCloudUpload className="w-10 h-10" />
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-600 group-hover:text-white">
-                    {selectedFile ? selectedFile.name : 'Ingest Visual Matrix (Upload Image)'}
-                  </span>
+                  <div className="text-center">
+                    <span className="text-sm font-black uppercase tracking-[0.4em] text-white block mb-2">
+                        {selectedFile ? selectedFile.name : 'Ingest Asset'}
+                    </span>
+                    <span className="text-[9px] font-bold text-gray-700 uppercase tracking-widest">
+                        Standard Modulation Input (PNG, JPG, WEBP)
+                    </span>
+                  </div>
                 </div>
               </div>
             )}
@@ -86,21 +95,21 @@ export default function Dashboard() {
             <button
               onClick={handleForge}
               disabled={isGenerating || (mode === 'synth' ? !prompt.trim() : !selectedFile)}
-              className={`w-full py-8 rounded-2xl font-black text-xs uppercase tracking-[0.4em] transition-all flex items-center justify-center gap-4 ${
+              className={`pill-button w-full flex items-center justify-center gap-6 ${
                 isGenerating 
-                ? 'bg-white/5 text-gray-700' 
-                : 'bg-white text-black hover:scale-[1.02] active:scale-[0.98] shadow-2xl'
+                ? 'bg-white/5 text-gray-600' 
+                : 'pill-primary'
               }`}
             >
               {isGenerating ? (
                 <>
                   <div className="w-5 h-5 border-2 border-gray-600 border-t-black rounded-full animate-spin" />
-                  Executing Neural Sequence...
+                  Neural Sequence in Progress...
                 </>
               ) : (
                 <>
                   <HiOutlineSparkles className="w-5 h-5" />
-                  {mode === 'synth' ? 'Initialize Forge' : 'Begin Modulation'}
+                  {mode === 'synth' ? 'Forge Matrix' : 'Begin Modulation'}
                 </>
               )}
             </button>
@@ -108,40 +117,44 @@ export default function Dashboard() {
         </div>
 
         {/* Result Stage */}
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {resultImage && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+              layout
+              initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="max-w-4xl mx-auto mb-20"
+              exit={{ opacity: 0, scale: 0.98 }}
+              className="max-w-4xl mx-auto mb-32"
             >
-              <div className="glass-card p-4 rounded-[3rem] overflow-hidden group relative">
-                <img src={resultImage} alt="Generated Asset" className="w-full h-auto rounded-[2rem]" />
-                
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-6">
-                  <a 
-                    href={resultImage} 
-                    download 
-                    className="p-6 rounded-full bg-white text-black hover:scale-110 transition-transform"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <HiOutlineDownload className="w-6 h-6" />
-                  </a>
-                  <button 
-                    onClick={clearResult}
-                    className="p-6 rounded-full glass-button text-white hover:scale-110 transition-transform"
-                  >
-                    <HiOutlineRefresh className="w-6 h-6" />
-                  </button>
-                </div>
+              <div className="glass-premium p-4 rounded-[48px] overflow-hidden group relative">
+                 <div className="absolute inset-x-8 top-8 z-20 flex justify-between">
+                    <span className="px-4 py-2 glass-premium rounded-full text-[9px] font-black uppercase tracking-widest">Archon Output v3</span>
+                    <div className="flex gap-2">
+                        <a 
+                            href={resultImage} 
+                            download 
+                            className="p-4 rounded-full bg-white text-black hover:scale-110 active:scale-95 transition-all shadow-2xl"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <HiOutlineDownload className="w-5 h-5" />
+                        </a>
+                        <button 
+                            onClick={clearResult}
+                            className="p-4 rounded-full glass-premium text-white hover:scale-110 active:scale-95 transition-all"
+                        >
+                            <HiOutlineRefresh className="w-5 h-5" />
+                        </button>
+                    </div>
+                 </div>
+
+                <img src={resultImage} alt="Neural Asset" className="w-full h-auto rounded-[32px] grayscale hover:grayscale-0 transition-all duration-[2000ms]" />
               </div>
               
               {enhancedPrompt && (
-                <div className="mt-8 px-8 py-6 glass-card rounded-2xl">
-                  <span className="text-[10px] font-black text-gray-700 uppercase tracking-[0.4em] block mb-4">Neural Expansion Details</span>
-                  <p className="text-gray-500 font-light italic text-sm leading-relaxed">
+                <div className="mt-12 px-10 py-10 glass-premium rounded-[32px] border-white/5">
+                  <span className="text-[10px] font-black text-white uppercase tracking-[0.5em] block mb-8">Architectural Metadata</span>
+                  <p className="text-gray-500 font-medium text-lg leading-relaxed italic pr-12">
                     "{enhancedPrompt}"
                   </p>
                 </div>
@@ -150,28 +163,26 @@ export default function Dashboard() {
           )}
         </AnimatePresence>
 
-        {/* Gallery Grid */}
+        {/* Archive Section */}
         <section className="pt-20 border-t border-white/5">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <span className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] block mb-2">Neural Archive</span>
-              <h2 className="text-4xl font-black uppercase tracking-tighter">Previous <span className="text-gray-600">Creations</span></h2>
-            </div>
-          </div>
+           <div className="text-center mb-24">
+              <h2 className="text-4xl archon-heading mb-4">Neural Archive</h2>
+              <div className="w-px h-16 bg-white/10 mx-auto" />
+           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {(Array.isArray(history) ? history : []).map((item, i) => (
               <motion.div
                 key={item.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="aspect-square glass-card rounded-2xl group transition-all hover:scale-[1.05] shadow-2xl overflow-hidden"
+                className="aspect-square glass-premium rounded-[32px] group overflow-hidden border-white/5 hover:border-white/20 transition-all"
               >
-                <img src={item.enhanced_url} alt="History asset" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
-                <div className="absolute inset-x-6 bottom-6 opacity-0 group-hover:opacity-100 transition-all">
-                   <a href={item.enhanced_url} target="_blank" rel="noreferrer" className="w-full py-4 glass-button rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest">
-                     <HiOutlineEye /> View Matrix
+                <img src={item.enhanced_url} alt="Archive" className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                   <a href={item.enhanced_url} target="_blank" rel="noreferrer" className="pill-button pill-primary py-3 !px-6 !text-[8px]">
+                     View Matrix
                    </a>
                 </div>
               </motion.div>
