@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { FcGoogle } from 'react-icons/fc'
 import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUser } from 'react-icons/hi'
 import useAuthStore from '../store/useAuthStore'
@@ -10,6 +10,7 @@ export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false)
   const { signUpWithEmail, signInWithGoogle, loading } = useAuthStore()
   const navigate = useNavigate()
 
@@ -27,7 +28,7 @@ export default function Signup() {
   const handleGoogleSignup = async () => {
     try {
       await signInWithGoogle()
-      toast.success('Biometric mapping complete.')
+      toast.success('Google mapping complete.')
       navigate('/chatbot')
     } catch (error) {
       toast.error(error.message)
@@ -57,13 +58,13 @@ export default function Signup() {
 
         <button
           onClick={handleGoogleSignup}
-          className="w-full h-18 py-5 glass border border-white/10 rounded-2xl flex items-center justify-center gap-6 hover:bg-white/5 transition-all mb-10 group relative overflow-hidden"
+          className="w-full h-18 py-5 glass border border-white/10 rounded-2xl flex items-center justify-center gap-6 hover:border-white/20 transition-all mb-10 group relative overflow-hidden"
         >
           <div className="relative">
             <FcGoogle className="w-6 h-6 relative z-10" />
-            <div className="absolute inset-0 bg-white blur-xl opacity-20 group-hover:opacity-60 transition-opacity" />
+            <div className="absolute inset-0 bg-white blur-xl opacity-40 group-hover:opacity-100 transition-opacity rounded-full scale-125" />
           </div>
-          <span className="text-[12px] font-black uppercase tracking-[0.4em] text-white">Neural Mapping</span>
+          <span className="text-[12px] font-black uppercase tracking-[0.4em] text-white">Sign up with Google</span>
         </button>
 
         <div className="flex items-center gap-10 mb-10">
@@ -105,17 +106,40 @@ export default function Signup() {
 
           <div className="space-y-2">
             <label className="text-[10px] font-bold text-gray-800 uppercase tracking-[0.5em] ml-2">Secure Key</label>
-            <div className="relative group">
-              <HiOutlineLockClosed className="absolute left-8 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-800 group-focus-within:text-white transition-colors" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                minLength={8}
-                className="w-full h-18 pl-20 pr-8 bg-white/[0.015] border border-white/5 rounded-2xl text-white text-base focus:outline-none focus:border-white/20 transition-all font-medium placeholder:text-gray-900 shadow-inner"
-              />
+            <div className="relative">
+              <HiOutlineLockClosed className={`absolute left-8 top-1/2 -translate-y-1/2 w-6 h-6 transition-colors z-20 ${isPasswordFocused ? 'text-white' : 'text-gray-800'}`} />
+              
+              <motion.div
+                animate={{ 
+                    boxShadow: isPasswordFocused ? "0 0 30px rgba(255,255,255,0.15)" : "0 0 0px rgba(255,255,255,0)",
+                    scale: isPasswordFocused ? 1.01 : 1
+                }}
+                className="relative"
+              >
+                  <input
+                    type="password"
+                    value={password}
+                    onFocus={() => setIsPasswordFocused(true)}
+                    onBlur={() => setIsPasswordFocused(false)}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    minLength={8}
+                    className="w-full h-18 pl-20 pr-8 bg-white/[0.015] border border-white/5 rounded-2xl text-white text-base focus:outline-none focus:border-white/20 transition-all font-medium placeholder:text-gray-900 shadow-inner relative z-10"
+                  />
+                  
+                  {/* Password Entry Pulse */}
+                  <AnimatePresence>
+                    {isPasswordFocused && password.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 bg-white/[0.02] blur-xl rounded-2xl -z-10"
+                      />
+                    )}
+                  </AnimatePresence>
+              </motion.div>
             </div>
           </div>
 

@@ -49,8 +49,8 @@ const Chatbot = () => {
                       <HiOutlineChip className="w-5 h-5" />
                   </div>
                   <div>
-                    <h2 className="text-[10px] font-black uppercase tracking-[0.6em] text-white">Unrestricted Matrix</h2>
-                    <p className="text-[8px] font-bold text-gray-800 uppercase tracking-widest leading-none mt-1">Llama 3.3 Core v18.0</p>
+                    <h2 className="text-[10px] font-black uppercase tracking-[0.6em] text-white">Forge AI</h2>
+                    <p className="text-[8px] font-bold text-gray-800 uppercase tracking-widest leading-none mt-1">Llama 3.3 Core v18.1</p>
                   </div>
               </div>
               <div className="w-2.5 h-2.5 rounded-full bg-white/20 animate-pulse border border-white/10" />
@@ -59,7 +59,7 @@ const Chatbot = () => {
           {/* Message Stream */}
           <div 
             ref={scrollRef}
-            className="flex-1 overflow-y-auto p-6 sm:p-20 space-y-8 scrollbar-hide pt-10 pb-44"
+            className="flex-1 overflow-y-auto p-6 sm:p-20 space-y-8 scrollbar-hide pt-10"
           >
             <AnimatePresence mode="popLayout">
               {messages.map((msg, i) => (
@@ -112,14 +112,14 @@ const Chatbot = () => {
             </AnimatePresence>
           </div>
 
-          {/* ⌨️ FIXED INPUT BRIDGE (NAVBAR STYLE) */}
-          <div className="absolute bottom-6 left-6 right-6 z-20">
+          {/* ⌨️ SEPARATED INPUT AREA (NO OVERLAP) */}
+          <div className="p-6 bg-black/40 backdrop-blur-3xl border-t border-white/[0.03]">
             <div className="max-w-3xl mx-auto relative group">
                 <div className="absolute inset-0 bg-white/[0.01] blur-[80px] rounded-full -z-10 group-focus-within:bg-white/[0.05] transition-all duration-1000" />
                 
-                <div className="glass-premium p-2.5 flex items-center gap-5 border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] focus-within:border-white/20 transition-all duration-1000 min-h-[72px] rounded-[2rem]">
-                    <div className="w-12 h-12 rounded-[1.25rem] bg-white/[0.03] text-gray-700 flex items-center justify-center shrink-0">
-                        <HiOutlineDotsHorizontal className="w-6 h-6" />
+                <div className="glass-premium p-2 flex items-center gap-5 border border-white/5 shadow-2xl transition-all duration-1000 min-h-[64px] rounded-[1.5rem]">
+                    <div className="w-10 h-10 rounded-xl bg-white/[0.03] text-gray-800 flex items-center justify-center shrink-0">
+                        <HiOutlineDotsHorizontal className="w-5 h-5" />
                     </div>
                     
                     <input
@@ -127,7 +127,7 @@ const Chatbot = () => {
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                        placeholder="Direct directive..."
+                        placeholder=""
                         className="flex-1 bg-transparent border-none outline-none text-white text-base font-semibold placeholder:text-gray-900 h-full px-2"
                     />
 
@@ -136,13 +136,13 @@ const Chatbot = () => {
                         disabled={loading || !input.trim()}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`h-12 w-12 rounded-[1.25rem] transition-all duration-1000 flex items-center justify-center shrink-0 ${
+                        className={`h-10 w-10 rounded-xl transition-all duration-1000 flex items-center justify-center shrink-0 ${
                             loading || !input.trim() 
                             ? 'text-gray-900 bg-white/5' 
-                            : 'bg-white text-black'
+                            : 'bg-white text-black shadow-white/10 shadow-xl'
                         }`}
                     >
-                        <HiOutlineArrowUp className="w-5 h-5" />
+                        <HiOutlineArrowUp className="w-4 h-4" />
                     </motion.button>
                 </div>
             </div>
