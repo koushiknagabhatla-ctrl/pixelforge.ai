@@ -19,8 +19,9 @@ const ASSETS = {
   entity: "/assets/entity.png"
 };
 
-const MotionSection = ({ children, className }) => (
+const MotionSection = ({ children, className, id }) => (
   <motion.section
+    id={id}
     initial={{ opacity: 0, y: 40 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-50px" }}
@@ -36,8 +37,7 @@ const Landing = () => {
 
   return (
     <div ref={containerRef} className="min-h-screen bg-transparent overflow-x-hidden pt-20 selection:bg-white/10 relative z-10">
-      <div className="absolute inset-0 neural-grain" />
-
+      
       {/* 🏙️ HERO PRECISION (Atomic Scale) */}
       <section className="relative min-h-[85vh] px-10 py-20 flex flex-col items-center justify-center text-center overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-white/[0.01] blur-[150px] rounded-full -z-10" />
@@ -51,7 +51,7 @@ const Landing = () => {
             <div className="inline-block">
                 <div className="glass-text-inner flex items-center gap-3">
                     <div className="w-1.2 h-1.2 rounded-full bg-white/40 animate-pulse" />
-                    <span className="text-[7.5px] font-black uppercase tracking-[0.5em] text-white/40">Atomic Framework v23.0</span>
+                    <span className="text-[7.5px] font-black uppercase tracking-[0.5em] text-white/40">Atomic Framework v25.0</span>
                 </div>
             </div>
 
@@ -88,7 +88,7 @@ const Landing = () => {
       </section>
 
       {/* 🏛️ THE MISSION */}
-      <MotionSection className="px-10 py-20 max-w-7xl mx-auto relative">
+      <MotionSection id="about" className="px-10 py-20 max-w-7xl mx-auto relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
             <div className="lg:col-span-7 space-y-8">
                 <div className="glass-text-inner !px-4 !py-1">
@@ -191,7 +191,7 @@ const Landing = () => {
                     <h2 className="text-[9px] font-black uppercase tracking-[0.4em]">Pixel Forge AI</h2>
                   </div>
               </div>
-              <p className="text-[8px] text-gray-800 font-bold uppercase tracking-widest ml-12">v23.0 Neural Skylight</p>
+              <p className="text-[8px] text-gray-800 font-bold uppercase tracking-widest ml-12">v25.0 Optic Matrix</p>
            </div>
            
            <div className="flex items-center gap-10 text-right">

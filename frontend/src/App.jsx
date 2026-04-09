@@ -33,7 +33,7 @@ function ProtectedRoute({ children, allowGuest = false }) {
   return children
 }
 
-/* ===== Main App Architecture v24.0 ===== */
+/* ===== Main App Architecture v25.0 ===== */
 export default function App() {
   const { initialize, user } = useAuthStore()
   const location = useLocation()
@@ -43,9 +43,9 @@ export default function App() {
     initialize()
   }, [])
 
-  // Absolute Requirement: Redirect on Auth
+  // Nav Liberation: Remove auto-redirect away from Landing for Auth users
   useEffect(() => {
-    if (user && (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/signup')) {
+    if (user && (location.pathname === '/login' || location.pathname === '/signup')) {
       navigate('/chatbot', { replace: true })
     }
   }, [user, location.pathname, navigate])
@@ -54,7 +54,6 @@ export default function App() {
 
   return (
     <div className="flex flex-col min-h-screen bg-transparent text-[#f8fafc] selection:bg-white/10">
-      <div className="neural-grain" />
       
       <Navbar />
 
