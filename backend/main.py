@@ -41,42 +41,37 @@ async def global_exception_handler(request: Request, exc: Exception):
 # 4. Emergency Diagnostic Hub (User Requested Format)
 @app.get("/api/health/")
 async def health_check():
-    """Diagnostic Hub to expose environment status without crashing."""
+    """Archon v3.1 Diagnostic Oracle"""
     try:
         from backend.services.supabase_service import supabase_service
         
-        env_vars_to_check = [
-            "SUPABASE_URL", "SUPABASE_SERVICE_KEY", 
-            "GEMINI_API_KEY", "CLOUDINARY_CLOUD_NAME",
-            "CLOUDINARY_API_KEY", "CLOUDINARY_API_SECRET"
-        ]
-        
-        present_vars = [v for v in env_vars_to_check if os.getenv(v)]
+        env_status = {
+            "SUPABASE": bool(os.getenv("SUPABASE_URL") and os.getenv("SUPABASE_SERVICE_KEY")),
+            "GEMINI": bool(os.getenv("GEMINI_API_KEY")),
+            "CLOUDINARY": bool(os.getenv("CLOUDINARY_API_KEY"))
+        }
         
         db_connected = False
-        db_error = None
         if supabase_service.supabase:
             try:
                 supabase_service.supabase.table("users").select("count").limit(1).execute()
                 db_connected = True
-            except Exception as e:
-                db_error = str(e)
+            except Exception: pass
 
         return {
             "status": "online" if db_connected else "degraded",
-            "env_vars_present": present_vars,
+            "archon_v3": "Active",
+            "environment": env_status,
             "database_connected": db_connected,
-            "database_error": db_error,
-            "vercel_env": os.getenv("VERCEL_ENV", "local")
+            "deployment": os.getenv("VERCEL_ENV", "local")
         }
     except Exception as e:
         return JSONResponse(
             status_code=503,
             content={
                 "status": "error",
-                "message": "Health Hub Initialization failure",
-                "error": str(e),
-                "traceback": traceback.format_exc()
+                "message": "Archon Ignition Failure",
+                "detail": str(e)
             }
         )
 

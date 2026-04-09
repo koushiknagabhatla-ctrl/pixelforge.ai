@@ -1,19 +1,29 @@
 import axios from 'axios'
 
 const api = axios.create({
-  // Use VITE_API_URL if present, otherwise fallback to local dev or production proxy
-  baseURL: import.meta.env.VITE_API_URL || 
-           (window.location.hostname === 'localhost' ? 'http://localhost:8000' : '/api'),
+  // Authoritative Production Routing:
+  // In Vercel, we MUST use relative /api path to leverage the proxy rewrites.
+  // Locally, we fallback to 8000 for backend development.
+  baseURL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+           ? 'http://localhost:8000/api' 
+           : '/api',
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-// Request interceptor for logging
+// Global Error Interceptor for production diagnostics
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error('API Error:', error.response?.data || error.message)
+    const errorDetail = error.response?.data?.detail || error.response?.data?.error || error.message;
+    console.error('Archon API Failure:', errorDetail);
+    
+    // If we catch a 500 in production, we log the specific bridge failure
+    if (error.response?.status === 500) {
+        console.warn('Production Matrix Collapse: Request likely failed at the serverless bridge.');
+    }
+    
     return Promise.reject(error)
   }
 )

@@ -26,6 +26,8 @@ class SupabaseService:
 
     async def get_user_credits(self, user_id: str) -> dict:
         """Get user's current credits and plan."""
+        if not self.supabase:
+            return {"credits": 999, "plan": "unlimited (offline)"}
         try:
             result = (
                 self.supabase.table("users")
@@ -36,18 +38,23 @@ class SupabaseService:
             )
             return result.data
         except Exception:
-            return {"credits": 9999, "plan": "unlimited"}
+            return {"credits": 5, "plan": "guest"}
 
     async def deduct_credit(self, user_id: str) -> bool:
         """Deduct 1 credit from user. Returns False if no credits left."""
-        user = await self.get_user_credits(user_id)
-        if not user or user["credits"] <= 0:
-            return False
+        if not self.supabase:
+            return True # Allow operation in offline mode
+        try:
+            user = await self.get_user_credits(user_id)
+            if not user or user["credits"] <= 0:
+                return False
 
-        self.supabase.table("users").update(
-            {"credits": user["credits"] - 1}
-        ).eq("id", user_id).execute()
-        return True
+            self.supabase.table("users").update(
+                {"credits": user["credits"] - 1}
+            ).eq("id", user_id).execute()
+            return True
+        except Exception:
+            return True
 
     async def save_enhancement(
         self,
@@ -58,6 +65,8 @@ class SupabaseService:
         scale: int,
     ) -> dict:
         """Save an enhancement record to the database."""
+        if not self.supabase:
+            return None
         try:
             result = (
                 self.supabase.table("enhancements")
@@ -78,11 +87,11 @@ class SupabaseService:
             return None
 
     async def save_history(self, user_id, mode, original_name, enhanced_url):
-        """Helper for tools to save history."""
         return await self.save_enhancement(user_id, original_name, enhanced_url, mode, 1)
 
     async def get_user_history(self, user_id: str, limit: int = 50) -> list:
-        """Get user's enhancement history."""
+        if not self.supabase:
+            return []
         try:
             result = (
                 self.supabase.table("enhancements")
@@ -97,41 +106,50 @@ class SupabaseService:
             return []
 
     async def ensure_user_exists(self, user_id: str, email: str) -> dict:
-        """Create user record if it doesn't exist."""
-        existing = (
-            self.supabase.table("users")
-            .select("*")
-            .eq("id", user_id)
-            .execute()
-        )
-        if existing.data:
-            return existing.data[0]
-
-        result = (
-            self.supabase.table("users")
-            .insert(
-                {
-                    "id": user_id,
-                    "email": email,
-                    "credits": 5,
-                    "plan": "free",
-                }
+        if not self.supabase:
+            return {"id": user_id, "email": email, "plan": "guest"}
+        try:
+            existing = (
+                self.supabase.table("users")
+                .select("*")
+                .eq("id", user_id)
+                .execute()
             )
-            .execute()
-        )
-        return result.data[0] if result.data else None
+            if existing.data:
+                return existing.data[0]
+
+            result = (
+                self.supabase.table("users")
+                .insert(
+                    {
+                        "id": user_id,
+                        "email": email,
+                        "credits": 5,
+                        "plan": "free",
+                    }
+                )
+                .execute()
+            )
+            return result.data[0] if result.data else None
+        except Exception as e:
+            print(f"User Ensure Error: {e}")
+            return {"id": user_id, "email": email, "plan": "error-mode"}
 
     async def update_user_plan(self, user_id: str, plan: str) -> dict:
-        """Update user's plan and add credits."""
-        credits_map = {"pro": 100, "business": 9999}
-        credits = credits_map.get(plan, 5)
+        if not self.supabase:
+            return None
+        try:
+            credits_map = {"pro": 100, "business": 9999}
+            credits = credits_map.get(plan, 5)
 
-        result = (
-            self.supabase.table("users")
-            .update({"plan": plan, "credits": credits})
-            .eq("id", user_id)
-            .execute()
-        )
-        return result.data[0] if result.data else None
+            result = (
+                self.supabase.table("users")
+                .update({"plan": plan, "credits": credits})
+                .eq("id", user_id)
+                .execute()
+            )
+            return result.data[0] if result.data else None
+        except Exception:
+            return None
 
 supabase_service = SupabaseService()

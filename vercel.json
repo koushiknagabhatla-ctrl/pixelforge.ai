@@ -1,20 +1,21 @@
 {
   "version": 2,
-  "trailingSlash": true,
-  "builds": [
+  "framework": null,
+  "rewrites": [
     {
-      "src": "api/index.py",
-      "use": "@vercel/python",
-      "config": { "maxDuration": 30 }
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
     },
     {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
+      "source": "/(.*)",
+      "destination": "/frontend/dist/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/dist/index.html"
     }
   ],
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "api/index.py" },
-    { "source": "/(.*)", "destination": "frontend/$1" }
-  ]
+  "env": {
+    "PYTHONPATH": "."
+  }
 }
