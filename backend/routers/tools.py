@@ -1,5 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
-from services import gemini_service, cloudinary_service, supabase_service
+from backend.services import gemini_service, cloudinary_service, supabase_service
 import base64
 from io import BytesIO
 

@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException
-from models.schemas import (
+from backend.models.schemas import (
     UserCredits,
     EnhancementRecord,
 )
-from services import supabase_service
+from backend.services.supabase_service import supabase_service
 from typing import List
 import uuid
 

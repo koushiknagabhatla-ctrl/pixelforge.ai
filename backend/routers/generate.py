@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request
-from models.schemas import EnhanceRequest, EnhanceResponse
-from services import gemini_service, cloudinary_service, supabase_service
+from backend.models.schemas import EnhanceRequest, EnhanceResponse
+from backend.services import gemini_service, cloudinary_service, supabase_service
 import uuid
 import asyncio
 from pydantic import BaseModel

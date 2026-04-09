@@ -7,7 +7,7 @@ import os
 # Load environment variables FIRST before importing routers
 load_dotenv()
 
-from routers import generate, upload, user, chat, tools
+from backend.routers import generate, upload, user, chat, tools
 
 from fastapi import Request
 from fastapi.responses import JSONResponse
@@ -62,8 +62,8 @@ async def root():
 @app.get("/api/health/")
 async def health_check():
     """Diagnostic Hub for checking environment and services."""
-    from services.supabase_service import supabase_service
-    from services.gemini_service import gemini_service
+    from backend.services.supabase_service import supabase_service
+    from backend.services.gemini_service import gemini_service
     
     env_vars = ["SUPABASE_URL", "SUPABASE_SERVICE_KEY", "GEMINI_API_KEY", "CLOUDINARY_CLOUD_NAME"]
     missing = [v for v in env_vars if not os.getenv(v)]

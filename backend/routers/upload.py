@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
-from models.schemas import UploadResponse
-from services import cloudinary_service
+from backend.models.schemas import UploadResponse
+from backend.services import cloudinary_service
 
 router = APIRouter()
 
