@@ -9,7 +9,7 @@ const Chatbot = () => {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [model, setModel] = useState('gemini-2.0-flash'); // gemini-2.0-flash or gemini-1.5-flash
+  const [model, setModel] = useState('llama-3.3-70b-versatile'); // llama-3.3-70b-versatile or gemini-2.0-flash
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -102,7 +102,7 @@ const Chatbot = () => {
             className="flex flex-col gap-2"
         >
             <div className="flex gap-2 mb-2">
-                {['gemini-2.0-flash', 'gemini-1.5-flash'].map(m => (
+                {['llama-3.3-70b-versatile', 'gemini-2.0-flash'].map(m => (
                     <button 
                         key={m}
                         onClick={() => setModel(m)}
@@ -110,7 +110,7 @@ const Chatbot = () => {
                             model === m ? 'bg-white text-black' : 'bg-white/5 text-gray-600 hover:text-white'
                         }`}
                     >
-                        {m === 'gemini-2.0-flash' ? 'PRO' : 'FLASH'}
+                        {m === 'llama-3.3-70b-versatile' ? 'LLAMA 3' : 'GEMINI'}
                     </button>
                 ))}
             </div>
