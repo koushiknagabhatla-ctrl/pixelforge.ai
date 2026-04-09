@@ -6,8 +6,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.py",
-      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
+      "destination": "/api/index.py"
     },
     {
       "source": "/(.*)",
