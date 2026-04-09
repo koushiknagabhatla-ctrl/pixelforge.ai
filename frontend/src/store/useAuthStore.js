@@ -46,7 +46,7 @@ const useAuthStore = create((set, get) => ({
   ensureUser: async (user) => {
     if (!user) return
     try {
-      await api.post(`/user/ensure/`, null, { params: { user_id: user.id, email: user.email } })
+      await api.post(`/user/ensure`, null, { params: { user_id: user.id, email: user.email } })
     } catch (e) {
       console.error('User synchronization failed:', e.response?.data?.detail || e.message)
     }
@@ -56,7 +56,7 @@ const useAuthStore = create((set, get) => ({
     const { user } = get()
     if (!user) return
     try {
-      const { data } = await api.get(`/user/credits/${user.id}/`)
+      const { data } = await api.get(`/user/credits/${user.id}`)
       set({ credits: data.credits, plan: data.plan })
     } catch (error) {
       console.error('Failed to fetch credits:', error)
