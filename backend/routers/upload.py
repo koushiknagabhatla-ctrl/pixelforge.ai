@@ -8,7 +8,7 @@ MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 ALLOWED_TYPES = {"image/jpeg", "image/png", "image/webp"}
 
 
-@router.post("/upload", response_model=UploadResponse)
+@router.post("/", response_model=UploadResponse)
 async def upload_image(file: UploadFile = File(...)):
     """
     Upload an image to Cloudinary.

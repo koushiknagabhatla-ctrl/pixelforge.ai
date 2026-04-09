@@ -39,7 +39,7 @@ const useEnhancementStore = create((set, get) => ({
     formData.append('file', file)
 
     try {
-      const { data } = await api.post('/upload', formData, {
+      const { data } = await api.post('/upload/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (e) => {
           const progress = Math.round((e.loaded * 100) / e.total)
@@ -159,7 +159,7 @@ const useEnhancementStore = create((set, get) => ({
   fetchHistory: async (userId, limit = 50) => {
     set({ historyLoading: true })
     try {
-      const { data } = await api.get(`/history/${userId}?limit=${limit}`)
+      const { data } = await api.get(`/user/history/${userId}/?limit=${limit}`)
       set({ history: Array.isArray(data) ? data : [], historyLoading: false })
     } catch (error) {
       set({ historyLoading: false })

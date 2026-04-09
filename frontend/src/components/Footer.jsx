@@ -98,7 +98,7 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-3 w-full items-center gap-16 pt-20 border-t border-white/[0.03]">
             <div className="order-2 md:order-1 flex flex-col items-center md:items-start gap-3">
                 <span className="text-[11px] font-black text-white uppercase tracking-[0.5em]">Pixel Forge</span>
-                <span className="text-[8px] font-bold text-gray-800 uppercase tracking-[0.3em]">Architect Neural Console v3.6.2 - FLASH</span>
+                <span className="text-[8px] font-bold text-gray-800 uppercase tracking-[0.3em]">Architect Neural Console v3.6.3 - ABSOLUTE</span>
             </div>
 
             <div className="order-1 md:order-2 flex flex-col items-center gap-6">

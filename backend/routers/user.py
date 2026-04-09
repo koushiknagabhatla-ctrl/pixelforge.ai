@@ -45,7 +45,7 @@ async def ensure_user(
     user_id: str = Query(..., description="The unique identity of the architect"), 
     email: str = Query(..., description="The neural address of the user")
 ):
-    """Ensure user exists in database (Slash & Method Agnostic - PINNACLE)."""
+    """Ensure user exists in database (Slash & Method Agnostic - ABSOLUTE)."""
     try:
         user = await supabase_service.ensure_user_exists(user_id, email)
         if not user:
