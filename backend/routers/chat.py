@@ -11,11 +11,16 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     reply: str
 
-@router.post("/", response_model=ChatResponse)
+@router.api_route("/", methods=["POST", "GET"])
+@router.api_route("", methods=["POST", "GET"])
 async def chat_with_forge(request: Request):
     """
-    Photography & Architecture Expert Chat powered by Gemini.
+    Photography & Architecture Expert Chat (Slash & Method Agnostic).
+    Supports GET (for status) and POST (for messaging).
     """
+    if request.method == "GET":
+        return {"status": "Neural Nexus Online"}
+        
     try:
         body = await request.json()
         message = body.get("message")

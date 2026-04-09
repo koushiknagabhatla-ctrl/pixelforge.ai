@@ -4,17 +4,17 @@ from fastapi.responses import JSONResponse
 import os
 import traceback
 
-# 1. Direct Ignition Foundation (v3.5)
-# We remove root_path and shadow routing to let Vercel manage the /api/ mapping.
+# 1. Indestructible Shadow Foundation (v3.6 - PINNACLE)
+# We handle every possible prefix combination for zero-error discovery.
 app = FastAPI(
-    title="PixelForge AI Production Engine",
-    version="3.5.0",
+    title="PixelForge AI Pinnacle Engine",
+    version="3.6.0",
     docs_url="/docs",
     openapi_url="/openapi.json",
-    redirect_slashes=False
+    redirect_slashes=False  # Crucial: We handle slashes manually for absolute control
 )
 
-# 2. Universal Handshake (CORS)
+# 2. Universal CORS Handshake
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -23,23 +23,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 3. Exception Shield
+# 3. Global Exception Shield
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     return JSONResponse(
         status_code=500,
         content={
-            "error": "Forge Internal Crash",
+            "error": "Internal Forge Crash",
             "detail": str(exc),
-            "traceback": traceback.format_exc() if os.getenv("VERCEL_ENV") != "production" else "Check Runtime Logs"
+            "v": "3.6.0"
         }
     )
 
-# 4. Diagnostic Oracle (v3.5)
+# 4. Global Diagnostic Hub (Slash & Prefix Agnostic)
+@app.get("/api/health")
+@app.get("/api/health/")
 @app.get("/health")
 @app.get("/health/")
 async def health_check():
-    """Archon v3.5 - FINAL IGNITION"""
+    """Archon v3.6 - PINNACLE DIAGNOSTIC"""
     try:
         from backend.services.supabase_service import supabase_service
         db_connected = False
@@ -51,27 +53,37 @@ async def health_check():
 
         return {
             "status": "online" if db_connected else "degraded",
-            "v": "3.5",
-            "mode": "Direct Ignition",
-            "database": db_connected,
-            "handshake": "Verified"
+            "v": "3.6",
+            "architecture": "Quadrants of Resilience",
+            "handshake": "Indestructible",
+            "database": db_connected
         }
     except Exception as e:
         return {"status": "offline", "error": str(e)}
 
-# 5. Authoritative Router Inclusion
-# We use standard prefixes. Vercel's rewrite /api/(.*) -> api/index.py 
-# means the frontend's /api/user/ensure hits here as /user/ensure.
+# 5. QUADRANT ROUTING (Agnostic Synchronization)
+# We register every router twice (with and without /api) 
+# and the routers internally handle the trailing slashes.
 try:
     from backend.routers import generate, upload, user, chat, tools
-    app.include_router(generate.router, prefix="/generate", tags=["generation"])
-    app.include_router(upload.router, prefix="/upload", tags=["upload"])
-    app.include_router(user.router, prefix="/user", tags=["user"])
-    app.include_router(chat.router, prefix="/chat", tags=["chat"])
-    app.include_router(tools.router, prefix="/tools", tags=["tools"])
+    
+    # Layer 1: Authoritative API Space
+    app.include_router(generate.router, prefix="/api/generate", tags=["generation"])
+    app.include_router(upload.router, prefix="/api/upload", tags=["upload"])
+    app.include_router(user.router, prefix="/api/user", tags=["user"])
+    app.include_router(chat.router, prefix="/api/chat", tags=["chat"])
+    app.include_router(tools.router, prefix="/api/tools", tags=["tools"])
+    
+    # Layer 2: Shadow Shadow Compatibility
+    app.include_router(generate.router, prefix="/generate", tags=["shadow"])
+    app.include_router(upload.router, prefix="/upload", tags=["shadow"])
+    app.include_router(user.router, prefix="/user", tags=["shadow"])
+    app.include_router(chat.router, prefix="/chat", tags=["shadow"])
+    app.include_router(tools.router, prefix="/tools", tags=["shadow"])
+    
 except Exception as e:
-    print(f"IGNITION CRITICAL ERROR: {e}")
+    print(f"QUADRANT IGNITION FAILURE: {e}")
 
 @app.get("/")
 async def root():
-    return {"status": "PixelForge Engine Ready", "version": "3.5.0"}
+    return {"status": "PixelForge Engine Ready", "pinnacle": True, "v": "3.6.0"}

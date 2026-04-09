@@ -9,10 +9,10 @@ import uuid
 
 router = APIRouter()
 
-
 @router.get("/credits/{user_id}/", response_model=UserCredits)
+@router.get("/credits/{user_id}", response_model=UserCredits)
 async def get_credits(user_id: str):
-    """Get user's current credits and plan."""
+    """Get user's current credits (Slash-Agnostic)."""
     try:
         data = await supabase_service.get_user_credits(user_id)
         return UserCredits(credits=data.get("credits", 0), plan=data.get("plan", "free"))
@@ -21,8 +21,9 @@ async def get_credits(user_id: str):
 
 
 @router.get("/history/{user_id}/", response_model=List[EnhancementRecord])
+@router.get("/history/{user_id}", response_model=List[EnhancementRecord])
 async def get_history(user_id: str, limit: int = 50):
-    """Get user's enhancement history."""
+    """Get user's enhancement history (Slash-Agnostic)."""
     history = await supabase_service.get_user_history(user_id, limit)
     return [
         EnhancementRecord(
@@ -38,16 +39,17 @@ async def get_history(user_id: str, limit: int = 50):
     ]
 
 
-@router.api_route("/user/ensure", methods=["GET", "POST"])
+@router.api_route("/ensure", methods=["GET", "POST"])
+@router.api_route("/ensure/", methods=["GET", "POST"])
 async def ensure_user(
     user_id: str = Query(..., description="The unique identity of the architect"), 
     email: str = Query(..., description="The neural address of the user")
 ):
-    """Ensure user exists in database (USER-FIX #2 & #3 Optimized)."""
+    """Ensure user exists in database (Slash & Method Agnostic - PINNACLE)."""
     try:
         user = await supabase_service.ensure_user_exists(user_id, email)
         if not user:
-            raise HTTPException(status_code=503, detail="Database Initialization Failed: User could not be synchronized.")
+            raise HTTPException(status_code=503, detail="Synchronization Failure")
         return user
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"User Synchronization Crisis: {str(e)}")
