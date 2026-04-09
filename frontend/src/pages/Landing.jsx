@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { HiOutlineArrowRight, HiOutlineSparkles, HiOutlineLightningBolt, HiOutlineGlobeAlt, HiOutlinePresentationChartBar, HiOutlineGithub } from 'react-icons/hi'
+import { HiOutlineArrowRight, HiOutlineSparkles, HiOutlineLightningBolt, HiOutlineGlobeAlt, HiOutlinePresentationChartBar } from 'react-icons/hi'
+import { FaGithub } from 'react-icons/fa'
 import { SiVercel } from 'react-icons/si'
 import useAuthStore from '../store/useAuthStore'
 
@@ -155,7 +156,7 @@ export default function Landing() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 px-6 py-3 glass rounded-xl hover:bg-white hover:text-black transition-all group"
                   >
-                    <HiOutlineGithub className="w-5 h-5" />
+                    <FaGithub className="w-5 h-5" />
                     <span className="text-[11px] font-bold uppercase tracking-widest">GitHub</span>
                   </a>
 
