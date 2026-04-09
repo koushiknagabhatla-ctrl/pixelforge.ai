@@ -120,23 +120,23 @@ h1, h2, h3, h4 {
   100% { transform: translate(30%, 30%) rotate(45deg); }
 }
 
-/* CINEMATIC UNDERLAY v22.0 */
+/* CINEMATIC UNDERLAY v22.1 — RESTORATION */
 .cinematic-underlay {
   position: fixed;
   inset: 0;
-  z-index: -20;
+  z-index: -1;
   background-size: cover;
   background-position: center;
-  opacity: 0.35;
-  filter: blur(40px) saturate(1.2) contrast(1.2);
+  opacity: 0.65;
+  filter: blur(10px) saturate(1.4) contrast(1.1);
   transform: scale(1.05);
   animation: neural-pulse 20s infinite ease-in-out;
 }
 
 @keyframes neural-pulse {
-  0% { transform: scale(1.05) rotate(0deg); opacity: 0.3; }
-  50% { transform: scale(1.15) rotate(1deg); opacity: 0.45; }
-  100% { transform: scale(1.05) rotate(0deg); opacity: 0.3; }
+  0% { transform: scale(1.05) rotate(0deg); opacity: 0.5; }
+  50% { transform: scale(1.15) rotate(1.5deg); opacity: 0.8; }
+  100% { transform: scale(1.05) rotate(0deg); opacity: 0.5; }
 }
 
 .neural-grain {

@@ -38,7 +38,7 @@ const Landing = () => {
   const yParallax = useTransform(scrollYProgress, [0, 1], [0, -80]);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-[#010101] overflow-x-hidden pt-20 selection:bg-white/10 relative">
+    <div ref={containerRef} className="min-h-screen bg-transparent overflow-x-hidden pt-20 selection:bg-white/10 relative">
       <div className="bg-animated" />
       
       {/* 🌌 VOLUMETRIC MOTION UNDERLAY */}
