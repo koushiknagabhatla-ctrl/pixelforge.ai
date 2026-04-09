@@ -56,7 +56,7 @@ const useAuthStore = create((set, get) => ({
     const { user } = get()
     if (!user) return
     try {
-      const { data } = await api.get(`/credits/${user.id}/`)
+      const { data } = await api.get(`/user/credits/${user.id}/`)
       set({ credits: data.credits, plan: data.plan })
     } catch (error) {
       console.error('Failed to fetch credits:', error)
