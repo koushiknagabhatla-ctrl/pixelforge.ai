@@ -12,7 +12,7 @@ load_dotenv()
 
 app = FastAPI(
     title="PixelForge AI Production Engine",
-    version="3.4.1",
+    version="3.4.2",
     docs_url="/api/docs",
     openapi_url="/api/openapi.json",
     redirect_slashes=False
@@ -42,8 +42,10 @@ async def global_exception_handler(request: Request, exc: Exception):
 # 4. Emergency Diagnostic Hub (User Requested Format)
 @app.get("/api/health/")
 @app.get("/api/health")
+@app.get("/health/")
+@app.get("/health")
 async def health_check():
-    """Archon v3.4.1 Diagnostic Oracle"""
+    """Archon v3.4.2 Diagnostic Oracle"""
     try:
         from backend.services.supabase_service import supabase_service
         
@@ -63,9 +65,9 @@ async def health_check():
 
         return {
             "status": "online" if db_connected else "degraded",
-            "archon_v3_4_1": "Active",
+            "archon_v3_4_2": "Active",
             "ignited": True,
-            "routing": "Precision Alignment (prefix=/api)",
+            "routing": "Shadow Alignment (Dual-Prefix)",
             "environment_keys": env_status,
             "database_connected": db_connected,
             "deployment": os.getenv("VERCEL_ENV", "local")
@@ -81,18 +83,29 @@ async def health_check():
         )
 
 # 5. Deferred Router Loading
+# SHADOW ROUTING: We register everything twice to handle Vercel's prefix stripping logic.
 try:
     from backend.routers import generate, upload, user, chat, tools
+    
+    # Prefix: /api
     app.include_router(generate.router, prefix="/api", tags=["generation"])
     app.include_router(upload.router, prefix="/api", tags=["upload"])
     app.include_router(user.router, prefix="/api", tags=["user"])
     app.include_router(chat.router, prefix="/api", tags=["chat"])
     app.include_router(tools.router, prefix="/api", tags=["tools"])
+    
+    # Prefix: (Empty) - For environments where /api is stripped
+    app.include_router(generate.router, prefix="", tags=["generation_shadow"])
+    app.include_router(upload.router, prefix="", tags=["upload_shadow"])
+    app.include_router(user.router, prefix="", tags=["user_shadow"])
+    app.include_router(chat.router, prefix="", tags=["chat_shadow"])
+    app.include_router(tools.router, prefix="", tags=["tools_shadow"])
+    
 except Exception as e:
     print(f"ROUTER LOADING ERROR: {e}")
 
 @app.get("/")
 async def root():
-    return {"status": "PixelForge Engine Ready", "v": "3.4.1", "mode": "Precision Alignment"}
+    return {"status": "PixelForge Engine Ready", "v": "3.4.2", "mode": "Shadow Alignment"}
 
 handler = Mangum(app)
