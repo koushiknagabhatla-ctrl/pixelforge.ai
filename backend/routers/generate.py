@@ -1,9 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from backend.models.schemas import EnhanceRequest, EnhanceResponse
-from backend.services import gemini_service, cloudinary_service, supabase_service
-import uuid
-import httpx
+from backend.services import gemini_service, cloudinary_service, supabase_service, segmind_service
 from pydantic import BaseModel
+import uuid
 
 class GenerateRequest(BaseModel):
     prompt: str
@@ -14,31 +12,26 @@ class GenerateResponse(BaseModel):
     enhanced_prompt: str
     user_id: str
 
+# Fixed: Using empty string so both /generate and /generate/ work correctly depending on main.py mount
 router = APIRouter()
 
+@router.post("")
 @router.post("/")
 async def generate_image(request: GenerateRequest):
     """
-    Forge a new image using the Flux Engine powered by Pollinations AI.
+    Forge a new image using the Segmind Flux Engine.
     Optimized for high-fidelity architectural and photography concepts.
     """
     try:
-        # 1. Optimize Prompt (We still use Gemini Flash for this as it's superior at prompt engineering)
+        # 1. Optimize Prompt
         enhanced_prompt = await gemini_service.optimize_prompt(request.prompt)
         
-        # 2. Forge Image (Flux via Pollinations)
-        # We encode the prompt for URL safety
-        import urllib.parse
-        safe_prompt = urllib.parse.quote(enhanced_prompt)
-        pollinations_url = f"https://gen.pollinations.ai/image/{safe_prompt}?model=flux&width=1024&height=1024&nologo=true"
-        
-        # 3. Synchronize with Cloudinary (Download from Pollinations and host on Cloudinary)
-        async with httpx.AsyncClient() as client:
-            image_response = await client.get(pollinations_url, timeout=30.0)
-            if image_response.status_code != 200:
-                 raise HTTPException(status_code=500, detail="Pollinations Matrix synchronization failed.")
-            image_bytes = image_response.content
+        # 2. Forge Image (Segmind Flux)
+        image_bytes = await segmind_service.segmind_service.generate_image(enhanced_prompt)
+        if not image_bytes:
+             raise HTTPException(status_code=500, detail="Segmind Matrix synchronization failed.")
 
+        # 3. Synchronize with Cloudinary
         upload_result = await cloudinary_service.upload_image(
             file_bytes=image_bytes,
             filename=f"flux_{uuid.uuid4()}.jpg"
