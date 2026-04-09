@@ -9,7 +9,6 @@ const Chatbot = () => {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [model, setModel] = useState('llama-3.3-70b-versatile'); // llama-3.3-70b-versatile or gemini-2.0-flash
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -27,10 +26,10 @@ const Chatbot = () => {
     setLoading(true);
 
     try {
-      const response = await prompt_deepseek(input, model);
+      const response = await prompt_deepseek(input);
       setMessages((prev) => [...prev, { role: 'assistant', content: response }]);
     } catch (error) {
-      setMessages((prev) => [...prev, { role: 'assistant', content: "Gemini Neural Nexus Error: Synchronization Failed" }]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: "FORGE AI Synchronization Failed" }]);
     } finally {
       setLoading(false);
     }
@@ -39,12 +38,14 @@ const Chatbot = () => {
   return (
     <div className="flex flex-col h-full bg-black/40 backdrop-blur-3xl overflow-hidden relative">
       {/* Cinematic Header Overlay */}
-      <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/60 to-transparent z-10 pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/60 to-transparent z-10 pointer-events-none flex items-center justify-center">
+            <h1 className="text-4xl font-black text-white/10 uppercase tracking-[0.8em] select-none">FORGE AI</h1>
+      </div>
       
-      {/* Thought Stream (Answers on Top, Flows Upwards) */}
+      {/* Thought Stream */}
       <div 
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide pt-16 pb-32"
+        className="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide pt-24 pb-32"
       >
         <AnimatePresence mode="popLayout">
           {messages.map((msg, i) => (
@@ -60,9 +61,6 @@ const Chatbot = () => {
                     <div className="w-5 h-5 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
                         {msg.role === 'user' ? <HiOutlineUser className="w-3 h-3 text-gray-400" /> : <HiOutlineChip className="w-3 h-3 text-gray-400" />}
                     </div>
-                    <span className="text-[9px] font-bold text-gray-600 uppercase tracking-[0.2em]">
-                        {msg.role === 'user' ? 'Architect' : `Gemini ${model === 'gemini-1.5-pro' ? 'Pro' : 'Flash'} Archon`}
-                    </span>
                   </div>
                   <div className={`p-4 lg:p-6 rounded-3xl text-sm leading-relaxed ${
                     msg.role === 'user' 
@@ -87,7 +85,7 @@ const Chatbot = () => {
                         <motion.div className="w-1.5 h-1.5 bg-white/40 rounded-full" animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.2 }} />
                         <motion.div className="w-1.5 h-1.5 bg-white/40 rounded-full" animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.4 }} />
                     </div>
-                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest italic">Archon Processing...</span>
+                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest italic">Forge Processing...</span>
                 </div>
             </motion.div>
           )}
@@ -101,19 +99,6 @@ const Chatbot = () => {
             animate={{ y: 0, opacity: 1 }}
             className="flex flex-col gap-2"
         >
-            <div className="flex gap-2 mb-2">
-                {['llama-3.3-70b-versatile', 'gemini-2.0-flash'].map(m => (
-                    <button 
-                        key={m}
-                        onClick={() => setModel(m)}
-                        className={`px-3 py-1 rounded-full text-[8px] font-bold uppercase tracking-widest transition-all ${
-                            model === m ? 'bg-white text-black' : 'bg-white/5 text-gray-600 hover:text-white'
-                        }`}
-                    >
-                        {m === 'llama-3.3-70b-versatile' ? 'LLAMA 3' : 'GEMINI'}
-                    </button>
-                ))}
-            </div>
             <div className="glass-dark border border-white/10 rounded-[2rem] p-2 pr-4 shadow-2xl flex items-center gap-4 group focus-within:border-white/20 transition-all">
                 <div className="w-12 h-12 rounded-[1.5rem] bg-white/5 flex items-center justify-center shrink-0 border border-white/5 text-gray-600">
                     <HiOutlineSparkles className="w-5 h-5 group-focus-within:text-white transition-colors" />
@@ -124,7 +109,7 @@ const Chatbot = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                    placeholder="ask me something from photography"
+                    placeholder="say hello to our ai"
                     className="flex-1 bg-transparent border-none outline-none text-white text-sm font-medium placeholder:text-gray-700 h-full py-4"
                 />
 

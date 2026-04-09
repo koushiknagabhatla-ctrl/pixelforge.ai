@@ -1,8 +1,8 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException
 from backend.models.schemas import EnhanceRequest, EnhanceResponse
 from backend.services import gemini_service, cloudinary_service, supabase_service
 import uuid
-import asyncio
+import httpx
 from pydantic import BaseModel
 
 class GenerateRequest(BaseModel):
@@ -19,31 +19,41 @@ router = APIRouter()
 @router.post("/")
 async def generate_image(request: GenerateRequest):
     """
-    Forge a new image using the Imagen 3 Engine powered by Gemini.
+    Forge a new image using the Flux Engine powered by Pollinations AI.
+    Optimized for high-fidelity architectural and photography concepts.
     """
     try:
-        # 1. Optimize Prompt
+        # 1. Optimize Prompt (We still use Gemini Flash for this as it's superior at prompt engineering)
         enhanced_prompt = await gemini_service.optimize_prompt(request.prompt)
         
-        # 2. Forge Image (Imagen 3)
-        image_bytes = await gemini_service.generate_image(enhanced_prompt)
+        # 2. Forge Image (Flux via Pollinations)
+        # We encode the prompt for URL safety
+        import urllib.parse
+        safe_prompt = urllib.parse.quote(enhanced_prompt)
+        pollinations_url = f"https://gen.pollinations.ai/image/{safe_prompt}?model=flux&width=1024&height=1024&nologo=true"
+        
+        # 3. Synchronize with Cloudinary (Download from Pollinations and host on Cloudinary)
+        async with httpx.AsyncClient() as client:
+            image_response = await client.get(pollinations_url, timeout=30.0)
+            if image_response.status_code != 200:
+                 raise HTTPException(status_code=500, detail="Pollinations Matrix synchronization failed.")
+            image_bytes = image_response.content
 
-        # 3. Synchronize with Cloudinary
         upload_result = await cloudinary_service.upload_image(
             file_bytes=image_bytes,
-            filename=f"forge_{uuid.uuid4()}.jpg"
+            filename=f"flux_{uuid.uuid4()}.jpg"
         )
         
         image_url = upload_result.get("image_url")
         if not image_url:
-            raise HTTPException(status_code=500, detail="Matrix synchronization failed (Upload).")
+            raise HTTPException(status_code=500, detail="Cloudinary synchronization failed.")
 
         # 4. Save to Neural Archives (Supabase)
         await supabase_service.save_enhancement(
             user_id=request.user_id,
-            original_url=request.prompt,  # Store prompt as original ref
+            original_url=request.prompt,
             enhanced_url=image_url,
-            mode="generate",
+            mode="flux",
             scale=1
         )
 

@@ -129,14 +129,17 @@ export default function Sidebar() {
       <div className={`mt-auto pt-4 border-t border-white/5 flex flex-col gap-4 p-6 ${isSidebarMinimized ? 'items-center' : ''}`}>
         <button
           onClick={signOut}
-          className={`flex items-center gap-3 text-[9px] font-bold uppercase tracking-widest text-gray-600 hover:text-white transition-colors overflow-hidden whitespace-nowrap`}
+          className={`flex items-center gap-3 text-[9px] font-bold uppercase tracking-widest text-gray-600 hover:text-white transition-colors overflow-hidden whitespace-nowrap group`}
         >
-          {user?.app_metadata?.provider === 'google' ? (
-            <FcGoogle className="w-4 h-4 shrink-0" />
-          ) : (
-            <HiOutlineLogout className="w-4 h-4 shrink-0" />
-          )}
-          {!isSidebarMinimized && "Terminate Session"}
+          <div className="relative">
+            {user?.app_metadata?.provider === 'google' ? (
+                <FcGoogle className="w-4 h-4 shrink-0 transition-all duration-500 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
+            ) : (
+                <HiOutlineLogout className="w-4 h-4 shrink-0 transition-all duration-500 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
+            )}
+            <div className="absolute inset-0 bg-white/5 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+          </div>
+          {!isSidebarMinimized && "SIGNOUT"}
         </button>
       </div>
     </motion.aside>
