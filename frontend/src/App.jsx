@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import Navbar from './components/Navbar'
@@ -10,7 +10,8 @@ import Signup from './pages/Signup'
 import useAuthStore from './store/useAuthStore'
 import Sidebar from './components/Sidebar'
 import ChatbotPage from './pages/ChatbotPage'
-import NeuralBackground from './components/NeuralBackground'
+import ElysiumScene from './components/ElysiumScene'
+import IntroForge from './components/IntroForge'
 import ErrorBoundary from './components/ErrorBoundary'
 import useUIStore from './store/useUIStore'
 
@@ -40,10 +41,10 @@ function ProtectedRoute({ children, allowGuest = false }) {
 function PageWrapper({ children }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0, scale: 0.98 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.02 }}
+      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
       className="w-full"
     >
       {children}
@@ -55,6 +56,7 @@ function PageWrapper({ children }) {
 export default function App() {
   const { initialize, user } = useAuthStore()
   const location = useLocation()
+  const [showIntro, setShowIntro] = useState(true)
 
   // Initialize auth on mount
   useEffect(() => {
@@ -65,16 +67,22 @@ export default function App() {
 
   return (
     <div className="flex flex-col min-h-screen bg-black overflow-x-hidden selection:bg-white selection:text-black">
-      <NeuralBackground />
+      <AnimatePresence>
+        {showIntro && <IntroForge onComplete={() => setShowIntro(false)} />}
+      </AnimatePresence>
+
+      {/* Transcendent 3D Backdrop */}
+      <ElysiumScene />
+      
       <Navbar />
 
       <div className="flex flex-1 pt-24 overflow-hidden relative">
         {user && !isAuthPage && <Sidebar />}
         
         <main 
-          className={`flex-1 relative min-w-0 transition-all duration-[0.8s] ease-[0.16, 1, 0.3, 1] ${
+          className={`flex-1 relative min-w-0 transition-all duration-[1s] ease-[0.16, 1, 0.3, 1] ${
             user && !isAuthPage 
-              ? 'pl-0 lg:pl-[72px]' // Precise minimized width offset for desktop
+              ? 'pl-0 lg:pl-[72px]' 
               : ''
           }`}
         >

@@ -72,15 +72,17 @@
   display: none;
 }
 
-/* Transcendent Glass Architecture v7.0 - SOVEREIGN */
+/* Transcendent Glass Architecture v9.0 - ELYSIUM */
 .glass-glow {
-  background: rgba(255, 255, 255, 0.015);
-  backdrop-filter: blur(48px);
-  -webkit-backdrop-filter: blur(48px);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8),
-              inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.012);
+  backdrop-filter: blur(64px);
+  -webkit-backdrop-filter: blur(64px);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: 0 40px 120px -20px rgba(0, 0, 0, 0.9),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.015),
+              0 0 30px -10px rgba(255, 255, 255, 0.05); /* Architectural Luster */
   position: relative;
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-edge {
@@ -96,16 +98,26 @@
   padding: 1px;
   background: linear-gradient(
     145deg, 
-    rgba(255,255,255,0.18) 0%, 
+    rgba(255,255,255,0.2) 0%, 
     rgba(255,255,255,0) 40%, 
     rgba(255,255,255,0) 60%, 
-    rgba(255,255,255,0.08) 100%
+    rgba(255,255,255,0.1) 100%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
+  animation: edge-breathe 8s ease-in-out infinite;
+}
+
+@keyframes edge-breathe {
+    0%, 100% { opacity: 0.4; scale: 1; }
+    50% { opacity: 0.8; scale: 1.002; }
+}
+
+.archon-glow {
+    box-shadow: 0 0 60px -15px rgba(255, 255, 255, 0.1);
 }
 
 /* Silk Smooth Responsive Typography */
