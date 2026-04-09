@@ -1,41 +1,39 @@
-import os
 import sys
-import json
+import os
+import traceback
+from pathlib import Path
 
-def handler(environ, start_response):
-    """
-    The Oracle Probe: Zero-Dependency WSGI Diagnostic Handler.
-    Used to find root-level Python crashes in Vercel Serverless.
-    """
-    # 1. Capture Environment State
-    diag_info = {
-        "status": "oracle_online",
-        "python_version": sys.version,
-        "cwd": os.getcwd(),
-        "sys_path": sys.path,
-        "installed_packages": [],
-        "env_vars": {k: "set" for k in os.environ},
-        "path_to_index": __file__
-    }
+# 1. Authoritative Path Injection
+# Ensure project root is in sys.path for absolute 'backend' imports
+root_path = Path(__file__).parent.parent
+if str(root_path) not in sys.path:
+    sys.path.append(str(root_path))
 
-    # 2. Try to list site-packages
-    try:
-        import pkg_resources
-        diag_info["installed_packages"] = [str(d) for d in pkg_resources.working_set]
-    except Exception as e:
-        diag_info["installed_packages_error"] = str(e)
-
-    # 3. Prepare Response
-    response_body = json.dumps(diag_info, indent=2).encode('utf-8')
-    status = '200 OK'
-    response_headers = [
-        ('Content-Type', 'application/json'),
-        ('Content-Length', str(len(response_body)))
-    ]
+# 2. Main API Ignition
+try:
+    from backend.main import handler as mangum_handler
+    app = mangum_handler
+except Exception as e:
+    # 3. Emergency Diagnostic Fallback
+    # If the app fails to boot, return the traceback directly
+    from fastapi import FastAPI
+    from fastapi.responses import JSONResponse
+    from mangum import Mangum
     
-    start_response(status, response_headers)
-    return [response_body]
+    debug_app = FastAPI()
+    
+    @debug_app.get("/api/health/")
+    async def bridge_emergency():
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": "Backend Boot Failure",
+                "detail": str(e),
+                "traceback": traceback.format_exc()
+            }
+        )
+    
+    app = Mangum(debug_app)
 
-# Export for Vercel
-# Vercel's @vercel/python looks for 'app' or 'handler' or 'index'
-app = handler
+# Authoritative Vercel Export
+handler = app
