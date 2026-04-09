@@ -39,8 +39,9 @@ async def get_history(user_id: str, limit: int = 50):
 
 
 @router.post("/user/ensure/")
+@router.post("/user/ensure")
 async def ensure_user(user_id: str, email: str):
-    """Ensure user exists in database (called after Supabase auth)."""
+    """Ensure user exists in database (Slash-Agnostic)."""
     try:
         user = await supabase_service.ensure_user_exists(user_id, email)
         if not user:
