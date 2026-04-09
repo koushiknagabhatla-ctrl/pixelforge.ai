@@ -12,7 +12,7 @@ const ElysiumScene = () => {
         className="absolute inset-0 w-full h-full"
       >
         <Spline 
-            scene="https://prod.spline.design/6Wq1Q7nS1u66iC9w/scene.splinecode" 
+            scene="https://prod.spline.design/nzM4A1qL6gQf34y9/scene.splinecode" 
             className="w-full h-full pointer-events-none"
         />
       </motion.div>
