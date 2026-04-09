@@ -72,24 +72,22 @@ export default function Dashboard() {
                     </div>
                   </div>
                 ) : (
-                  <div className="relative group p-20 border-2 border-dashed border-white/5 rounded-2xl hover:border-indigo-500/20 transition-all cursor-pointer bg-white/[0.01]">
+                  <div className="relative group p-20 border border-white/5 rounded-[4rem] flex flex-col items-center justify-center bg-white/[0.01] hover:bg-white/[0.02] transition-colors cursor-pointer min-h-[500px]">
                     <input 
                       type="file" 
                       accept="image/*"
                       onChange={handleFileChange}
                       className="absolute inset-0 opacity-0 cursor-pointer z-10" 
                     />
-                    <div className="flex flex-col items-center gap-6">
-                      <div className="w-20 h-20 rounded-2xl glass flex items-center justify-center text-slate-600 group-hover:text-indigo-400 transition-all duration-700 shadow-inner group-hover:scale-110">
-                        <HiOutlineCloudUpload className="w-8 h-8" />
+                    <div className="flex flex-col items-center gap-12 text-center pointer-events-none">
+                      <div className="w-32 h-32 rounded-[2.5rem] bg-indigo-500/10 flex items-center justify-center text-slate-700 group-hover:text-white transition-all duration-700 shadow-inner group-hover:scale-110">
+                        <HiOutlineCloudUpload className="w-12 h-12" />
                       </div>
-                      <div className="text-center">
-                        <span className="text-sm font-bold uppercase tracking-[0.4em] text-white block mb-2">
-                            {selectedFile ? selectedFile.name : 'Select Primary Asset'}
-                        </span>
-                        <span className="text-[10px] font-medium text-slate-600 uppercase tracking-[0.2em]">
-                            Payload max: 10MB
-                        </span>
+                      <div className="space-y-4">
+                        <h3 className="text-2xl font-black uppercase tracking-[0.4em] text-white">Select Asset</h3>
+                        <p className="text-[10px] font-bold text-slate-700 uppercase tracking-[0.3em]">
+                            Max Payload: 10MB (JPG, PNG, WEBP)
+                        </p>
                       </div>
                     </div>
                   </div>

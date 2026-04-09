@@ -96,42 +96,48 @@ export default function Footer() {
 
           {/* Signature & GitHub Architectural Core */}
           <div className="grid grid-cols-1 md:grid-cols-3 w-full items-center gap-16 pt-20 border-t border-white/[0.03]">
-            <div className="order-2 md:order-1 flex flex-col items-center md:items-start gap-3">
-                <span className="text-[11px] font-black text-white uppercase tracking-[0.5em]">Forge AI</span>
-                <span className="text-[8px] font-bold text-gray-800 uppercase tracking-[0.3em]">Architect Neural Console v10.0 - VELOCITY</span>
+            <div className="order-2 md:order-1 flex flex-col items-center md:items-start gap-4">
+                <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-md bg-white flex items-center justify-center font-black text-black text-[10px]">P</div>
+                    <span className="text-[11px] font-black text-white uppercase tracking-[0.5em]">Forge AI</span>
+                </div>
+                <span className="text-[8px] font-bold text-gray-800 uppercase tracking-[0.3em]">Architect Neural V10.2 — Legacy Protocol</span>
             </div>
 
             <div className="order-1 md:order-2 flex flex-col items-center gap-6">
-              <span className="text-[9px] font-black text-gray-700 uppercase tracking-[0.8em]">Masterwork by</span>
+              <span className="text-[9px] font-black text-gray-700 uppercase tracking-[0.8em]">Architectural Masterwork</span>
               <a 
                 href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative flex flex-col items-center"
               >
-                <span className="text-3xl font-black uppercase tracking-[0.4em] text-white group-hover:text-white/70 transition-all duration-700">
-                    Koushik
-                </span>
+                <div className="flex items-center gap-4 mb-2">
+                    <span className="text-sm font-bold text-white/40 uppercase tracking-widest">Developed by</span>
+                    <span className="text-3xl font-black uppercase tracking-[0.4em] text-white group-hover:text-indigo-400 transition-all duration-700">
+                        Koushik
+                    </span>
+                </div>
                 <motion.div 
                     initial={{ width: 0 }}
                     whileHover={{ width: '100%' }}
-                    className="h-px bg-white/20 mt-2"
+                    className="h-px bg-indigo-500 mt-2"
                 />
-                <div className="mt-8 p-4 glass-premium rounded-2xl group-hover:bg-white group-hover:text-black transition-all duration-500">
+                <div className="mt-8 p-4 glass-premium rounded-[2rem] border-white/5 group-hover:bg-white group-hover:text-black transition-all duration-500 shadow-2xl">
                     <FaGithub className="w-6 h-6" />
                 </div>
               </a>
             </div>
 
-            <div className="order-3 flex flex-col items-center md:items-end gap-3">
+            <div className="order-3 flex flex-col items-center md:items-end gap-3 text-right">
                <a 
                  href="mailto:architect@pixelforge.ai"
                  className="flex items-center gap-4 text-[10px] font-black text-gray-600 hover:text-white transition-all uppercase tracking-[0.4em] group"
                >
                  <HiOutlineMail className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                 Forge Communication
+                 Forge Link Access
                </a>
-               <span className="text-[7px] font-black text-gray-900 uppercase tracking-[1em]">Universal Domain 2026</span>
+               <span className="text-[7px] font-black text-gray-900 uppercase tracking-[1em]">Universal Domain — 2026 Edition</span>
             </div>
           </div>
         </div>

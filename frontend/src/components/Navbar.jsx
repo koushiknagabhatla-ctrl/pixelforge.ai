@@ -23,7 +23,7 @@ export default function Navbar() {
         </motion.div>
         <div className="flex flex-col">
             <span className="text-sm font-black uppercase tracking-[0.4em] text-white">Pixel Forge</span>
-            <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Architect Neural v3</span>
+            <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Architect Neural V3</span>
         </div>
       </Link>
 

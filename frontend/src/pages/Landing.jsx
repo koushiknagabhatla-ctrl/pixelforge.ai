@@ -1,141 +1,152 @@
-import { motion } from 'framer-motion'
+import { motion, useScroll, useSpring } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { HiOutlineArrowRight, HiOutlineLightningBolt, HiOutlineShieldCheck, HiOutlineCube } from 'react-icons/hi'
+import { HiOutlineArrowRight, HiOutlineSparkles, HiOutlineCube, HiOutlineLightningBolt } from 'react-icons/hi'
 import useAuthStore from '../store/useAuthStore'
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.3
-    }
-  }
-}
-
-const item = {
-  hidden: { y: 60, opacity: 0 },
+const revealVariant = {
+  hidden: { y: 40, opacity: 0 },
   show: { 
     y: 0, 
     opacity: 1, 
-    transition: { 
-      type: "spring", 
-      damping: 20, 
-      stiffness: 100 
-    } 
+    transition: { type: "spring", damping: 25, stiffness: 80 }
   }
 }
 
-const features = [
-  { icon: HiOutlineLightningBolt, title: 'Extreme Velocity', desc: 'GPU-accelerated synthesis delivering results in sub-second cycles.' },
-  { icon: HiOutlineShieldCheck, title: 'Neural Integrity', desc: 'Bit-perfect restoration of architectural and photographic assets.' },
-  { icon: HiOutlineCube, title: 'Spatial Engine', desc: 'Proprietary 3D-aware depth estimation for immersive rendering.' }
-]
-
 export default function Landing() {
   const { user } = useAuthStore()
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  })
+
+  const aboutFeatures = [
+    { title: 'NEURAL ENGINE', desc: 'Proprietary V3 architecture for extreme-fidelity asset restoration.' },
+    { title: 'SYNTHESIS YIELD', desc: 'Accelerated GPU cycles delivering architectural drafts in sub-second timeframes.' },
+    { title: 'MATRIX ARCH', desc: 'Deep-aware spatial depth estimation for immersive world-building.' }
+  ]
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center pt-20 pb-40 px-6 overflow-hidden">
-      {/* Background Mesh Flare - Local Enhancement */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none select-none" />
-      
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="max-w-5xl w-full text-center relative z-10"
-      >
-        <motion.div variants={item} className="mb-6">
-          <span className="px-4 py-1.5 rounded-full glass border-white/5 text-[10px] sm:text-xs font-mono font-bold text-indigo-400 uppercase tracking-[0.3em]">
-            PixelForge Engine v10.0
-          </span>
-        </motion.div>
-
-        <motion.h1 
-          variants={item}
-          className="text-6xl sm:text-7xl lg:text-[10rem] font-black mb-10 tracking-tighter leading-[0.85] text-white flex flex-wrap justify-center overflow-hidden"
-        >
-          {["FORGING", "THE", "FUTURE"].map((word, i) => (
-            <motion.span 
-              key={i} 
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ 
-                  delay: i * 0.15, 
-                  duration: 1.2, 
-                  ease: [0.16, 1, 0.3, 1] 
-              }}
-              className="inline-block mr-[0.2em] last:mr-0"
-            >
-              {word}
-            </motion.span>
-          ))}
-        </motion.h1>
-
-        <motion.p 
-          variants={item}
-          className="max-w-2xl mx-auto text-lg sm:text-xl text-slate-400 font-medium leading-relaxed mb-12"
-        >
-          An elite neural ecosystem for professional image synthesis, 
-          architectural restoration, and high-fidelity vision engineering.
-        </motion.p>
-
-        <motion.div variants={item} className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-32">
-          <Link 
-            to={user ? "/chatbot" : "/login"}
-            className="group relative px-10 py-5 btn-primary overflow-hidden"
-          >
-            <span className="relative z-10 flex items-center gap-3 text-sm">
-              {user ? 'Enter Command Center' : 'Initialize Session'}
-              <HiOutlineArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </Link>
-          
-          {!user && (
-            <Link to="/signup" className="px-10 py-5 btn-secondary text-sm">
-              Create Index
-            </Link>
-          )}
-        </motion.div>
-
-        {/* Feature Grid with Bobbing Glass Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-           {features.map((f, i) => (
-             <motion.div
-               key={f.title}
-               variants={item}
-               whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(99,102,241,0.15)" }}
-               animate={{ y: [0, -4, 0] }}
-               transition={{ 
-                 y: { duration: 4, repeat: Infinity, ease: 'easeInOut', delay: i * 0.5 },
-                 default: { type: "spring", damping: 15 }
-               }}
-               className="glass p-8 text-left group transition-colors hover:border-indigo-500/30"
-             >
-                <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 shadow-inner">
-                    <f.icon className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold mb-3 text-white">{f.title}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed font-medium">
-                  {f.desc}
-                </p>
-             </motion.div>
-           ))}
-        </div>
-      </motion.div>
-
-      {/* Discovery Footer Hint */}
+    <div className="relative min-h-screen bg-[#050505] text-white">
+      {/* Cinematic Scroll Progress */}
       <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.5, duration: 1 }}
-        className="absolute bottom-10 flex flex-col items-center gap-4 text-slate-600"
-      >
-          <span className="text-[10px] font-bold uppercase tracking-[0.5em]">Explore Architecture</span>
-          <div className="w-px h-12 bg-gradient-to-b from-indigo-500/40 to-transparent" />
-      </motion.div>
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-600 via-purple-500 to-indigo-600 z-[110] origin-left"
+        style={{ scaleX }}
+      />
+
+      {/* 🚀 HERO SECTION (Screenshot 1 Alignment) */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 px-6 overflow-hidden">
+        {/* Deep Atmospheric Backdrop */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(99,102,241,0.08)_0%,transparent 70%)]" />
+        
+        <motion.div
+           initial="hidden"
+           animate="show"
+           className="relative z-10 w-full max-w-7xl text-center"
+        >
+            <motion.span 
+              variants={revealVariant}
+              className="text-[10px] font-black text-white/40 uppercase tracking-[1em] mb-12 block"
+            >
+                The Architect's Console
+            </motion.span>
+
+            <motion.h1 
+               variants={revealVariant}
+               className="text-[12vw] sm:text-[10vw] font-black leading-[0.85] tracking-tighter mb-12 flex flex-wrap justify-center items-baseline"
+            >
+               <span className="text-white">PIXEL</span>
+               <span className="text-white/10 ml-4">FORGE</span>
+            </motion.h1>
+
+            <motion.p 
+               variants={revealVariant}
+               className="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-[0.5em] mb-16"
+            >
+                Synthetic Vision & Neural Image Synthesis
+            </motion.p>
+
+            <motion.div 
+              variants={revealVariant}
+              className="flex flex-col sm:flex-row items-center justify-center gap-6"
+            >
+                <Link 
+                  to={user ? "/chatbot" : "/login"}
+                  className="px-12 py-5 bg-white text-black text-[10px] font-black uppercase tracking-[0.3em] rounded-full hover:scale-105 transition-transform flex items-center gap-3 shadow-[0_0_40px_rgba(255,255,255,0.2)]"
+                >
+                  Enter Forge <HiOutlineArrowRight className="w-4 h-4" />
+                </Link>
+                
+                <Link 
+                  to="/login"
+                  className="px-12 py-5 bg-transparent border border-white/10 text-white text-[10px] font-black uppercase tracking-[0.3em] rounded-full hover:bg-white/5 transition-colors"
+                >
+                  Sign In
+                </Link>
+            </motion.div>
+        </motion.div>
+
+        {/* Floating Indicator */}
+        <motion.div 
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
+        >
+            <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.8em]">Scroll to Decode</span>
+            <div className="w-px h-12 bg-gradient-to-b from-white/20 to-transparent" />
+        </motion.div>
+      </section>
+
+      {/* 🏛️ ABOUT SECTION (Scroll Reveal) */}
+      <section className="relative py-40 px-6 lg:px-20 max-w-7xl mx-auto">
+          <motion.div 
+             initial="hidden"
+             whileInView="show"
+             viewport={{ once: true, margin: "-100px" }}
+             className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center"
+          >
+              <div className="space-y-12">
+                  <motion.div variants={revealVariant}>
+                      <span className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.5em] mb-4 block">About Architecture</span>
+                      <h2 className="text-4xl lg:text-6xl font-black text-white leading-tight tracking-tighter uppercase">
+                        The Future of <br /> Vision Synthesis
+                      </h2>
+                  </motion.div>
+
+                  <motion.p variants={revealVariant} className="text-lg text-white/50 leading-relaxed font-medium">
+                      PixelForge AI is a high-performance neural engine designed for architects of the future. 
+                      Utilizing proprietary V3 Matrix architecture, we deliver bit-perfect asset generation 
+                      and restoration at sub-pixel precision.
+                  </motion.p>
+
+                  <div className="grid grid-cols-1 gap-8">
+                      {aboutFeatures.map((f, i) => (
+                          <motion.div 
+                            key={f.title}
+                            variants={revealVariant}
+                            className="glass-premium p-8 rounded-3xl border-white/5 group hover:bg-white/5 transition-all"
+                          >
+                              <h4 className="text-xs font-black text-white uppercase tracking-widest mb-3">{f.title}</h4>
+                              <p className="text-[13px] text-white/40 font-medium leading-relaxed">{f.desc}</p>
+                          </motion.div>
+                      ))}
+                  </div>
+              </div>
+
+              {/* Decorative Visual Bridge */}
+              <motion.div 
+                variants={revealVariant}
+                className="hidden lg:block relative aspect-square"
+              >
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-purple-600/10 rounded-full blur-[120px]" />
+                  <div className="relative h-full w-full border border-white/5 rounded-[4rem] flex items-center justify-center overflow-hidden">
+                      <div className="absolute inset-0 opacity-[0.03] neural-grain" />
+                      <HiOutlineCube className="w-40 h-40 text-white/10 animate-pulse" />
+                  </div>
+              </motion.div>
+          </motion.div>
+      </section>
     </div>
   )
 }
