@@ -9,8 +9,10 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import useAuthStore from './store/useAuthStore'
 import Sidebar from './components/Sidebar'
-
 import ChatbotPage from './pages/ChatbotPage'
+import NeuralBackground from './components/NeuralBackground'
+import ErrorBoundary from './components/ErrorBoundary'
+import useUIStore from './store/useUIStore'
 
 /* ===== Protected Route ===== */
 function ProtectedRoute({ children, allowGuest = false }) {
@@ -41,7 +43,7 @@ function PageWrapper({ children }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="w-full"
     >
       {children}
@@ -49,14 +51,9 @@ function PageWrapper({ children }) {
   )
 }
 
-import ErrorBoundary from './components/ErrorBoundary'
-
-import useUIStore from './store/useUIStore'
-
 /* ===== Main App ===== */
 export default function App() {
   const { initialize, user } = useAuthStore()
-  const { isSidebarMinimized } = useUIStore()
   const location = useLocation()
 
   // Initialize auth on mount
@@ -67,15 +64,17 @@ export default function App() {
   const isAuthPage = ['/login', '/signup'].includes(location.pathname);
 
   return (
-    <div className="flex flex-col min-h-screen bg-black transition-colors duration-500">
+    <div className="flex flex-col min-h-screen bg-black overflow-x-hidden selection:bg-white selection:text-black">
+      <NeuralBackground />
       <Navbar />
 
-      <div className="flex flex-1 pt-24 overflow-hidden">
+      <div className="flex flex-1 pt-24 overflow-hidden relative">
         {user && !isAuthPage && <Sidebar />}
+        
         <main 
           className={`flex-1 relative min-w-0 transition-all duration-[0.8s] ease-[0.16, 1, 0.3, 1] ${
             user && !isAuthPage 
-              ? 'pl-[84px] lg:pl-[100px]' 
+              ? 'pl-0 lg:pl-[72px]' // Precise minimized width offset for desktop
               : ''
           }`}
         >

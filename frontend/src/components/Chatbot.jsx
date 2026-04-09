@@ -36,36 +36,36 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-black/40 backdrop-blur-3xl overflow-hidden relative">
+    <div className="flex flex-col h-full bg-black/20 backdrop-blur-3xl overflow-hidden relative selection:bg-white selection:text-black">
       {/* Cinematic Header Overlay */}
-      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent z-10 pointer-events-none flex items-center justify-center pt-8">
-            <h1 className="text-5xl font-black text-white/[0.03] uppercase tracking-[1.2rem] select-none">AI Chatbot</h1>
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black/80 to-transparent z-10 pointer-events-none flex items-center justify-center pt-6">
+            <h1 className="text-3xl font-black text-white/[0.03] uppercase tracking-[1rem] select-none">AI Chatbot</h1>
       </div>
       
       {/* Thought Stream */}
       <div 
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-8 lg:p-12 space-y-12 scrollbar-hide pt-32 pb-48"
+        className="flex-1 overflow-y-auto p-6 lg:p-10 space-y-8 scrollbar-hide pt-24 pb-40"
       >
         <AnimatePresence mode="popLayout">
           {messages.map((msg, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
+              initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <div className={`max-w-[90%] lg:max-w-[75%] space-y-3 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-                  <div className={`flex items-center gap-3 mb-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                    <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center border border-white/10 shadow-inner">
-                        {msg.role === 'user' ? <HiOutlineUser className="w-3.5 h-3.5 text-gray-500" /> : <HiOutlineChip className="w-3.5 h-3.5 text-gray-400" />}
+              <div className={`max-w-[85%] lg:max-w-[70%] space-y-2 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                  <div className={`flex items-center gap-2 mb-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                    <div className="w-5 h-5 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/5 shadow-inner">
+                        {msg.role === 'user' ? <HiOutlineUser className="w-3 h-3 text-gray-700" /> : <HiOutlineChip className="w-3 h-3 text-gray-700" />}
                     </div>
                   </div>
-                  <div className={`p-6 lg:p-8 rounded-[2rem] text-[13px] lg:text-[14px] leading-relaxed shadow-2xl glass-glow glass-edge ${
+                  <div className={`p-5 lg:p-6 rounded-[1.8rem] text-[12px] lg:text-[13px] leading-relaxed shadow-xl glass-glow glass-edge ${
                     msg.role === 'user' 
-                    ? 'bg-white text-black font-semibold' 
-                    : 'text-gray-300'
+                    ? 'bg-white text-black font-bold' 
+                    : 'text-gray-400'
                   }`}>
                     {msg.content}
                   </div>
@@ -79,13 +79,13 @@ const Chatbot = () => {
               animate={{ opacity: 1 }}
               className="flex justify-start"
             >
-                <div className="glass-glow glass-edge p-6 rounded-[2rem] flex items-center gap-4">
-                    <div className="flex gap-1.5">
-                        <motion.div className="w-2 h-2 bg-white/40 rounded-full" animate={{ scale: [1, 1.5, 1], opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 2 }} />
-                        <motion.div className="w-2 h-2 bg-white/40 rounded-full" animate={{ scale: [1, 1.5, 1], opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 2, delay: 0.3 }} />
-                        <motion.div className="w-2 h-2 bg-white/40 rounded-full" animate={{ scale: [1, 1.5, 1], opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 2, delay: 0.6 }} />
+                <div className="glass-glow glass-edge px-5 py-4 rounded-[1.5rem] flex items-center gap-3">
+                    <div className="flex gap-1">
+                        <motion.div className="w-1.5 h-1.5 bg-white/30 rounded-full" animate={{ scale: [1, 1.4, 1], opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 2 }} />
+                        <motion.div className="w-1.5 h-1.5 bg-white/30 rounded-full" animate={{ scale: [1, 1.4, 1], opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 2, delay: 0.3 }} />
+                        <motion.div className="w-1.5 h-1.5 bg-white/30 rounded-full" animate={{ scale: [1, 1.4, 1], opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 2, delay: 0.6 }} />
                     </div>
-                    <span className="text-[10px] font-black text-gray-600 uppercase tracking-[0.4em] italic">Intelligence Processing...</span>
+                    <span className="text-[8px] font-black text-gray-800 uppercase tracking-[0.3em]">Processing...</span>
                 </div>
             </motion.div>
           )}
@@ -93,16 +93,16 @@ const Chatbot = () => {
       </div>
 
       {/* Floating Prompt Pill (Bottom Fixed) */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[90%] lg:w-[70%] z-20">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[92%] lg:w-[65%] z-20">
         <motion.div 
-            initial={{ y: 40, opacity: 0 }}
+            initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-3"
         >
-            <div className="glass-glow glass-edge border border-white/10 rounded-[3rem] p-3 shadow-2xl flex items-center gap-6 group hover:border-white/20 focus-within:border-white/30 transition-all duration-700">
-                <div className="w-14 h-14 rounded-[2.5rem] bg-white text-black flex items-center justify-center shrink-0 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
-                    <HiOutlineSparkles className="w-6 h-6" />
+            <div className="glass-glow glass-edge border border-white/5 rounded-[2.5rem] p-2.5 shadow-2xl flex items-center gap-5 group hover:border-white/10 focus-within:border-white/20 transition-all duration-700">
+                <div className="w-11 h-11 rounded-[1.8rem] bg-white text-black flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(255,255,255,0.15)]">
+                    <HiOutlineSparkles className="w-5 h-5" />
                 </div>
                 
                 <input
@@ -111,31 +111,31 @@ const Chatbot = () => {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                     placeholder="say hello to our ai"
-                    className="flex-1 bg-transparent border-none outline-none text-white text-[15px] font-medium placeholder:text-gray-800 h-full py-6"
+                    className="flex-1 bg-transparent border-none outline-none text-white text-[14px] font-medium placeholder:text-gray-900 h-full py-5"
                 />
 
                 <button
                     onClick={handleSend}
                     disabled={loading || !input.trim()}
-                    className={`p-6 rounded-[2.5rem] transition-all duration-500 flex items-center justify-center mr-2 ${
+                    className={`h-11 w-11 rounded-[1.8rem] transition-all duration-700 flex items-center justify-center mr-1 ${
                         loading || !input.trim() 
-                        ? 'bg-transparent text-gray-800' 
-                        : 'bg-white/5 text-white hover:bg-white hover:text-black active:scale-90 shadow-2xl'
+                        ? 'bg-transparent text-gray-900' 
+                        : 'bg-white/5 text-white hover:bg-white hover:text-black active:scale-90 shadow-xl'
                     }`}
                 >
-                    <HiOutlineArrowUp className="w-6 h-6" />
+                    <HiOutlineArrowUp className="w-5 h-5" />
                 </button>
             </div>
         </motion.div>
         
         {/* Cinematic branding label */}
-        <div className="mt-6 text-center">
-            <span className="text-[9px] font-black text-gray-800 uppercase tracking-[1em] opacity-40">Intelligence Nexus • Precision Architecture</span>
+        <div className="mt-4 text-center">
+            <span className="text-[8px] font-black text-gray-900 uppercase tracking-[0.8em] opacity-30 select-none">Neural Nexus • v8.0 Architecture</span>
         </div>
       </div>
       
       {/* Bottom Gradient Overlay */}
-      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-black to-transparent pointer-events-none z-10" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent pointer-events-none z-10" />
     </div>
   );
 };
