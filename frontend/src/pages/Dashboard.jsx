@@ -7,9 +7,9 @@ import { HiOutlineSparkles, HiOutlineDownload, HiOutlineRefresh, HiOutlineCloudU
 
 export default function Dashboard() {
   const { user } = useAuthStore();
-  const { isGenerating, resultImage, enhancedPrompt, history, generateImage, runTool, fetchHistory, clearResult } = useImageStore();
+  const { isGenerating, resultImage, generateImage, runTool, fetchHistory, clearResult } = useImageStore();
   const [prompt, setPrompt] = useState("");
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode') || 'synth'; 
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -34,45 +34,45 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen pt-12 px-6 lg:px-20 pb-32 text-slate-200 relative">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen pt-24 px-6 lg:px-20 pb-40 text-platinum relative selection:bg-white/10 font-sans">
+      <div className="max-w-7xl mx-auto">
         
         {/* Nav Indicator */}
-        <div className="mb-16 flex items-end justify-between">
-           <div className="space-y-3">
-              <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-[0.4em] block">System Logic 10.0</span>
-              <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tighter uppercase">
-                {mode === 'synth' ? 'Synthesis Alpha' : 'Asset Enhancement'}
+        <div className="mb-20 flex flex-col sm:flex-row items-end sm:items-center justify-between gap-8">
+           <div className="space-y-4">
+              <span className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] block">Architectural Protocol v12.0</span>
+              <h2 className="text-5xl sm:text-7xl font-black text-white tracking-tighter uppercase leading-none">
+                {mode === 'synth' ? 'Image Generation' : 'Asset Enhancement'}
               </h2>
            </div>
-           <div className="hidden md:flex items-center gap-4 py-3 px-6 glass rounded-full border-white/5">
-              <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Neural Link Steady</span>
+           <div className="flex items-center gap-6 py-4 px-8 glass-premium border-white/5">
+              <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)] animate-pulse" />
+              <span className="text-[9px] font-black text-white uppercase tracking-[0.4em]">Neural Link Secure</span>
            </div>
         </div>
 
         {/* Console Interface */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20 items-stretch">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="lg:col-span-7"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="lg:col-span-8 h-full"
           >
-            <div className="glass-strong p-2 overflow-hidden shadow-2xl">
+            <div className="glass-strong p-3 h-full flex flex-col shadow-3xl border border-white/5">
                 {mode === 'synth' ? (
-                  <div className="relative group">
+                  <div className="relative group flex-1">
                     <textarea
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value.slice(0, 500))}
-                      placeholder="Input architectural neural prompt..."
-                      className="w-full bg-white/[0.02] border border-white/5 rounded-2xl p-8 text-lg sm:text-xl font-medium tracking-tight h-[400px] resize-none focus:outline-none focus:bg-white/[0.04] transition-all input-glow"
+                      placeholder="Input architectural neural directive..."
+                      className="w-full h-[450px] bg-white/[0.01] border border-white/5 rounded-[2rem] p-10 text-xl font-medium tracking-tight resize-none focus:outline-none focus:bg-white/[0.02] transition-all duration-700 placeholder:text-gray-800"
                     />
-                    <div className="absolute bottom-6 right-8 text-[10px] font-mono font-bold text-slate-600 uppercase tracking-widest group-focus-within:text-indigo-400 transition-colors">
-                      {prompt.length} / 500
+                    <div className="absolute bottom-10 right-10 text-[9px] font-black text-gray-800 uppercase tracking-[0.3em]">
+                      Intensity :: {prompt.length} / 500
                     </div>
                   </div>
                 ) : (
-                  <div className="relative group p-20 border border-white/5 rounded-[4rem] flex flex-col items-center justify-center bg-white/[0.01] hover:bg-white/[0.02] transition-colors cursor-pointer min-h-[500px]">
+                  <div className="tool-dropzone flex flex-col items-center justify-center min-h-[450px] flex-1">
                     <input 
                       type="file" 
                       accept="image/*"
@@ -80,13 +80,13 @@ export default function Dashboard() {
                       className="absolute inset-0 opacity-0 cursor-pointer z-10" 
                     />
                     <div className="flex flex-col items-center gap-12 text-center pointer-events-none">
-                      <div className="w-32 h-32 rounded-[2.5rem] bg-indigo-500/10 flex items-center justify-center text-slate-700 group-hover:text-white transition-all duration-700 shadow-inner group-hover:scale-110">
-                        <HiOutlineCloudUpload className="w-12 h-12" />
+                      <div className="w-32 h-32 rounded-[3rem] glass-premium flex items-center justify-center text-gray-600 group-hover:text-white transition-all duration-700 group-hover:scale-110 border border-white/5">
+                        <HiOutlineCloudUpload className="w-10 h-10" />
                       </div>
                       <div className="space-y-4">
-                        <h3 className="text-2xl font-black uppercase tracking-[0.4em] text-white">Select Asset</h3>
-                        <p className="text-[10px] font-bold text-slate-700 uppercase tracking-[0.3em]">
-                            Max Payload: 10MB (JPG, PNG, WEBP)
+                        <h3 className="text-3xl font-black uppercase tracking-[0.4em] text-white">Select Raw Asset</h3>
+                        <p className="text-[10px] font-black text-gray-800 uppercase tracking-[0.4em]">
+                             JPG / PNG / WEBP :: LIMIT 10MB
                         </p>
                       </div>
                     </div>
@@ -99,49 +99,70 @@ export default function Dashboard() {
               disabled={isGenerating || (mode === 'synth' ? !prompt.trim() : !selectedFile)}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              className={`w-full mt-8 py-6 rounded-2xl font-black text-sm uppercase tracking-[0.5em] transition-all flex items-center justify-center gap-5 ${
+              className={`w-full mt-10 py-8 rounded-[2rem] font-black text-[10px] uppercase tracking-[0.6em] transition-all flex items-center justify-center gap-6 border border-white/5 ${
                 isGenerating 
-                ? 'bg-white/5 text-slate-600 cursor-not-allowed' 
-                : 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-2xl shadow-indigo-600/20'
+                ? 'bg-white/5 text-gray-800 cursor-not-allowed' 
+                : 'bg-white text-black hover:shadow-[0_20px_60px_rgba(255,255,255,0.1)]'
               }`}
             >
               {isGenerating ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  Forging Neural Matrix...
+                  <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                  Deconstructing Matrix...
                 </>
               ) : (
                 <>
                   <HiOutlineSparkles className="w-5 h-5" />
-                  {mode === 'synth' ? 'Initialize Synthesis' : 'Enhance Asset'}
+                  {mode === 'synth' ? 'Execute Synthesis' : 'Enhance Architecture'}
                 </>
               )}
             </motion.button>
           </motion.div>
 
           {/* Context Sidebar */}
-          <div className="lg:col-span-5 space-y-8">
-              <div className="glass p-8">
-                  <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em] mb-6">Engine Protocols</h4>
-                  <ul className="space-y-4">
-                      {['Sub-pixel Optimization', 'Spatial Depth Estimation', 'Chromatic Correction'].map(p => (
-                          <li key={p} className="flex items-center gap-4 text-xs font-medium text-slate-400">
-                              <div className="w-1.5 h-1.5 rounded-full bg-indigo-500/40" />
-                              {p}
+          <div className="lg:col-span-4 flex flex-col gap-10">
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+                className="glass-premium p-10 flex-1 border border-white/5"
+              >
+                  <h4 className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] mb-10">Engine Directives</h4>
+                  <ul className="space-y-8">
+                      {[
+                        { name: 'Sub-pixel Precision', status: 'Active' },
+                        { name: 'Contrast Calibration', status: 'Standby' },
+                        { name: 'Spatial Denoise', status: 'Optimized' }
+                      ].map(p => (
+                          <li key={p.name} className="flex flex-col gap-2">
+                              <div className="flex items-center justify-between">
+                                <span className="text-[10px] font-black text-white uppercase tracking-widest">{p.name}</span>
+                                <span className="text-[8px] font-bold text-gray-800 uppercase tracking-widest">{p.status}</span>
+                              </div>
+                              <div className="w-full h-1 bg-white/[0.02] rounded-full overflow-hidden">
+                                  <motion.div 
+                                    initial={{ width: 0 }}
+                                    animate={{ width: '100%' }}
+                                    transition={{ duration: 2 }}
+                                    className="h-full bg-white/10"
+                                  />
+                              </div>
                           </li>
                       ))}
                   </ul>
-              </div>
+              </motion.div>
               
-              <div className="glass p-8 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-4 opacity-10">
-                      <HiOutlineSparkles className="w-20 h-20" />
-                  </div>
-                  <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em] mb-4">Neural Guidance</h4>
-                  <p className="text-xs text-slate-400 leading-relaxed italic">
-                      "For extreme architectural fidelity, include lighting terminology such as 'volumetric scattering' or 'global illumination' in your prompt matrix."
+              <motion.div 
+                 initial={{ opacity: 0, x: 20 }}
+                 animate={{ opacity: 1, x: 0 }}
+                 transition={{ delay: 0.4 }}
+                 className="glass p-10 relative overflow-hidden group border border-white/5"
+              >
+                  <h4 className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] mb-6">Neural Tip</h4>
+                  <p className="text-[11px] text-gray-400 leading-loose italic uppercase tracking-wider font-medium">
+                      "For maximum depth clarity, use lighting terminology such as 'monochrome high-contrast' or 'soft diffused studio' in your prompt matrix."
                   </p>
-              </div>
+              </motion.div>
           </div>
         </div>
 
@@ -149,26 +170,33 @@ export default function Dashboard() {
         <AnimatePresence mode="wait">
           {resultImage && (
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
-              className="mt-20"
+              className="mt-32 pt-20 border-t border-white/5"
             >
-               <div className="text-center mb-12">
-                  <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-[0.8em]">Synthesis Yield</span>
+               <div className="text-center mb-16">
+                  <span className="text-[10px] font-black text-white uppercase tracking-[1em]">Forged Entity</span>
                </div>
                
-               <div className="glass-strong p-4 max-w-4xl mx-auto shadow-3xl group relative overflow-hidden animate-in fade-in zoom-in duration-1000">
-                  <div className="absolute top-8 right-8 z-20 flex gap-4">
-                      <a href={resultImage} download className="p-4 glass rounded-xl text-white hover:bg-white hover:text-black transition-all shadow-2xl">
+               <div className="max-w-5xl mx-auto glass-strong p-4 relative group overflow-hidden shadow-[0_60px_100px_rgba(0,0,0,0.8)] border border-white/10">
+                  <div className="absolute top-10 right-10 z-20 flex gap-6">
+                      <a href={resultImage} download className="h-16 w-16 glass rounded-2xl text-white flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500 shadow-2xl">
                           <HiOutlineDownload className="w-6 h-6" />
                       </a>
-                      <button onClick={clearResult} className="p-4 glass rounded-xl text-white hover:bg-white/10 transition-all border-white/5">
+                      <button onClick={clearResult} className="h-16 w-16 glass rounded-2xl text-white flex items-center justify-center hover:bg-neutral-900 transition-all duration-500">
                           <HiOutlineRefresh className="w-6 h-6" />
                       </button>
                   </div>
                   
-                  <img src={resultImage} alt="Forge Output" className="w-full h-auto rounded-xl shadow-inner transition-transform duration-[5s] hover:scale-105" />
+                  <img 
+                    src={resultImage} 
+                    alt="Forge Output" 
+                    className="w-full h-auto rounded-[1.5rem] transition-all duration-[3s] group-hover:scale-[1.02] filter grayscale-[0.2] group-hover:grayscale-0" 
+                  />
+                  
+                  {/* Neural Overlay Decor */}
+                  <div className="absolute inset-0 opacity-[0.03] neural-grain pointer-events-none" />
                </div>
             </motion.div>
           )}

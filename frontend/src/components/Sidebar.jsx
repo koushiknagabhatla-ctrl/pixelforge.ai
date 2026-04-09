@@ -9,68 +9,104 @@ import {
   HiOutlineLightningBolt
 } from 'react-icons/hi'
 import useAuthStore from '../store/useAuthStore'
+import { useState } from 'react'
 
 const navigation = [
   { name: 'IMAGE GENERATOR', path: '/tools?mode=synth', icon: HiOutlineSparkles },
-  { name: 'AI ENHANCER', path: '/tools?mode=enhance', icon: HiOutlineLightningBolt },
-  { name: 'AI CHATBOT', path: '/chatbot', icon: HiOutlineChatAlt2 },
+  { name: 'IMAGE ENHANCER', path: '/tools?mode=enhance', icon: HiOutlineLightningBolt },
+  { name: 'FORGE AI', path: '/chatbot', icon: HiOutlineChatAlt2 },
   { name: 'ARCHIVES', path: '/history', icon: HiOutlineClock },
 ]
 
 export default function Sidebar() {
   const { signOut } = useAuthStore()
+  const [isHovered, setIsHovered] = useState(false)
 
   return (
-    <motion.aside
-      initial={{ x: -100, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      className="fixed left-0 top-0 bottom-0 w-80 z-[80] bg-[#050505] border-r border-white/5 flex flex-col p-8 pt-32 overflow-hidden"
-    >
-      {/* Brand Header (Sync with Screenshot 2) */}
-      <div className="mb-16 px-4">
-          <div className="flex items-center gap-4 mb-2">
-            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center font-black text-black text-sm">F</div>
-            <div>
-              <h2 className="text-xs font-black text-white uppercase tracking-widest">Forge AI</h2>
-              <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Menu Console</span>
+    <>
+      {/* Invisible Trigger Zone */}
+      <div 
+        onMouseEnter={() => setIsHovered(true)}
+        className="fixed left-0 top-0 bottom-0 w-20 z-[75]"
+      />
+
+      <motion.aside
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        initial={false}
+        animate={{ 
+          width: isHovered ? 280 : 80,
+          background: isHovered ? 'rgba(5, 5, 5, 0.95)' : 'rgba(5, 5, 5, 0.4)',
+          backdropFilter: isHovered ? 'blur(40px)' : 'blur(10px)',
+          borderColor: isHovered ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.03)'
+        }}
+        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        className="fixed left-0 top-0 bottom-0 z-[80] border-r flex flex-col p-6 pt-32 overflow-hidden selection:bg-white/10"
+      >
+        <div className="absolute inset-0 opacity-[0.02] neural-grain pointer-events-none" />
+
+        {/* Brand Header */}
+        <div className="mb-16 px-2 whitespace-nowrap overflow-hidden">
+            <div className="flex items-center gap-4">
+                <div className="w-10 h-10 flex items-center justify-center shrink-0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 10L12 2L20 10L12 18L4 10Z" stroke="white" strokeWidth="2" strokeLinecap="square"/>
+                    </svg>
+                </div>
+                <motion.div
+                  animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : -10 }}
+                >
+                  <h2 className="text-xs font-black text-white uppercase tracking-[0.3em]">Menu Console</h2>
+                  <span className="text-[8px] font-bold text-gray-700 uppercase tracking-widest">Architectural Navigation</span>
+                </motion.div>
             </div>
-          </div>
-      </div>
+        </div>
 
-      {/* Navigation - Tablet/Capsule Style (Screenshot 2 Alignment) */}
-      <nav className="flex-1 space-y-4">
-         {navigation.map((item) => (
-           <NavLink
-             key={item.name}
-             to={item.path}
-             className={({ isActive }) => `
-               flex items-center gap-6 px-6 py-5 rounded-[1.5rem] transition-all duration-500 group relative
-               ${isActive ? 'bg-white text-black shadow-[0_0_30px_rgba(255,255,255,0.1)]' : 'text-gray-500 hover:text-white hover:bg-white/5'}
-             `}
-           >
-             {({ isActive }) => (
-               <>
-                 <item.icon className="w-6 h-6 shrink-0" />
-                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">
-                    {item.name}
-                 </span>
-                 <HiChevronRight className={`ml-auto w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity ${isActive ? 'text-black' : 'text-white/20'}`} />
-               </>
-             )}
-           </NavLink>
-         ))}
-      </nav>
+        {/* Navigation */}
+        <nav className="flex-1 space-y-4">
+           {navigation.map((item) => (
+             <NavLink
+               key={item.name}
+               to={item.path}
+               className={({ isActive }) => `
+                 flex items-center gap-6 px-4 py-4 rounded-2xl transition-all duration-500 group relative
+                 ${isActive ? 'bg-white text-black shadow-[0_0_30px_rgba(255,255,255,0.1)]' : 'text-gray-600 hover:text-white hover:bg-white/5'}
+               `}
+             >
+               {({ isActive }) => (
+                 <>
+                   <item.icon className="w-6 h-6 shrink-0" />
+                   <motion.span 
+                      animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : -10 }}
+                      className="text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap"
+                   >
+                      {item.name}
+                   </motion.span>
+                   {isHovered && (
+                     <HiChevronRight className={`ml-auto w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity ${isActive ? 'text-black' : 'text-white/20'}`} />
+                   )}
+                 </>
+               )}
+             </NavLink>
+           ))}
+        </nav>
 
-      {/* Footer / Sign Out */}
-      <div className="pt-8 border-t border-white/5">
-        <button
-          onClick={signOut}
-          className="w-full flex items-center gap-6 px-6 py-4 rounded-2xl text-gray-600 hover:bg-red-500/10 hover:text-red-400 transition-all group"
-        >
-          <HiOutlineLogout className="w-5 h-5" />
-          <span className="text-[10px] font-black uppercase tracking-widest">Terminate Session</span>
-        </button>
-      </div>
-    </motion.aside>
+        {/* Footer / Sign Out */}
+        <div className="pt-8 border-t border-white/5 overflow-hidden">
+          <button
+            onClick={signOut}
+            className="w-full flex items-center gap-6 px-4 py-4 rounded-2xl text-gray-700 hover:bg-neutral-900 hover:text-white transition-all group"
+          >
+            <HiOutlineLogout className="w-6 h-6 shrink-0" />
+            <motion.span 
+              animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : -10 }}
+              className="text-[10px] font-black uppercase tracking-widest whitespace-nowrap"
+            >
+              Terminate Session
+            </motion.span>
+          </button>
+        </div>
+      </motion.aside>
+    </>
   )
 }
