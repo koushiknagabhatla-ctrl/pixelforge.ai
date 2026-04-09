@@ -5,14 +5,14 @@ import {
   HiOutlineChatAlt2, 
   HiOutlineLogout, 
   HiOutlineClock,
-  HiChevronRight
+  HiChevronRight,
+  HiOutlineLightningBolt
 } from 'react-icons/hi'
-import { LuWand2 } from 'react-icons/lu'
 import useAuthStore from '../store/useAuthStore'
 
 const navigation = [
   { name: 'IMAGE GENERATOR', path: '/tools?mode=synth', icon: HiOutlineSparkles },
-  { name: 'AI ENHANCER', path: '/tools?mode=enhance', icon: LuWand2 },
+  { name: 'AI ENHANCER', path: '/tools?mode=enhance', icon: HiOutlineLightningBolt },
   { name: 'AI CHATBOT', path: '/chatbot', icon: HiOutlineChatAlt2 },
   { name: 'ARCHIVES', path: '/history', icon: HiOutlineClock },
 ]
