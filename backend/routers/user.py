@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from backend.models.schemas import (
     UserCredits,
     EnhancementRecord,
@@ -38,10 +38,12 @@ async def get_history(user_id: str, limit: int = 50):
     ]
 
 
-@router.post("/user/ensure/")
-@router.post("/user/ensure")
-async def ensure_user(user_id: str, email: str):
-    """Ensure user exists in database (Slash-Agnostic)."""
+@router.api_route("/user/ensure", methods=["GET", "POST"])
+async def ensure_user(
+    user_id: str = Query(..., description="The unique identity of the architect"), 
+    email: str = Query(..., description="The neural address of the user")
+):
+    """Ensure user exists in database (USER-FIX #2 & #3 Optimized)."""
     try:
         user = await supabase_service.ensure_user_exists(user_id, email)
         if not user:
@@ -49,6 +51,3 @@ async def ensure_user(user_id: str, email: str):
         return user
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"User Synchronization Crisis: {str(e)}")
-
-
-

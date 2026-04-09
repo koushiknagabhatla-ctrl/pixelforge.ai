@@ -12,13 +12,13 @@ load_dotenv()
 
 app = FastAPI(
     title="PixelForge AI Production Engine",
-    version="3.4.2",
+    version="3.4.3",
     docs_url="/api/docs",
     openapi_url="/api/openapi.json",
     redirect_slashes=False
 )
 
-# 2. Universal CORS Relief
+# 2. Universal CORS Relief (USER-FIX #4 Alignment)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -45,7 +45,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 @app.get("/health/")
 @app.get("/health")
 async def health_check():
-    """Archon v3.4.2 Diagnostic Oracle"""
+    """Archon v3.4.3 - THE FINAL ALIGNMENT"""
     try:
         from backend.services.supabase_service import supabase_service
         
@@ -65,13 +65,22 @@ async def health_check():
 
         return {
             "status": "online" if db_connected else "degraded",
-            "archon_v3_4_2": "Active",
-            "ignited": True,
-            "routing": "Shadow Alignment (Dual-Prefix)",
+            "archon_v3_4_3": "Active",
+            "handshake": "Optimized",
+            "fix": "trailingSlash=False",
             "environment_keys": env_status,
             "database_connected": db_connected,
             "deployment": os.getenv("VERCEL_ENV", "local")
         }
+    except Exception as e:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "error",
+                "message": "Archon Ignition Failure",
+                "detail": str(e)
+            }
+        )
     except Exception as e:
         return JSONResponse(
             status_code=503,
