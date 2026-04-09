@@ -1,183 +1,131 @@
-import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
-import { HiOutlineArrowRight, HiOutlineSparkles, HiOutlineLightningBolt, HiOutlineGlobeAlt, HiOutlinePresentationChartBar } from 'react-icons/hi'
-import { FaGithub } from 'react-icons/fa'
-import { SiVercel } from 'react-icons/si'
-import useAuthStore from '../store/useAuthStore'
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { HiOutlineSparkles, HiOutlineLightningBolt, HiOutlineChatAlt2, HiArrowRight } from 'react-icons/hi';
+import { FaGithub } from 'react-icons/fa';
 
-const revealVariant = {
-  hidden: { y: 30, opacity: 0 },
-  show: { 
-    y: 0, 
-    opacity: 1, 
-    transition: { duration: 0.6, ease: "easeOut" }
-  }
-}
-
-export default function Landing() {
-  const { user } = useAuthStore()
-
-  const tools = [
-    { title: 'Image Generation', icon: HiOutlineSparkles, desc: 'Create stunning images from simple text descriptions.' },
-    { title: 'Image Enhancer', icon: HiOutlineLightningBolt, desc: 'Make your images clearer and sharper instantly.' },
-    { title: 'Chat with AI', icon: HiOutlineGlobeAlt, desc: 'Have a natural conversation to help with your projects.' },
-    { title: 'Simple Analytics', icon: HiOutlinePresentationChartBar, desc: 'Track your usage and results with ease.' }
-  ]
-
+const Landing = () => {
   return (
-    <div className="relative min-h-screen bg-[#050505] text-white selection:bg-white/10 font-sans overflow-hidden">
-      {/* Background */}
+    <div className="min-h-screen bg-[#010101] overflow-x-hidden pt-20 selection:bg-white/10">
       <div className="bg-animated" />
+      <div className="absolute inset-0 neural-grain opacity-[0.05]" />
 
-      {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-20 px-6">
+      {/* 🌌 HERO SECTION */}
+      <section className="relative px-6 py-24 sm:py-40 flex flex-col items-center text-center overflow-hidden">
+        {/* Spatial Depth Accents */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-white/[0.02] blur-[120px] rounded-full -z-10 animate-pulse" />
+        
         <motion.div
-           initial="hidden"
-           whileInView="show"
-           viewport={{ once: true }}
-           className="relative z-10 w-full max-w-4xl text-center"
+           initial={{ opacity: 0, y: 30 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+           className="relative z-10 space-y-10 max-w-5xl"
         >
-            <motion.div variants={revealVariant} className="mb-8">
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest bg-white/5 px-4 py-2 rounded-full">Simple & Powerful</span>
-            </motion.div>
+            <div className="inline-flex items-center gap-3 px-6 py-2 glass border border-white/5 shadow-2xl">
+                <div className="w-1.5 h-1.5 rounded-full bg-white/40 animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white/40">Architectural Synthesis v16.1</span>
+            </div>
 
-            <motion.h1 
-               variants={revealVariant}
-               className="text-5xl md:text-7xl font-black mb-8 leading-tight tracking-tight"
-            >
-               Build your ideas <br /> with <span className="text-gray-400">Pixel Forge</span>
-            </motion.h1>
+            <h1 className="text-6xl sm:text-[110px] font-black leading-[0.9] tracking-tighter text-glass pb-4">
+                Pixel Forge AI
+            </h1>
 
-            <motion.p 
-               variants={revealVariant}
-               className="text-sm md:text-base text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed"
-            >
-                Professional AI tools for everyone. Generate images, enhance quality, and chat with AI in a simple, fast workspace.
-            </motion.p>
+            <p className="text-sm sm:text-lg text-gray-500 font-medium max-w-3xl mx-auto leading-relaxed uppercase tracking-[0.1em]">
+              The next evolution in generative architecture. A unified neural workspace for high-fidelity image synthesis, 
+              precision asset enhancement, and conversational intelligence. Forged for the elite.
+            </p>
 
-            <motion.div 
-              variants={revealVariant}
-              className="flex flex-col sm:flex-row items-center justify-center gap-6"
-            >
-                <Link 
-                  to={user ? "/chatbot" : "/login"}
-                  className="w-full sm:w-auto px-10 py-4 bg-white text-black text-[12px] font-bold uppercase tracking-widest rounded-xl hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-3"
-                >
-                  Get Started <HiOutlineArrowRight className="w-4 h-4" />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-10">
+                <Link to="/signup">
+                  <button className="btn-monochrome group relative overflow-hidden">
+                    <span className="relative z-10 flex items-center gap-3">
+                        Initialize Session <HiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </button>
                 </Link>
-                
-                <a 
-                  href="#about"
-                  className="w-full sm:w-auto px-10 py-4 border border-white/10 text-white text-[12px] font-bold uppercase tracking-widest rounded-xl hover:bg-white/5 transition-all flex items-center justify-center"
-                >
-                  Learn More
-                </a>
-            </motion.div>
+                <Link to="/login">
+                  <button className="px-10 py-5 glass border border-white/10 text-[11px] font-black uppercase tracking-[0.4em] hover:bg-white/5 transition-all">
+                    Authorize Identity
+                  </button>
+                </Link>
+            </div>
         </motion.div>
       </section>
 
-      {/* Simple Tools Section */}
-      <section id="about" className="relative py-32 px-6 lg:px-20 max-w-6xl mx-auto">
-          <motion.div 
-             initial="hidden"
-             whileInView="show"
-             viewport={{ once: true, margin: "-100px" }}
-             className="grid grid-cols-1 md:grid-cols-2 gap-8"
-          >
-              <div className="space-y-8 md:sticky md:top-32 h-fit">
-                  <motion.div variants={revealVariant}>
-                      <h2 className="text-3xl md:text-5xl font-black mb-6">Simple Tools. <br /> Real Results.</h2>
-                      <p className="text-gray-400 text-sm md:text-base leading-relaxed">
-                          We believe AI should be easy to use. Pixel Forge removes the complexity so you can focus on creating.
-                      </p>
-                  </motion.div>
+      {/* 🛰️ CORE PROTOCOLS (Tools) */}
+      <section className="px-6 py-32 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {[
+            { 
+              title: "Image Generation", 
+              desc: "Deploy the Segmind Flux Engine to forge high-fidelity visual constructs.", 
+              icon: HiOutlineSparkles,
+              mode: 'synth'
+            },
+            { 
+              title: "Asset Enhancer", 
+              desc: "Deep-scale restoration using the specialized Klein neural protocol.", 
+              icon: HiOutlineLightningBolt,
+              mode: 'enhance'
+            },
+            { 
+              title: "Forge AI", 
+              desc: "Direct neural link to our semantic architectural core.", 
+              icon: HiOutlineChatAlt2,
+              mode: 'chat'
+            }
+          ].map((tool, i) => (
+            <motion.div
+              key={i}
+              whileHover={{ y: -10 }}
+              className="glass-premium p-12 border border-white/5 flex flex-col gap-8 group hover:border-white/10 transition-all duration-700 shadow-4xl h-full"
+            >
+              <div className="w-16 h-16 glass-strong flex items-center justify-center text-white/40 border border-white/10 group-hover:text-white transition-colors duration-700">
+                  <tool.icon className="w-8 h-8" />
               </div>
-
-              <div className="grid grid-cols-1 gap-4">
-                  {tools.map((tool) => (
-                      <motion.div 
-                        key={tool.title}
-                        variants={revealVariant}
-                        className="glass p-8 flex items-center gap-6 group hover:border-white/20 transition-all duration-300"
-                      >
-                          <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-white shrink-0">
-                              <tool.icon className="w-6 h-6" />
-                          </div>
-                          <div>
-                            <h4 className="text-sm font-bold mb-1">{tool.title}</h4>
-                            <p className="text-xs text-gray-500 leading-relaxed">
-                                {tool.desc}
-                            </p>
-                          </div>
-                      </motion.div>
-                  ))}
-              </div>
-          </motion.div>
-      </section>
-
-      {/* Final Section */}
-      <section className="py-32 px-6">
-        <motion.div 
-           initial="hidden"
-           whileInView="show"
-           viewport={{ once: true }}
-           className="max-w-3xl mx-auto glass p-16 md:p-24 rounded-[2rem] text-center"
-        >
-            <motion.h3 variants={revealVariant} className="text-4xl md:text-5xl font-black mb-8 italic">Ready to build?</motion.h3>
-            <motion.p variants={revealVariant} className="text-sm text-gray-500 mb-12">
-                Join our community of creators and start using Pixel Forge today.
-            </motion.p>
-            <motion.div variants={revealVariant}>
-              <Link 
-                to="/signup" 
-                className="inline-block px-12 py-4 bg-white text-black text-[12px] font-bold uppercase tracking-widest rounded-xl hover:opacity-90 active:scale-95 transition-all"
-              >
-                Sign Up Now
-              </Link>
-            </motion.div>
-        </motion.div>
-      </section>
-
-      {/* 👨‍💻 DEVELOPER FOOTER */}
-      <footer className="py-20 px-6 border-t border-white/5 bg-black/30">
-          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
-              <div className="text-center md:text-left space-y-4">
-                  <h4 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-600">Developed By</h4>
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xl font-black text-white">Koushik</span>
-                    <span className="text-[10px] font-medium text-gray-500 uppercase tracking-widest">Full-Stack Engineer</span>
-                  </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center gap-6">
-                  <a 
-                    href="https://github.com/koushiknagabhatla-ctrl" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-6 py-3 glass rounded-xl hover:bg-white hover:text-black transition-all group"
-                  >
-                    <FaGithub className="w-5 h-5" />
-                    <span className="text-[11px] font-bold uppercase tracking-widest">GitHub</span>
-                  </a>
-
-                  <a 
-                    href="https://koushikportfolio-peach.vercel.app/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-6 py-3 glass rounded-xl hover:bg-white hover:text-black transition-all group"
-                  >
-                    <SiVercel className="w-4 h-4" />
-                    <span className="text-[11px] font-bold uppercase tracking-widest">Portfolio</span>
-                  </a>
-              </div>
-
-              <div className="text-center md:text-right">
-                  <p className="text-[10px] font-bold text-gray-700 uppercase tracking-widest">
-                      &copy; 2026 Pixel Forge AI. <br /> All Rights Reserved.
+              <div className="space-y-4">
+                  <h3 className="text-2xl font-black text-white tracking-tight underline decoration-white/10 underline-offset-8 decoration-2">{tool.title}</h3>
+                  <p className="text-gray-600 font-bold text-[11px] uppercase tracking-widest leading-loose">
+                    {tool.desc}
                   </p>
               </div>
-          </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* 🏙️ ARCHITECTURAL FOOTER */}
+      <footer className="px-6 py-20 border-t border-white/5 mt-40">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+           <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                  <div className="w-8 h-8 glass flex items-center justify-center border-white/10">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M4 10L12 2L20 10L12 18L4 10Z" stroke="white" strokeWidth="2.5" strokeLinecap="square"/>
+                      </svg>
+                  </div>
+                  <h2 className="text-sm font-black uppercase tracking-[0.4em]">Pixel Forge AI</h2>
+              </div>
+              <p className="text-[10px] text-gray-800 font-black uppercase tracking-widest">Neural Alpha Phase v16.1</p>
+           </div>
+           
+           <div className="flex items-center gap-12">
+              <div className="text-right">
+                <p className="text-[10px] text-gray-700 font-black uppercase tracking-widest mb-2">Developed By</p>
+                <h3 className="text-sm font-black text-white hover:text-gray-400 transition-colors uppercase tracking-widest">Koushik Nagabhatla</h3>
+              </div>
+              <div className="flex gap-6">
+                 <a href="https://github.com/koushiknagabhatla-ctrl" target="_blank" rel="noreferrer" className="w-12 h-12 glass flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                    <FaGithub className="w-6 h-6" />
+                 </a>
+                 <a href="https://koushikportfolio-peach.vercel.app/" target="_blank" rel="noreferrer" className="w-12 h-12 glass flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                    <HiArrowRight className="w-6 h-6 -rotate-45" />
+                 </a>
+              </div>
+           </div>
+        </div>
       </footer>
     </div>
-  )
-}
+  );
+};
+
+export default Landing;

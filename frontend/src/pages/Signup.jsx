@@ -17,7 +17,7 @@ export default function Signup() {
     e.preventDefault()
     try {
       await signUpWithEmail(email, password, name)
-      toast.success('Account created.')
+      toast.success('Neural identity registered.')
       navigate('/chatbot')
     } catch (error) {
       toast.error(error.message)
@@ -27,7 +27,7 @@ export default function Signup() {
   const handleGoogleSignup = async () => {
     try {
       await signInWithGoogle()
-      toast.success('Sign up successful.')
+      toast.success('Biometric mapping complete.')
       navigate('/chatbot')
     } catch (error) {
       toast.error(error.message)
@@ -35,82 +35,86 @@ export default function Signup() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#010101] flex items-center justify-center p-8 relative overflow-hidden font-sans selection:bg-white/10">
       <div className="bg-animated" />
+      <div className="absolute inset-0 neural-grain opacity-[0.05]" />
 
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md glass-strong p-10 rounded-[2rem] border border-white/5 shadow-2xl relative z-10"
+        initial={{ opacity: 0, y: 40, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-lg glass-hyper p-16 rounded-[4rem] border border-white/5 shadow-[0_80px_160px_rgba(0,0,0,1)] relative z-10"
       >
-        <div className="text-center mb-10">
-          <div className="w-12 h-12 rounded-xl glass flex items-center justify-center mx-auto mb-6 border border-white/10">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 10L12 2L20 10L12 18L4 10Z" stroke="white" strokeWidth="2" strokeLinecap="square"/>
-                <path d="M12 18V22" stroke="white" strokeWidth="2"/>
+        <div className="text-center mb-16">
+          <div className="w-16 h-16 rounded-[1.5rem] glass-premium flex items-center justify-center mx-auto mb-10 border border-white/10 shadow-3xl">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 10L12 2L20 10L12 18L4 10Z" stroke="white" strokeWidth="2.5" strokeLinecap="square"/>
             </svg>
           </div>
-          <h1 className="text-3xl font-black mb-2 tracking-tight">Create Account</h1>
-          <p className="text-xs text-gray-600 font-bold uppercase tracking-widest">Start building today</p>
+          <h1 className="text-4xl font-black mb-4 tracking-tighter text-white">Initialize Identity</h1>
+          <p className="text-[10px] text-gray-700 font-bold uppercase tracking-[0.4em]">Map your neural footprint</p>
         </div>
 
         <button
           onClick={handleGoogleSignup}
-          className="w-full h-14 glass border border-white/5 rounded-xl flex items-center justify-center gap-4 hover:bg-white/5 transition-all mb-8"
+          className="w-full h-18 py-5 glass border border-white/10 rounded-2xl flex items-center justify-center gap-6 hover:bg-white/5 transition-all mb-10 group relative overflow-hidden"
         >
-          <FcGoogle className="w-5 h-5" />
-          <span className="text-[11px] font-bold uppercase tracking-widest">Sign up with Google</span>
+          <div className="relative">
+            <FcGoogle className="w-6 h-6 relative z-10" />
+            <div className="absolute inset-0 bg-white blur-xl opacity-20 group-hover:opacity-60 transition-opacity" />
+          </div>
+          <span className="text-[12px] font-black uppercase tracking-[0.4em] text-white">Neural Mapping</span>
         </button>
 
-        <div className="flex items-center gap-6 mb-8">
+        <div className="flex items-center gap-10 mb-10">
           <div className="flex-1 h-px bg-white/5" />
-          <span className="text-[9px] text-gray-800 font-bold uppercase tracking-widest">or</span>
+          <span className="text-[10px] text-gray-900 font-bold uppercase tracking-[0.5em]">or</span>
           <div className="flex-1 h-px bg-white/5" />
         </div>
 
-        <form onSubmit={handleSignup} className="space-y-6">
+        <form onSubmit={handleSignup} className="space-y-8">
           <div className="space-y-2">
-            <label className="text-[9px] font-bold text-gray-700 uppercase tracking-widest ml-1">Name</label>
+            <label className="text-[10px] font-bold text-gray-800 uppercase tracking-[0.5em] ml-2">Display Label</label>
             <div className="relative group">
-              <HiOutlineUser className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-800 group-focus-within:text-white transition-colors" />
+              <HiOutlineUser className="absolute left-8 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-800 group-focus-within:text-white transition-colors" />
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Your Name"
+                placeholder="Architect Name"
                 required
-                className="w-full h-14 pl-16 pr-6 bg-white/[0.015] border border-white/5 rounded-xl text-white text-sm focus:outline-none focus:border-white/10 transition-all font-medium placeholder:text-gray-800"
+                className="w-full h-18 pl-20 pr-8 bg-white/[0.015] border border-white/5 rounded-2xl text-white text-base focus:outline-none focus:border-white/20 transition-all font-medium placeholder:text-gray-900 shadow-inner"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-[9px] font-bold text-gray-700 uppercase tracking-widest ml-1">Email</label>
+            <label className="text-[10px] font-bold text-gray-800 uppercase tracking-[0.5em] ml-2">Neural Registry</label>
             <div className="relative group">
-              <HiOutlineMail className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-800 group-focus-within:text-white transition-colors" />
+              <HiOutlineMail className="absolute left-8 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-800 group-focus-within:text-white transition-colors" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@email.com"
+                placeholder="identity@neural.link"
                 required
-                className="w-full h-14 pl-16 pr-6 bg-white/[0.015] border border-white/5 rounded-xl text-white text-sm focus:outline-none focus:border-white/10 transition-all font-medium placeholder:text-gray-800"
+                className="w-full h-18 pl-20 pr-8 bg-white/[0.015] border border-white/5 rounded-2xl text-white text-base focus:outline-none focus:border-white/20 transition-all font-medium placeholder:text-gray-900 shadow-inner"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-[9px] font-bold text-gray-700 uppercase tracking-widest ml-1">Password</label>
+            <label className="text-[10px] font-bold text-gray-800 uppercase tracking-[0.5em] ml-2">Secure Key</label>
             <div className="relative group">
-              <HiOutlineLockClosed className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-800 group-focus-within:text-white transition-colors" />
+              <HiOutlineLockClosed className="absolute left-8 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-800 group-focus-within:text-white transition-colors" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="At least 8 characters"
+                placeholder="••••••••"
                 required
                 minLength={8}
-                className="w-full h-14 pl-16 pr-6 bg-white/[0.015] border border-white/5 rounded-xl text-white text-sm focus:outline-none focus:border-white/10 transition-all font-medium placeholder:text-gray-800"
+                className="w-full h-18 pl-20 pr-8 bg-white/[0.015] border border-white/5 rounded-2xl text-white text-base focus:outline-none focus:border-white/20 transition-all font-medium placeholder:text-gray-900 shadow-inner"
               />
             </div>
           </div>
@@ -118,19 +122,19 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-14 bg-white text-black rounded-xl font-bold text-[11px] uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all flex items-center justify-center shadow-2xl"
+            className="w-full h-18 bg-white text-black rounded-2xl font-black text-[12px] uppercase tracking-[0.6em] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center shadow-[0_30px_60px_rgba(255,255,255,0.1)]"
           >
             {loading ? (
-              <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+              <div className="w-5 h-5 border-4 border-black/20 border-t-black rounded-full animate-spin" />
             ) : (
-              'Create Account'
+              'Forge Identity'
             )}
           </button>
         </form>
 
-        <p className="text-center mt-10 text-[10px] text-gray-700 font-bold uppercase tracking-widest">
-          Already have one? {' '}
-          <Link to="/login" className="text-white hover:underline">Log in</Link>
+        <p className="text-center mt-16 text-[11px] text-gray-800 font-bold uppercase tracking-[0.4em]">
+          Existing Link? {' '}
+          <Link to="/login" className="text-white hover:text-gray-400 transition-colors border-b border-white/10 pb-0.5">Authorize Here</Link>
         </p>
       </motion.div>
     </div>

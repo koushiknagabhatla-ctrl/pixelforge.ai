@@ -13,17 +13,15 @@ class SegmindService:
 
     async def generate_image(self, prompt: str) -> Optional[bytes]:
         """
-        Generates a high-fidelity image using the Flux Pro model on Segmind.
+        Generates a high-fidelity image using the latest Flux 1.1 Pro model.
         """
-        url = f"{self.base_url}/flux-pro"
+        url = f"{self.base_url}/flux-1.1-pro"
         payload = {
             "prompt": prompt,
-            "steps": 25,
             "seed": -1,
-            "sampler": "euler",
-            "guidance_scale": 7.5,
             "width": 1024,
-            "height": 1024
+            "height": 1024,
+            "prompt_upsampling": True
         }
         headers = {
             "x-api-key": self.api_key,
@@ -31,31 +29,32 @@ class SegmindService:
         }
 
         async with httpx.AsyncClient() as client:
-            response = await client.post(url, json=payload, headers=headers, timeout=60.0)
-            if response.status_code == 200:
-                return response.content
-            else:
-                print(f"Segmind Generation Error: {response.text}")
+            try:
+                response = await client.post(url, json=payload, headers=headers, timeout=60.0)
+                if response.status_code == 200:
+                    return response.content
+                else:
+                    print(f"SEGMIND CRITICAL ERROR [{response.status_code}]: {response.text}")
+                    return None
+            except Exception as e:
+                print(f"SEGMIND CONNECTION FAILURE: {str(e)}")
                 return None
 
     async def enhance_image(self, image_bytes: bytes) -> Optional[bytes]:
         """
-        Enhances an image using the Flux2-Klein-9B-Enhanced-Details model via Segmind.
+        Enhances an image using the Flux2-Klein protocol.
         """
-        # Note: If Segmind requires a specific endpoint for custom models or img2img enhancement
-        # I'll use the general 'image-to-image' logic or the specific model endpoint if known.
-        # Given the model 'dx8152/Flux2-Klein-9B-Enhanced-Details', I'll target the model-specific endpoint.
-        model_id = "dx8152/flux2-klein-9b-enhanced-details"
+        # Sanitizing model ID naming convention for Segmind API
+        model_id = "flux2-klein-9b-enhanced-details"
         url = f"{self.base_url}/{model_id}"
         
-        # Base64 encode the image for JSON payload
         base64_image = base64.b64encode(image_bytes).decode('utf-8')
         
         payload = {
             "image": base64_image,
             "prompt": "highly detailed, 8k, realistic, sharp focus, professional photography",
-            "strength": 0.5,
-            "steps": 30,
+            "strength": 0.35,
+            "steps": 25,
             "seed": -1,
             "sampler": "euler",
             "guidance_scale": 7.5
@@ -67,11 +66,15 @@ class SegmindService:
         }
 
         async with httpx.AsyncClient() as client:
-            response = await client.post(url, json=payload, headers=headers, timeout=120.0)
-            if response.status_code == 200:
-                return response.content
-            else:
-                print(f"Segmind Enhancement Error: {response.text}")
+            try:
+                response = await client.post(url, json=payload, headers=headers, timeout=120.0)
+                if response.status_code == 200:
+                    return response.content
+                else:
+                    print(f"SEGMIND ENHANCE ERROR [{response.status_code}]: {response.text}")
+                    return None
+            except Exception as e:
+                print(f"SEGMIND ENHANCE FAILURE: {str(e)}")
                 return None
 
 segmind_service = SegmindService()
