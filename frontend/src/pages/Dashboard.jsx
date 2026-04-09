@@ -34,59 +34,59 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen pt-24 px-6 lg:px-20 pb-40 text-platinum relative selection:bg-white/10 font-sans">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen pt-20 px-6 lg:px-20 pb-32 font-sans relative">
+      <div className="max-w-5xl mx-auto">
         
-        {/* Nav Indicator */}
-        <div className="mb-20 flex flex-col sm:flex-row items-end sm:items-center justify-between gap-8">
-           <div className="space-y-4">
-              <span className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] block">Architectural Protocol v12.0</span>
-              <h2 className="text-5xl sm:text-7xl font-black text-white tracking-tighter uppercase leading-none">
-                {mode === 'synth' ? 'Image Generation' : 'Asset Enhancement'}
+        {/* Header Section */}
+        <div className="mb-12 flex flex-col sm:flex-row items-end sm:items-center justify-between gap-6">
+           <div className="space-y-2">
+              <span className="text-[10px] font-bold text-gray-600 uppercase tracking-widest block">Pixel Forge Tools</span>
+              <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+                {mode === 'synth' ? 'Image Generation' : 'Image Enhancer'}
               </h2>
            </div>
-           <div className="flex items-center gap-6 py-4 px-8 glass-premium border-white/5">
-              <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)] animate-pulse" />
-              <span className="text-[9px] font-black text-white uppercase tracking-[0.4em]">Neural Link Secure</span>
+           <div className="flex items-center gap-4 py-3 px-6 glass border-white/5">
+              <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
+              <span className="text-[9px] font-bold text-white/60 uppercase tracking-widest">System Ready</span>
            </div>
         </div>
 
-        {/* Console Interface */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20 items-stretch">
+        {/* Workspace */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="lg:col-span-8 h-full"
+            className="lg:col-span-8"
           >
-            <div className="glass-strong p-3 h-full flex flex-col shadow-3xl border border-white/5">
+            <div className="glass-strong p-2 h-full flex flex-col border border-white/5">
                 {mode === 'synth' ? (
                   <div className="relative group flex-1">
                     <textarea
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value.slice(0, 500))}
-                      placeholder="Input architectural neural directive..."
-                      className="w-full h-[450px] bg-white/[0.01] border border-white/5 rounded-[2rem] p-10 text-xl font-medium tracking-tight resize-none focus:outline-none focus:bg-white/[0.02] transition-all duration-700 placeholder:text-gray-800"
+                      placeholder="Describe the image you want to create..."
+                      className="w-full h-64 bg-white/[0.01] border border-white/5 rounded-xl p-6 text-base font-medium resize-none focus:outline-none focus:bg-white/[0.02] transition-all placeholder:text-gray-700"
                     />
-                    <div className="absolute bottom-10 right-10 text-[9px] font-black text-gray-800 uppercase tracking-[0.3em]">
-                      Intensity :: {prompt.length} / 500
+                    <div className="absolute bottom-6 right-6 text-[9px] font-bold text-gray-700 uppercase tracking-widest">
+                      {prompt.length} / 500
                     </div>
                   </div>
                 ) : (
-                  <div className="tool-dropzone flex flex-col items-center justify-center min-h-[450px] flex-1">
+                  <div className="tool-dropzone flex flex-col items-center justify-center min-h-[300px] flex-1">
                     <input 
                       type="file" 
                       accept="image/*"
                       onChange={handleFileChange}
                       className="absolute inset-0 opacity-0 cursor-pointer z-10" 
                     />
-                    <div className="flex flex-col items-center gap-12 text-center pointer-events-none">
-                      <div className="w-32 h-32 rounded-[3rem] glass-premium flex items-center justify-center text-gray-600 group-hover:text-white transition-all duration-700 group-hover:scale-110 border border-white/5">
-                        <HiOutlineCloudUpload className="w-10 h-10" />
+                    <div className="flex flex-col items-center gap-6 text-center pointer-events-none">
+                      <div className="w-16 h-16 rounded-2xl glass flex items-center justify-center text-gray-600 border border-white/5">
+                        <HiOutlineCloudUpload className="w-6 h-6" />
                       </div>
-                      <div className="space-y-4">
-                        <h3 className="text-3xl font-black uppercase tracking-[0.4em] text-white">Select Raw Asset</h3>
-                        <p className="text-[10px] font-black text-gray-800 uppercase tracking-[0.4em]">
-                             JPG / PNG / WEBP :: LIMIT 10MB
+                      <div className="space-y-2">
+                        <h3 className="text-xl font-bold text-white">Upload Image</h3>
+                        <p className="text-[9px] font-bold text-gray-700 uppercase tracking-widest">
+                             JPG / PNG / WEBP (MAX 10MB)
                         </p>
                       </div>
                     </div>
@@ -94,109 +94,70 @@ export default function Dashboard() {
                 )}
             </div>
 
-            <motion.button
+            <button
               onClick={handleForge}
               disabled={isGenerating || (mode === 'synth' ? !prompt.trim() : !selectedFile)}
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
-              className={`w-full mt-10 py-8 rounded-[2rem] font-black text-[10px] uppercase tracking-[0.6em] transition-all flex items-center justify-center gap-6 border border-white/5 ${
+              className={`w-full mt-6 py-5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all flex items-center justify-center gap-4 border border-white/5 ${
                 isGenerating 
-                ? 'bg-white/5 text-gray-800 cursor-not-allowed' 
-                : 'bg-white text-black hover:shadow-[0_20px_60px_rgba(255,255,255,0.1)]'
+                ? 'bg-white/5 text-gray-700 cursor-not-allowed' 
+                : 'bg-white text-black hover:opacity-90 active:scale-95'
               }`}
             >
               {isGenerating ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                  Deconstructing Matrix...
+                  <div className="w-3.5 h-3.5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                  Generating...
                 </>
               ) : (
                 <>
-                  <HiOutlineSparkles className="w-5 h-5" />
-                  {mode === 'synth' ? 'Execute Synthesis' : 'Enhance Architecture'}
+                  <HiOutlineSparkles className="w-4 h-4" />
+                  {mode === 'synth' ? 'Generate Image' : 'Enhance Image'}
                 </>
               )}
-            </motion.button>
+            </button>
           </motion.div>
 
-          {/* Context Sidebar */}
-          <div className="lg:col-span-4 flex flex-col gap-10">
-              <motion.div 
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-                className="glass-premium p-10 flex-1 border border-white/5"
-              >
-                  <h4 className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] mb-10">Engine Directives</h4>
-                  <ul className="space-y-8">
-                      {[
-                        { name: 'Sub-pixel Precision', status: 'Active' },
-                        { name: 'Contrast Calibration', status: 'Standby' },
-                        { name: 'Spatial Denoise', status: 'Optimized' }
-                      ].map(p => (
-                          <li key={p.name} className="flex flex-col gap-2">
-                              <div className="flex items-center justify-between">
-                                <span className="text-[10px] font-black text-white uppercase tracking-widest">{p.name}</span>
-                                <span className="text-[8px] font-bold text-gray-800 uppercase tracking-widest">{p.status}</span>
-                              </div>
-                              <div className="w-full h-1 bg-white/[0.02] rounded-full overflow-hidden">
-                                  <motion.div 
-                                    initial={{ width: 0 }}
-                                    animate={{ width: '100%' }}
-                                    transition={{ duration: 2 }}
-                                    className="h-full bg-white/10"
-                                  />
-                              </div>
-                          </li>
-                      ))}
+          {/* Quick Info */}
+          <div className="lg:col-span-4 flex flex-col gap-6">
+              <div className="glass p-8 flex-1 border border-white/5">
+                  <h4 className="text-[9px] font-bold text-gray-600 uppercase tracking-widest mb-6">Quick Tips</h4>
+                  <ul className="space-y-4 text-[11px] text-gray-400 font-medium leading-relaxed">
+                      <li className="flex gap-3">
+                          <span className="text-white/20">01</span>
+                          <span>Use simple, descriptive sentences.</span>
+                      </li>
+                      <li className="flex gap-3">
+                          <span className="text-white/20">02</span>
+                          <span>Mention colors and lighting for better results.</span>
+                      </li>
+                      <li className="flex gap-3">
+                          <span className="text-white/20">03</span>
+                          <span>High-quality inputs work best for enhancing.</span>
+                      </li>
                   </ul>
-              </motion.div>
-              
-              <motion.div 
-                 initial={{ opacity: 0, x: 20 }}
-                 animate={{ opacity: 1, x: 0 }}
-                 transition={{ delay: 0.4 }}
-                 className="glass p-10 relative overflow-hidden group border border-white/5"
-              >
-                  <h4 className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em] mb-6">Neural Tip</h4>
-                  <p className="text-[11px] text-gray-400 leading-loose italic uppercase tracking-wider font-medium">
-                      "For maximum depth clarity, use lighting terminology such as 'monochrome high-contrast' or 'soft diffused studio' in your prompt matrix."
-                  </p>
-              </motion.div>
+              </div>
           </div>
         </div>
 
-        {/* Result Stage */}
+        {/* Result Area */}
         <AnimatePresence mode="wait">
           {resultImage && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="mt-32 pt-20 border-t border-white/5"
+              className="mt-20 pt-16 border-t border-white/5"
             >
-               <div className="text-center mb-16">
-                  <span className="text-[10px] font-black text-white uppercase tracking-[1em]">Forged Entity</span>
-               </div>
-               
-               <div className="max-w-5xl mx-auto glass-strong p-4 relative group overflow-hidden shadow-[0_60px_100px_rgba(0,0,0,0.8)] border border-white/10">
-                  <div className="absolute top-10 right-10 z-20 flex gap-6">
-                      <a href={resultImage} download className="h-16 w-16 glass rounded-2xl text-white flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500 shadow-2xl">
-                          <HiOutlineDownload className="w-6 h-6" />
+               <div className="max-w-3xl mx-auto glass-strong p-3 relative group overflow-hidden border border-white/5 shadow-2xl">
+                  <div className="absolute top-6 right-6 z-20 flex gap-4">
+                      <a href={resultImage} download className="h-12 w-12 glass rounded-xl text-white flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                          <HiOutlineDownload className="w-5 h-5" />
                       </a>
-                      <button onClick={clearResult} className="h-16 w-16 glass rounded-2xl text-white flex items-center justify-center hover:bg-neutral-900 transition-all duration-500">
-                          <HiOutlineRefresh className="w-6 h-6" />
+                      <button onClick={clearResult} className="h-12 w-12 glass rounded-xl text-white flex items-center justify-center hover:bg-white/10 transition-all">
+                          <HiOutlineRefresh className="w-5 h-5" />
                       </button>
                   </div>
-                  
-                  <img 
-                    src={resultImage} 
-                    alt="Forge Output" 
-                    className="w-full h-auto rounded-[1.5rem] transition-all duration-[3s] group-hover:scale-[1.02] filter grayscale-[0.2] group-hover:grayscale-0" 
-                  />
-                  
-                  {/* Neural Overlay Decor */}
-                  <div className="absolute inset-0 opacity-[0.03] neural-grain pointer-events-none" />
+                  <img src={resultImage} alt="AI Generated" className="w-full h-auto rounded-lg" />
                </div>
             </motion.div>
           )}

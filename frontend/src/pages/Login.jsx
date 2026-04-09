@@ -16,7 +16,7 @@ export default function Login() {
     e.preventDefault()
     try {
       await signInWithEmail(email, password)
-      toast.success('System Authenticated.')
+      toast.success('Welcome back.')
       navigate('/chatbot')
     } catch (error) {
       toast.error(error.message)
@@ -26,7 +26,7 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     try {
       await signInWithGoogle()
-      toast.success('Omni-Bridge Connected.')
+      toast.success('Sign in successful.')
       navigate('/chatbot')
     } catch (error) {
       toast.error(error.message)
@@ -36,72 +36,64 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 relative overflow-hidden font-sans">
       <div className="bg-animated" />
-      <div className="fixed inset-0 opacity-[0.015] neural-grain pointer-events-none" />
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-lg glass-strong p-16 rounded-[4rem] shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/5 relative z-10"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-md glass-strong p-10 rounded-[2rem] border border-white/5 shadow-2xl relative z-10"
       >
-        <div className="text-center mb-16">
-          {/* Architectural Badge */}
-          <div className="w-20 h-20 rounded-3xl glass flex items-center justify-center mx-auto mb-10 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div className="text-center mb-10">
+          <div className="w-12 h-12 rounded-xl glass flex items-center justify-center mx-auto mb-6 border border-white/10">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M4 10L12 2L20 10L12 18L4 10Z" stroke="white" strokeWidth="2" strokeLinecap="square"/>
                 <path d="M12 18V22" stroke="white" strokeWidth="2"/>
-                <path d="M8 22H16" stroke="white" strokeWidth="2"/>
             </svg>
           </div>
-          
-          <h1 className="text-5xl font-black text-white uppercase tracking-tighter mb-6">Initialize Session</h1>
-          <p className="text-[10px] text-gray-700 font-black uppercase tracking-[0.6em]">Secure Neural Bridge Credentials</p>
+          <h1 className="text-3xl font-black mb-2 tracking-tight">Sign In</h1>
+          <p className="text-xs text-gray-600 font-bold uppercase tracking-widest">Access your workspace</p>
         </div>
 
-        {/* Action Anchor */}
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+        <button
           onClick={handleGoogleLogin}
-          className="w-full h-20 bg-white/[0.02] border border-white/5 rounded-[2.5rem] flex items-center justify-center gap-6 group hover:bg-white/[0.04] transition-all mb-16"
+          className="w-full h-14 glass border border-white/5 rounded-xl flex items-center justify-center gap-4 hover:bg-white/5 transition-all mb-8"
         >
-          <FcGoogle className="w-8 h-8" />
-          <span className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Sign in :: Google Protocol</span>
-        </motion.button>
+          <FcGoogle className="w-5 h-5" />
+          <span className="text-[11px] font-bold uppercase tracking-widest">Continue with Google</span>
+        </button>
 
-        {/* Divider */}
-        <div className="flex items-center gap-10 mb-16">
+        <div className="flex items-center gap-6 mb-8">
           <div className="flex-1 h-px bg-white/5" />
-          <span className="text-[10px] text-gray-800 font-black uppercase tracking-[0.5em]">Primary Link</span>
+          <span className="text-[9px] text-gray-800 font-bold uppercase tracking-widest">or</span>
           <div className="flex-1 h-px bg-white/5" />
         </div>
 
-        <form onSubmit={handleEmailLogin} className="space-y-12">
-          <div className="space-y-4">
-            <label className="text-[8px] font-black text-gray-700 uppercase tracking-[0.4em] ml-4">Architect ID</label>
+        <form onSubmit={handleEmailLogin} className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-[9px] font-bold text-gray-700 uppercase tracking-widest ml-1">Email</label>
             <div className="relative group">
-              <HiOutlineMail className="absolute left-8 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-800 group-focus-within:text-white transition-colors" />
+              <HiOutlineMail className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-800 group-focus-within:text-white transition-colors" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="architect@pixelforge.ai"
+                placeholder="you@email.com"
                 required
-                className="w-full h-20 pl-20 pr-10 bg-white/[0.015] border border-white/5 rounded-[2rem] text-white text-md focus:outline-none focus:border-white/10 transition-all font-medium placeholder:text-gray-800"
+                className="w-full h-14 pl-16 pr-6 bg-white/[0.015] border border-white/5 rounded-xl text-white text-sm focus:outline-none focus:border-white/10 transition-all font-medium placeholder:text-gray-800"
               />
             </div>
           </div>
 
-          <div className="space-y-4">
-            <label className="text-[8px] font-black text-gray-700 uppercase tracking-[0.4em] ml-4">Secret Protocol</label>
+          <div className="space-y-2">
+            <label className="text-[9px] font-bold text-gray-700 uppercase tracking-widest ml-1">Password</label>
             <div className="relative group">
-              <HiOutlineLockClosed className="absolute left-8 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-800 group-focus-within:text-white transition-colors" />
+              <HiOutlineLockClosed className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-800 group-focus-within:text-white transition-colors" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full h-20 pl-20 pr-10 bg-white/[0.015] border border-white/5 rounded-[2rem] text-white text-md focus:outline-none focus:border-white/10 transition-all font-medium placeholder:text-gray-800"
+                className="w-full h-14 pl-16 pr-6 bg-white/[0.015] border border-white/5 rounded-xl text-white text-sm focus:outline-none focus:border-white/10 transition-all font-medium placeholder:text-gray-800"
               />
             </div>
           </div>
@@ -109,19 +101,19 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-20 bg-white text-black rounded-[2rem] font-black text-[11px] uppercase tracking-[0.6em] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center shadow-[0_20px_60px_rgba(255,255,255,0.1)]"
+            className="w-full h-14 bg-white text-black rounded-xl font-bold text-[11px] uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all flex items-center justify-center shadow-2xl"
           >
             {loading ? (
-              <div className="w-6 h-6 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
             ) : (
-              'Authorize Connection'
+              'Sign In'
             )}
           </button>
         </form>
 
-        <p className="text-center mt-16 text-[9px] text-gray-800 font-black uppercase tracking-widest">
-          No Index Found? {' '}
-          <Link to="/signup" className="text-white hover:underline underline-offset-8">Initialize Signup</Link>
+        <p className="text-center mt-10 text-[10px] text-gray-700 font-bold uppercase tracking-widest">
+          New here? {' '}
+          <Link to="/signup" className="text-white hover:underline">Get an account</Link>
         </p>
       </motion.div>
     </div>

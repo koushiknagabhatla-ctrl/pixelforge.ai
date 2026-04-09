@@ -1,191 +1,182 @@
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { HiOutlineArrowRight, HiOutlineSparkles, HiOutlineLightningBolt, HiOutlineGlobeAlt, HiOutlinePresentationChartBar } from 'react-icons/hi'
+import { HiOutlineArrowRight, HiOutlineSparkles, HiOutlineLightningBolt, HiOutlineGlobeAlt, HiOutlinePresentationChartBar, HiOutlineGithub } from 'react-icons/hi'
+import { SiVercel } from 'react-icons/si'
 import useAuthStore from '../store/useAuthStore'
 
 const revealVariant = {
-  hidden: { y: 100, opacity: 0, filter: 'blur(20px)' },
+  hidden: { y: 30, opacity: 0 },
   show: { 
     y: 0, 
     opacity: 1, 
-    filter: 'blur(0px)',
-    transition: { type: "spring", damping: 40, stiffness: 60 }
+    transition: { duration: 0.6, ease: "easeOut" }
   }
 }
 
 export default function Landing() {
   const { user } = useAuthStore()
-  const { scrollYProgress } = useScroll()
-  const scaleProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 })
 
   const tools = [
-    { title: 'IMAGE GENERATOR', icon: HiOutlineSparkles, desc: 'Architecting high-fidelity synthetics from pure text-intent.' },
-    { title: 'IMAGE ENHANCER', icon: HiOutlineLightningBolt, desc: 'Upscaling assets through sub-pixel reconstruction algorithms.' },
-    { title: 'FORGE AI', icon: HiOutlineGlobeAlt, desc: 'Natural language dialogue for complex asset orchestration.' },
-    { title: 'SYNC ANALYTICS', icon: HiOutlinePresentationChartBar, desc: 'Real-time telemetry on neural yield and synthetic stability.' }
+    { title: 'Image Generation', icon: HiOutlineSparkles, desc: 'Create stunning images from simple text descriptions.' },
+    { title: 'Image Enhancer', icon: HiOutlineLightningBolt, desc: 'Make your images clearer and sharper instantly.' },
+    { title: 'Chat with AI', icon: HiOutlineGlobeAlt, desc: 'Have a natural conversation to help with your projects.' },
+    { title: 'Simple Analytics', icon: HiOutlinePresentationChartBar, desc: 'Track your usage and results with ease.' }
   ]
 
   return (
     <div className="relative min-h-screen bg-[#050505] text-white selection:bg-white/10 font-sans overflow-hidden">
-      {/* Dynamic Background */}
+      {/* Background */}
       <div className="bg-animated" />
-      <div className="fixed inset-0 opacity-[0.015] neural-grain pointer-events-none" />
 
-      {/* 🚀 HERO SECTION — MONOCHROME ELITE */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 px-6 overflow-hidden">
+      {/* Hero Section */}
+      <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-20 px-6">
         <motion.div
            initial="hidden"
-           animate="show"
-           className="relative z-10 w-full max-w-7xl text-center"
+           whileInView="show"
+           viewport={{ once: true }}
+           className="relative z-10 w-full max-w-4xl text-center"
         >
-            <motion.div 
-              variants={revealVariant}
-              className="flex items-center justify-center gap-6 mb-16"
-            >
-                <div className="h-px w-10 bg-gray-800" />
-                <span className="text-[10px] font-black text-white uppercase tracking-[1em]">The Architect's Console</span>
-                <div className="h-px w-10 bg-gray-800" />
+            <motion.div variants={revealVariant} className="mb-8">
+                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest bg-white/5 px-4 py-2 rounded-full">Simple & Powerful</span>
             </motion.div>
 
             <motion.h1 
                variants={revealVariant}
-               style={{ scale: useTransform(scaleProgress, [0, 0.2], [1, 1.1]) }}
-               className="text-[16vw] sm:text-[13vw] font-black leading-[0.85] tracking-tighter mb-16 flex flex-wrap justify-center items-baseline"
+               className="text-5xl md:text-7xl font-black mb-8 leading-tight tracking-tight"
             >
-               <span className="text-white drop-shadow-[0_0_80px_rgba(255,255,255,0.15)]">PIXEL</span>
-               <span className="text-white/5 ml-8 hover:text-white/10 transition-colors cursor-default">FORGE</span>
+               Build your ideas <br /> with <span className="text-gray-400">Pixel Forge</span>
             </motion.h1>
 
             <motion.p 
                variants={revealVariant}
-               className="text-[10px] sm:text-[12px] font-black text-gray-500 uppercase tracking-[0.8em] mb-20 max-w-3xl mx-auto leading-loose"
+               className="text-sm md:text-base text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed"
             >
-                Synthetic Vision & Neural Logic Synthesis <br />
-                <span className="text-gray-800">Precision Protocol v12.0 // Monochrome Architecture</span>
+                Professional AI tools for everyone. Generate images, enhance quality, and chat with AI in a simple, fast workspace.
             </motion.p>
 
             <motion.div 
               variants={revealVariant}
-              className="flex flex-col sm:flex-row items-center justify-center gap-12"
+              className="flex flex-col sm:flex-row items-center justify-center gap-6"
             >
                 <Link 
                   to={user ? "/chatbot" : "/login"}
-                  className="px-20 py-8 bg-white text-black text-[11px] font-black uppercase tracking-[0.6em] rounded-full hover:scale-105 active:scale-95 transition-all flex items-center gap-6 shadow-[0_20px_80px_rgba(255,255,255,0.2)]"
+                  className="w-full sm:w-auto px-10 py-4 bg-white text-black text-[12px] font-bold uppercase tracking-widest rounded-xl hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-3"
                 >
-                  Enter Forge <HiOutlineArrowRight className="w-5 h-5" />
+                  Get Started <HiOutlineArrowRight className="w-4 h-4" />
                 </Link>
                 
-                <Link 
-                  to="/login"
-                  className="px-20 py-8 bg-transparent border border-white/5 text-white text-[11px] font-black uppercase tracking-[0.6em] rounded-full hover:bg-white hover:text-black transition-all"
+                <a 
+                  href="#about"
+                  className="w-full sm:w-auto px-10 py-4 border border-white/10 text-white text-[12px] font-bold uppercase tracking-widest rounded-xl hover:bg-white/5 transition-all flex items-center justify-center"
                 >
-                  Sign In
-                </Link>
+                  Learn More
+                </a>
             </motion.div>
-        </motion.div>
-
-        {/* 📐 SCROLL INDICATOR — ELITE FIXED POSITION */}
-        <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.5, duration: 2 }}
-            className="fixed bottom-12 right-12 hidden lg:flex flex-col items-end gap-8 z-[90] pointer-events-none"
-        >
-            <div className="flex flex-col items-end gap-2 text-right">
-              <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.85em]">Scroll to Decode</span>
-              <span className="text-[7px] font-bold text-gray-800 uppercase tracking-[0.4em]">Section :: Architectural View</span>
-            </div>
-            <div className="w-[1px] h-32 bg-white/5 overflow-hidden flex flex-col justify-start">
-              <motion.div 
-                animate={{ y: [0, 128, 0] }}
-                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                className="w-full h-12 bg-white/40 blur-[1px]"
-              />
-            </div>
         </motion.div>
       </section>
 
-      {/* 🏛️ ABOUT THE FORGE — PROFESSIONAL TEXT PARALLAX */}
-      <section id="about" className="relative py-80 px-6 lg:px-20 max-w-7xl mx-auto">
+      {/* Simple Tools Section */}
+      <section id="about" className="relative py-32 px-6 lg:px-20 max-w-6xl mx-auto">
           <motion.div 
              initial="hidden"
              whileInView="show"
              viewport={{ once: true, margin: "-100px" }}
-             className="grid grid-cols-1 lg:grid-cols-2 gap-40 items-start"
+             className="grid grid-cols-1 md:grid-cols-2 gap-8"
           >
-              <div className="space-y-24 sticky top-40">
+              <div className="space-y-8 md:sticky md:top-32 h-fit">
                   <motion.div variants={revealVariant}>
-                      <span className="text-[10px] font-black text-gray-600 uppercase tracking-[0.8em] mb-8 block">Legacy v12.0</span>
-                      <h2 className="text-6xl lg:text-8xl font-black text-white leading-[0.85] tracking-tighter uppercase mb-12">
-                        The Neural <br /> Architecture.
-                      </h2>
-                      <div className="w-24 h-[1px] bg-white/10" />
-                  </motion.div>
-
-                  <motion.div variants={revealVariant} className="space-y-12">
-                      <p className="text-2xl text-gray-400 leading-relaxed font-medium tracking-tight">
-                          "PixelForge AI is a high-performance neural engine designed for the architects of the future."
-                      </p>
-                      <p className="text-md text-gray-600 leading-relaxed font-bold uppercase tracking-widest">
-                          Utilizing proprietary V12 architecture, we deliver bit-perfect asset generation and restoration at sub-pixel precision.
+                      <h2 className="text-3xl md:text-5xl font-black mb-6">Simple Tools. <br /> Real Results.</h2>
+                      <p className="text-gray-400 text-sm md:text-base leading-relaxed">
+                          We believe AI should be easy to use. Pixel Forge removes the complexity so you can focus on creating.
                       </p>
                   </motion.div>
               </div>
 
-              {/* Tool Gallery Section — MONOCHROME GLASS */}
-              <div className="grid grid-cols-1 gap-10 relative">
-                  {tools.map((tool, i) => (
+              <div className="grid grid-cols-1 gap-4">
+                  {tools.map((tool) => (
                       <motion.div 
                         key={tool.title}
                         variants={revealVariant}
-                        whileHover={{ x: 20 }}
-                        className="glass-premium p-12 flex flex-col sm:flex-row items-center gap-12 group hover:bg-white hover:border-white transition-all duration-700"
+                        className="glass p-8 flex items-center gap-6 group hover:border-white/20 transition-all duration-300"
                       >
-                          <div className="w-24 h-24 rounded-[2.5rem] glass flex items-center justify-center text-white group-hover:bg-black group-hover:text-white transition-all duration-700 border border-white/5">
-                              <tool.icon className="w-10 h-10" />
+                          <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-white shrink-0">
+                              <tool.icon className="w-6 h-6" />
                           </div>
-                          <div className="space-y-4 text-center sm:text-left">
-                            <h4 className="text-xs font-black text-white group-hover:text-black uppercase tracking-[0.4em] transition-colors">{tool.title}</h4>
-                            <p className="text-[11px] text-gray-600 group-hover:text-black/60 font-black uppercase tracking-widest transition-colors leading-relaxed">
+                          <div>
+                            <h4 className="text-sm font-bold mb-1">{tool.title}</h4>
+                            <p className="text-xs text-gray-500 leading-relaxed">
                                 {tool.desc}
                             </p>
                           </div>
                       </motion.div>
                   ))}
-                  
-                  {/* Neural Glow Decor */}
-                  <div className="absolute -z-10 inset-0 pointer-events-none">
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] bg-white/[0.015] blur-[150px] rounded-full" />
-                  </div>
               </div>
           </motion.div>
       </section>
 
-      {/* Professional CTA Section */}
-      <section className="py-60 relative px-6 overflow-hidden">
+      {/* Final Section */}
+      <section className="py-32 px-6">
         <motion.div 
-           initial={{ opacity: 0, scale: 0.95 }}
-           whileInView={{ opacity: 1, scale: 1 }}
-           transition={{ duration: 1.5 }}
-           className="max-w-5xl mx-auto glass-strong p-32 rounded-[5rem] border-white/5 text-center relative z-10 shadow-3xl bg-white/[0.005]"
+           initial="hidden"
+           whileInView="show"
+           viewport={{ once: true }}
+           className="max-w-3xl mx-auto glass p-16 md:p-24 rounded-[2rem] text-center"
         >
-            <h3 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter mb-16 leading-[0.8]">Ready <br /> to Forge?</h3>
-            <p className="text-[10px] text-gray-800 font-black uppercase tracking-[0.8em] mb-20 leading-loose">
-                Universal Architecture Matrix <br />
-                Neural Verification Level 12.0 :: High-Contrast Yield
-            </p>
-            <Link 
-              to="/signup" 
-              className="inline-flex px-24 py-8 bg-white text-black text-[11px] font-black uppercase tracking-[0.6em] rounded-full hover:scale-110 active:scale-95 transition-all shadow-2xl"
-            >
-              Initialize Identity
-            </Link>
+            <motion.h3 variants={revealVariant} className="text-4xl md:text-5xl font-black mb-8 italic">Ready to build?</motion.h3>
+            <motion.p variants={revealVariant} className="text-sm text-gray-500 mb-12">
+                Join our community of creators and start using Pixel Forge today.
+            </motion.p>
+            <motion.div variants={revealVariant}>
+              <Link 
+                to="/signup" 
+                className="inline-block px-12 py-4 bg-white text-black text-[12px] font-bold uppercase tracking-widest rounded-xl hover:opacity-90 active:scale-95 transition-all"
+              >
+                Sign Up Now
+              </Link>
+            </motion.div>
         </motion.div>
-        
-        {/* Abstract Geometry */}
-        <div className="absolute top-1/2 left-0 w-[500px] h-[500px] border border-white/[0.02] rounded-full -translate-y-1/2 -translate-x-1/2" />
-        <div className="absolute top-1/2 right-0 w-[800px] h-[800px] border border-white/[0.02] rounded-full -translate-y-1/2 translate-x-1/2" />
       </section>
+
+      {/* 👨‍💻 DEVELOPER FOOTER */}
+      <footer className="py-20 px-6 border-t border-white/5 bg-black/30">
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+              <div className="text-center md:text-left space-y-4">
+                  <h4 className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-600">Developed By</h4>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xl font-black text-white">Koushik</span>
+                    <span className="text-[10px] font-medium text-gray-500 uppercase tracking-widest">Full-Stack Engineer</span>
+                  </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-6">
+                  <a 
+                    href="https://github.com/koushiknagabhatla-ctrl" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 px-6 py-3 glass rounded-xl hover:bg-white hover:text-black transition-all group"
+                  >
+                    <HiOutlineGithub className="w-5 h-5" />
+                    <span className="text-[11px] font-bold uppercase tracking-widest">GitHub</span>
+                  </a>
+
+                  <a 
+                    href="https://koushikportfolio-peach.vercel.app/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 px-6 py-3 glass rounded-xl hover:bg-white hover:text-black transition-all group"
+                  >
+                    <SiVercel className="w-4 h-4" />
+                    <span className="text-[11px] font-bold uppercase tracking-widest">Portfolio</span>
+                  </a>
+              </div>
+
+              <div className="text-center md:text-right">
+                  <p className="text-[10px] font-bold text-gray-700 uppercase tracking-widest">
+                      &copy; 2026 Pixel Forge AI. <br /> All Rights Reserved.
+                  </p>
+              </div>
+          </div>
+      </footer>
     </div>
   )
 }
