@@ -6,7 +6,7 @@ router = APIRouter()
 
 class ChatRequest(BaseModel):
     message: str
-    model: str = "gemini-1.5-pro"
+    model: str = "gemini-2.0-flash"
 
 class ChatResponse(BaseModel):
     reply: str
@@ -24,7 +24,7 @@ async def chat_with_forge(request: Request):
     try:
         body = await request.json()
         message = body.get("message")
-        model = body.get("model", "gemini-1.5-pro")
+        model = body.get("model", "gemini-2.0-flash")
         
         system_prompt = (
             "You are the Pixel Forge Archon, a master of photography, digital arts, and neural architecture. "

@@ -76,7 +76,7 @@ class GeminiService:
         try:
             # High-fidelity visual enhancement via Gemini 1.5 Pro Vision
             img = Image.open(BytesIO(image_bytes))
-            model = genai.GenerativeModel("gemini-1.5-pro")
+            model = genai.GenerativeModel("gemini-2.0-flash")
             
             response = model.generate_content(
                 ["Analyze this image and refine every pixel. Enhance sharpness, resolve textures, and optimize dynamic range. Return a high-fidelity version of this exact composition.", img]
@@ -96,7 +96,7 @@ class GeminiService:
             print(f"Image Enhancement Error: {e}")
             return image_bytes
 
-    async def chat(self, message: str, system_prompt: str, model_name: str = "gemini-1.5-pro") -> str:
+    async def chat(self, message: str, system_prompt: str, model_name: str = "gemini-2.0-flash") -> str:
         """
         Conversational AI powered by Gemini Pro or Flash.
         """
