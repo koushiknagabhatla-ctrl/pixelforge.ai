@@ -94,21 +94,25 @@ export default function Sidebar() {
                 }`
               }
             >
-              <link.icon className={`w-5 h-5 shrink-0 transition-all duration-700 ${isOpen ? '' : 'mx-auto'} ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
-              <AnimatePresence>
-                  {isOpen && (
-                    <motion.span 
-                      initial={{ opacity: 0, x: -20 }} 
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      {link.name}
-                    </motion.span>
-                  )}
-              </AnimatePresence>
-              {/* Premium Interaction Wave */}
-              <div className="absolute inset-0 bg-gradient-to-r from-white/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              {({ isActive }) => (
+                <>
+                  <link.icon className={`w-5 h-5 shrink-0 transition-all duration-700 ${isOpen ? '' : 'mx-auto'} ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
+                  <AnimatePresence>
+                      {isOpen && (
+                        <motion.span 
+                          initial={{ opacity: 0, x: -20 }} 
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          {link.name}
+                        </motion.span>
+                      )}
+                  </AnimatePresence>
+                  {/* Premium Interaction Wave */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                </>
+              )}
             </NavLink>
           ))}
         </nav>
