@@ -59,7 +59,12 @@ const Chatbot = () => {
               key={i}
               initial={{ opacity: 0, y: 30, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ type: "spring", damping: 20, stiffness: 100 }}
+              transition={{ 
+                  type: "spring", 
+                  damping: 24, 
+                  stiffness: 120,
+                  delay: 0.05
+              }}
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div className={`max-w-[85%] sm:max-w-[75%] space-y-2 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>

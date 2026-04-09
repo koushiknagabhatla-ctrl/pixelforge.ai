@@ -11,7 +11,9 @@ const useImageStore = create((set, get) => ({
   generateImage: async (prompt, userId) => {
     set({ isGenerating: true, resultImage: null, enhancedPrompt: null })
     try {
-      const { data } = await api.post('/generate', { prompt, user_id: userId })
+      // Hyper-Performance Prompt Wrapper v10.1
+      const hyperPrompt = `[MODE: HYPER-BEST / MAXIMUM THINKING] High-fidelity architectural render, professional lighting, 8k resolution, cinematic composition, photorealistic detail: ${prompt}`;
+      const { data } = await api.post('/generate', { prompt: hyperPrompt, user_id: userId })
       set({ 
         resultImage: data.image_url, 
         enhancedPrompt: data.enhanced_prompt,

@@ -30,15 +30,15 @@ export default function Sidebar() {
       {/* Mobile Hamburger Trigger */}
       <button 
         onClick={() => setMobileOpen(true)}
-        className="fixed top-4 left-4 z-[60] lg:hidden w-10 h-10 flex items-center justify-center glass rounded-lg"
+        className="fixed top-5 left-5 z-[60] lg:hidden w-12 h-12 flex items-center justify-center glass rounded-xl border-white/20 active:scale-90 transition-transform shadow-2xl"
       >
-        <HiOutlineMenu className="w-6 h-6" />
+        <HiOutlineMenu className="w-6 h-6 text-white" />
       </button>
 
       {/* Desktop Toggle Trigger Zone (Invisible) */}
       <div 
         onMouseEnter={() => setSidebarOpen(true)}
-        className="fixed left-0 top-0 bottom-0 w-5 z-[55] lg:block hidden"
+        className="fixed left-0 top-0 bottom-0 w-6 z-[55] lg:block hidden"
       />
 
       {/* Mobile Backdrop */}
@@ -67,28 +67,30 @@ export default function Sidebar() {
         className={`fixed left-0 top-0 bottom-0 z-[80] glass-strong border-r border-white/10 flex flex-col py-6 overflow-hidden`}
       >
         {/* Header / Identity */}
-        <div className="px-5 mb-10 flex items-center gap-4">
-           <div className="w-6 h-6 rounded-md bg-indigo-600 shrink-0 flex items-center justify-center font-bold text-xs">P</div>
-           <AnimatePresence>
-             {sidebarOpen && (
-               <motion.span 
-                 initial={{ opacity: 0, x: -10 }}
-                 animate={{ opacity: 1, x: 0 }}
-                 exit={{ opacity: 0, x: -10 }}
-                 className="font-bold tracking-tight whitespace-nowrap"
-               >
-                 PixelForge AI
-               </motion.span>
-             )}
-           </AnimatePresence>
+        <div className="px-5 mb-10 flex items-center justify-between">
+           <div className="flex items-center gap-4 min-w-0">
+              <div className="w-6 h-6 rounded-md bg-indigo-600 shrink-0 flex items-center justify-center font-bold text-xs shadow-lg shadow-indigo-600/30">P</div>
+              <AnimatePresence>
+                {sidebarOpen && (
+                  <motion.span 
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    className="font-bold tracking-tight whitespace-nowrap overflow-hidden"
+                  >
+                    PixelForge AI
+                  </motion.span>
+                )}
+              </AnimatePresence>
+           </div>
            
-           {/* Mobile Close Button */}
+           {/* Mobile Close Button - Enhanced */}
            {mobileOpen && (
               <button 
                 onClick={() => setMobileOpen(false)}
-                className="ml-auto lg:hidden"
+                className="lg:hidden p-2 glass rounded-lg hover:bg-white/10 transition-colors"
               >
-                <HiX className="w-5 h-5" />
+                <HiX className="w-5 h-5 text-indigo-400" />
               </button>
            )}
         </div>

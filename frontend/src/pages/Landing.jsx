@@ -55,14 +55,19 @@ export default function Landing() {
 
         <motion.h1 
           variants={item}
-          className="text-5xl sm:text-7xl lg:text-8xl font-black mb-10 tracking-tighter leading-[0.9] text-white"
+          className="text-6xl sm:text-7xl lg:text-[10rem] font-black mb-10 tracking-tighter leading-[0.85] text-white flex flex-wrap justify-center overflow-hidden"
         >
-          {["FORGING", "THE", "FUTURE", "OF", "VISION"].map((word, i) => (
+          {["FORGING", "THE", "FUTURE"].map((word, i) => (
             <motion.span 
               key={i} 
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ 
+                  delay: i * 0.15, 
+                  duration: 1.2, 
+                  ease: [0.16, 1, 0.3, 1] 
+              }}
               className="inline-block mr-[0.2em] last:mr-0"
-              whileHover={{ scale: 1.05, color: '#6366f1' }}
-              transition={{ type: 'spring', stiffness: 400 }}
             >
               {word}
             </motion.span>
