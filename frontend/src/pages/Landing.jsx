@@ -14,7 +14,7 @@ import { useRef } from 'react';
 
 // Atomic Static Assets (Local)
 const ASSETS = {
-  bg: "/assets/bg.png",
+  bg: "/assets/bg_v2.png",
   nexus: "/assets/nexus.png",
   enhancer: "/assets/enhancer.png",
   entity: "/assets/entity.png"
@@ -35,18 +35,18 @@ const MotionSection = ({ children, className }) => (
 const Landing = () => {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll();
-  const yParallax = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const yParallax = useTransform(scrollYProgress, [0, 1], [0, -80]);
 
   return (
     <div ref={containerRef} className="min-h-screen bg-[#010101] overflow-x-hidden pt-20 selection:bg-white/10 relative">
       <div className="bg-animated" />
       
-      {/* 🌌 ATOMIC CINEMATIC UNDERLAY */}
+      {/* 🌌 VOLUMETRIC MOTION UNDERLAY */}
       <motion.div 
         style={{ y: yParallax }}
-        className="fixed inset-0 z-0 opacity-[0.15] pointer-events-none filter blur-[120px] scale-110"
+        className="cinematic-underlay"
       >
-        <img src={ASSETS.bg} alt="Neural Void" className="w-full h-full object-cover grayscale" />
+        <img src={ASSETS.bg} alt="Neural Void" className="w-full h-full object-cover" />
       </motion.div>
       
       <div className="absolute inset-0 neural-grain z-10" />
@@ -64,7 +64,7 @@ const Landing = () => {
             <div className="inline-block">
                 <div className="glass-text-inner flex items-center gap-3">
                     <div className="w-1.2 h-1.2 rounded-full bg-white/40 animate-pulse" />
-                    <span className="text-[7.5px] font-black uppercase tracking-[0.5em] text-white/40">Atomic Engine v21.1</span>
+                    <span className="text-[7.5px] font-black uppercase tracking-[0.5em] text-white/40">Atomic Framework v22.0</span>
                 </div>
             </div>
 
@@ -78,7 +78,7 @@ const Landing = () => {
 
             <div className="max-w-xl mx-auto">
                 <div className="glass-text-inner !p-4 !px-10 border-white/5 bg-white/[0.005]">
-                    <p className="text-[9px] text-gray-500 font-bold max-w-lg mx-auto leading-relaxed uppercase tracking-[0.2em]">
+                    <p className="text-[9px] text-gray-400 font-bold max-w-lg mx-auto leading-relaxed uppercase tracking-[0.2em]">
                       A high-precision laboratory for neural asset synthesis. 
                       Surgical engineering for the modern creative architect.
                     </p>
@@ -100,7 +100,7 @@ const Landing = () => {
         </motion.div>
       </section>
 
-      {/* 🏛️ THE MISSION (Linear Linear Narrative) */}
+      {/* 🏛️ THE MISSION */}
       <MotionSection className="px-10 py-20 max-w-7xl mx-auto z-20 relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
             <div className="lg:col-span-7 space-y-8">
@@ -111,7 +111,7 @@ const Landing = () => {
                     <h2 className="text-2xl font-black text-white tracking-tight mb-5 underline decoration-white/5 underline-offset-8">
                         Neural Clarity.
                     </h2>
-                    <p className="text-[11px] text-gray-600 font-bold leading-loose uppercase tracking-widest">
+                    <p className="text-[11px] text-gray-500 font-bold leading-loose uppercase tracking-widest">
                         Pixel Forge bridges abstract imagination and digital materialization. Our engine synthesizes high-fidelity directives with surgical precision, manifesting concepts through direct neural handshakes with the world's most advanced synthetic cores.
                     </p>
                 </div>
@@ -122,7 +122,7 @@ const Landing = () => {
         </div>
       </MotionSection>
 
-      {/* 🛰️ CORE PROTOCOLS (Atomic Grid) */}
+      {/* 🛰️ CORE PROTOCOLS */}
       <MotionSection className="px-10 py-20 z-20 relative bg-zinc-950/20">
         <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16 space-y-5">
@@ -158,7 +158,7 @@ const Landing = () => {
         </div>
       </MotionSection>
 
-      {/* 🗺️ TRAJECTORY (Compressed Roadmap) */}
+      {/* 🗺️ TRAJECTORY */}
       <MotionSection className="px-10 py-32 max-w-4xl mx-auto z-20 relative">
         <div className="text-center mb-16 space-y-5">
             <div className="glass-text-inner !px-4 !py-1">
@@ -190,7 +190,7 @@ const Landing = () => {
         </div>
       </MotionSection>
 
-      {/* 🏙️ FOOTER (Minimized) */}
+      {/* 🏙️ FOOTER */}
       <footer className="px-10 py-16 border-t border-white/5 mt-20 z-20 relative">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
             <div className="space-y-3">
@@ -204,7 +204,7 @@ const Landing = () => {
                     <h2 className="text-[9px] font-black uppercase tracking-[0.4em]">Pixel Forge AI</h2>
                   </div>
               </div>
-              <p className="text-[8px] text-gray-800 font-bold uppercase tracking-widest ml-12">v21.1 Atomic Matrix</p>
+              <p className="text-[8px] text-gray-800 font-bold uppercase tracking-widest ml-12">v22.0 Volumetric Matrix</p>
            </div>
            
            <div className="flex items-center gap-10 text-right">
