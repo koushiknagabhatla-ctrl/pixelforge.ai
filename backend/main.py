@@ -39,9 +39,9 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 # 4. Emergency Diagnostic Hub (User Requested Format)
-@app.get("/api/health/")
+@app.get("/health/")
 async def health_check():
-    """Archon v3.1 Diagnostic Oracle"""
+    """Archon v3.2 Diagnostic Oracle"""
     try:
         from backend.services.supabase_service import supabase_service
         
@@ -60,7 +60,7 @@ async def health_check():
 
         return {
             "status": "online" if db_connected else "degraded",
-            "archon_v3": "Active",
+            "archon_v3_2": "Active",
             "environment": env_status,
             "database_connected": db_connected,
             "deployment": os.getenv("VERCEL_ENV", "local")
@@ -76,19 +76,19 @@ async def health_check():
         )
 
 # 5. Deferred Router Loading
-# This prevents one broken router from killing the entire API initialization
+# We use empty prefixes internally because Vercel/Frontend already provide the /api/ scoping.
 try:
     from backend.routers import generate, upload, user, chat, tools
-    app.include_router(generate.router, prefix="/api", tags=["generation"])
-    app.include_router(upload.router, prefix="/api", tags=["upload"])
-    app.include_router(user.router, prefix="/api", tags=["user"])
-    app.include_router(chat.router, prefix="/api", tags=["chat"])
-    app.include_router(tools.router, prefix="/api", tags=["tools"])
+    app.include_router(generate.router, prefix="", tags=["generation"])
+    app.include_router(upload.router, prefix="", tags=["upload"])
+    app.include_router(user.router, prefix="", tags=["user"])
+    app.include_router(chat.router, prefix="", tags=["chat"])
+    app.include_router(tools.router, prefix="", tags=["tools"])
 except Exception as e:
     print(f"ROUTER LOADING ERROR: {e}")
 
 @app.get("/")
 async def root():
-    return {"status": "PixelForge Engine Ready", "archon": "Active"}
+    return {"status": "PixelForge Engine Ready", "archon": "Active", "mode": "Ironclad Routing"}
 
 handler = Mangum(app)
