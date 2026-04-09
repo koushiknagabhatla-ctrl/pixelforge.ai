@@ -12,9 +12,11 @@ load_dotenv()
 
 app = FastAPI(
     title="PixelForge AI Production Engine",
-    version="2.1.0",
-    docs_url="/api/docs",
-    openapi_url="/api/openapi.json"
+    version="3.3.0",
+    docs_url="/docs",
+    openapi_url="/openapi.json",
+    root_path="/api",
+    redirect_slashes=False
 )
 
 # 2. Universal CORS Relief
@@ -41,13 +43,14 @@ async def global_exception_handler(request: Request, exc: Exception):
 # 4. Emergency Diagnostic Hub (User Requested Format)
 @app.get("/health/")
 async def health_check():
-    """Archon v3.2 Diagnostic Oracle"""
+    """Archon v3.3 Diagnostic Oracle"""
     try:
         from backend.services.supabase_service import supabase_service
         
         env_status = {
-            "SUPABASE": bool(os.getenv("SUPABASE_URL") and os.getenv("SUPABASE_SERVICE_KEY")),
-            "GEMINI": bool(os.getenv("GEMINI_API_KEY")),
+            "SUPABASE_URL": bool(os.getenv("SUPABASE_URL")),
+            "SUPABASE_KEY": bool(os.getenv("SUPABASE_SERVICE_KEY")),
+            "GEMINI_KEY": bool(os.getenv("GEMINI_API_KEY")),
             "CLOUDINARY": bool(os.getenv("CLOUDINARY_API_KEY"))
         }
         
@@ -60,8 +63,9 @@ async def health_check():
 
         return {
             "status": "online" if db_connected else "degraded",
-            "archon_v3_2": "Active",
-            "environment": env_status,
+            "archon_v3_3": "Active",
+            "routing": "Zero-Config (root_path=/api)",
+            "environment_keys": env_status,
             "database_connected": db_connected,
             "deployment": os.getenv("VERCEL_ENV", "local")
         }
