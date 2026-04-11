@@ -7,23 +7,32 @@ router = APIRouter(prefix="/tools")
 @router.post("/enhance/")
 async def enhance(user_id: str, file: UploadFile = File(...)):
     """
-    Enhanced Image Processor v14.0.
-    Utilizes the Flux2-Klein-9B-Enhanced-Details model via Segmind Neural Nexus.
+    Enhanced Image Processor.
+    Utilizes Replicate API and Cloudinary uploads.
     """
     try:
         contents = await file.read()
         
-        # 1. Enhance using Segmind specialized model
-        processed_bytes = await segmind_service.segmind_service.enhance_image(contents)
-        if not processed_bytes:
-             raise HTTPException(status_code=500, detail="Segmind Enhancement synchronization failed.")
+        from backend.services import replicate_service
         
-        # 2. Synchronize with Cloudinary
+        # 1. Cloudinary upload FIRST (Replicate requires a standard URL)
         upload_result = await cloudinary_service.upload_image(
-            file_bytes=processed_bytes,
-            filename=f"enhanced_{user_id}_{file.filename}"
+            file_bytes=contents,
+            filename=f"raw_{user_id}_{file.filename}"
         )
-        public_url = upload_result.get("image_url")
+        raw_url = upload_result.get("image_url")
+        if not raw_url:
+            raise HTTPException(status_code=500, detail="Cloudinary upload boundary failure.")
+
+        # 2. Enhance using Replicate (RealESRGAN)
+        rep_result = await replicate_service.enhance_image(
+            image_url=raw_url,
+            mode="enhance", 
+            scale=2
+        )
+        public_url = rep_result.get("enhanced_url")
+        if not public_url:
+             raise HTTPException(status_code=500, detail="Replicate upscaler processing failed.")
         
         # 3. Neural Archive Synchronization
         await supabase_service.save_enhancement(
