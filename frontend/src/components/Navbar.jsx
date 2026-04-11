@@ -13,10 +13,8 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 h-20 bg-black/40 backdrop-blur-3xl border-b border-white/[0.04] z-[100] px-4 sm:px-12 flex items-center justify-between selection:bg-white/10">
       
       <Link to="/" className="flex items-center gap-3 sm:gap-4 group cursor-pointer">
-        <div className="w-9 h-9 sm:w-10 sm:h-10 glass flex items-center justify-center border-white/5 group-hover:bg-white group-hover:text-black transition-all duration-700 shadow-2xl shrink-0">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 10L12 2L20 10L12 18L4 10Z" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square"/>
-          </svg>
+        <div className="w-9 h-9 sm:w-10 sm:h-10 glass flex items-center justify-center border-white/5 group-hover:bg-white group-hover:bg-opacity-5 transition-all duration-700 shadow-2xl shrink-0 p-1">
+          <img src="/assets/logo.png" alt="Logo" className="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
         </div>
         <div className="glass-text-inner !px-3 sm:!px-4 !py-1 hidden xs:block">
           <h1 className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.4em] sm:tracking-[0.5em] text-white whitespace-nowrap">Pixel Forge AI</h1>

@@ -38,9 +38,22 @@ const Landing = () => {
   return (
     <div ref={containerRef} className="min-h-screen bg-transparent overflow-x-hidden pt-20 selection:bg-white/10 relative z-10">
       
+      {/* 🔮 MOTION BACKGROUND (ONLY ON LANDING) */}
+      <div className="absolute inset-0 w-full h-[100vh] overflow-hidden -z-20 pointer-events-none">
+         <motion.div 
+            animate={{ scale: [1, 1.1, 1], opacity: [0.4, 0.6, 0.4], rotate: [0, 90, 0] }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+            className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-white/[0.03] blur-[150px]"
+         />
+         <motion.div 
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3], rotate: [0, -90, 0] }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            className="absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-white/[0.02] blur-[120px]"
+         />
+      </div>
+
       {/* 🏙️ HERO PRECISION (Atomic Scale) */}
       <section className="relative min-h-[85vh] px-10 py-20 flex flex-col items-center justify-center text-center overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-white/[0.01] blur-[150px] rounded-full -z-10" />
         
         <motion.div
            initial={{ opacity: 0, scale: 0.98 }}
@@ -94,12 +107,16 @@ const Landing = () => {
                 <div className="glass-text-inner !px-4 !py-1">
                     <span className="text-[8px] font-black uppercase tracking-[0.4em] text-white/30">Philosophy</span>
                 </div>
-                <div className="glass-premium p-10 border-white/5">
-                    <h2 className="text-2xl font-black text-white tracking-tight mb-5 underline decoration-white/5 underline-offset-8">
-                        Neural Clarity.
+                <div className="glass-premium p-10 border-white/5 relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                    <h2 className="text-3xl font-black text-white tracking-tight mb-6 underline decoration-white/5 underline-offset-8">
+                        The Neural Paradigm.
                     </h2>
+                    <p className="text-[12px] text-gray-500 font-bold leading-relaxed uppercase tracking-[0.2em] mb-4">
+                        Pixel Forge isn't just an interface; it's a direct bridge between your conceptual imagination and structural reality. 
+                    </p>
                     <p className="text-[11px] text-gray-600 font-bold leading-loose uppercase tracking-widest">
-                        Pixel Forge bridges abstract imagination and digital materialization. Our engine synthesizes high-fidelity directives with surgical precision, manifesting concepts through direct neural handshakes with the world's most advanced synthetic cores.
+                        We have engineered a surgical environment where abstract thought is synthesized into high-fidelity digital assets. By leveraging the world's most sophisticated neural networks—including advanced generative models and semantic engines—we provide creators with unprecedented clarity, control, and execution speed. Welcome to the frontier of atomic digital creation.
                     </p>
                 </div>
             </div>
