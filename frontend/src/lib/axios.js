@@ -2,11 +2,12 @@ import axios from 'axios'
 
 const api = axios.create({
   // Authoritative Production Routing:
-  // In Vercel, we MUST use relative /api path to leverage the proxy rewrites.
+  // If deployed, this must point securely to the Render.com backend URL
   // Locally, we fallback to 8000 for backend development.
-  baseURL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-           ? 'http://localhost:8000/api' 
-           : '/api',
+  baseURL: import.meta.env.VITE_API_URL 
+           || ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+               ? 'http://localhost:8000/api' 
+               : '/api'),
   headers: {
     'Content-Type': 'application/json',
   },
