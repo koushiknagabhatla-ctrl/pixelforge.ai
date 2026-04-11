@@ -5,6 +5,8 @@ const DynamicGeometry = ({ position, color, scale, speed, mouse }) => {
   const meshRef = useRef();
 
   useFrame((state) => {
+    if (!meshRef.current) return;
+
     const time = state.clock.getElapsedTime();
     
     // Internal constant rotation and floating
