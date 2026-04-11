@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useRef, useEffect } from 'react';
-import FramerBackground from '../components/FramerBackground';
+import SplineBackground from '../components/SplineBackground';
 import useAuthStore from '../store/useAuthStore';
 import { 
   HiOutlineSparkles, 
@@ -42,8 +42,8 @@ const Landing = () => {
   return (
     <div ref={containerRef} onMouseMove={handleMouseMove} className="min-h-screen bg-transparent overflow-x-hidden pt-20 selection:bg-white/10 relative z-10 w-full font-sans">
       
-      {/* 🚀 NEW CRASH-PROOF FRAMER BACKGROUND */}
-      <FramerBackground mouse={mouseRef} />
+      {/* 🚀 TRUE 3D WEBGL SPLINE ENGINE */}
+      <SplineBackground />
 
       {/* 🏙️ HERO SECTION - BUILT FROM SCRATCH */}
       <section className="relative min-h-[90vh] px-4 sm:px-10 py-10 sm:py-20 flex flex-col items-center justify-center text-center">
@@ -63,10 +63,10 @@ const Landing = () => {
             </div>
 
             <div className="relative group mx-auto w-full px-2 sm:px-0 mt-8">
-                <h1 className="text-5xl xs:text-6xl sm:text-[80px] md:text-[110px] font-black leading-[0.9] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-600 relative z-10 uppercase drop-shadow-[0_0_40px_rgba(255,255,255,0.15)]">
+                <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-black leading-[0.9] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-600 relative z-10 uppercase drop-shadow-[0_0_40px_rgba(255,255,255,0.15)]">
                     Pixel Forge
                 </h1>
-                <h1 className="text-4xl xs:text-5xl sm:text-[60px] md:text-[80px] font-black leading-none tracking-tight text-white relative z-10 uppercase mt-2">
+                <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-black leading-none tracking-tight text-white relative z-10 uppercase mt-2">
                    V2 Architecture
                 </h1>
             </div>

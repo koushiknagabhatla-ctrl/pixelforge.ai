@@ -5,7 +5,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUser } from 'react-icons/hi'
 import useAuthStore from '../store/useAuthStore'
 import toast from 'react-hot-toast'
-import FramerBackground from '../components/FramerBackground'
+import SplineBackground from '../components/SplineBackground'
 
 export default function Signup() {
   const [formData, setFormData] = useState({ fullName: '', email: '', password: '' })
@@ -46,7 +46,7 @@ export default function Signup() {
 
   return (
     <div onMouseMove={handleMouseMove} className="min-h-screen bg-transparent flex items-center justify-center p-8 relative overflow-hidden font-sans selection:bg-white/10">
-      <FramerBackground mouse={mouseRef} />
+      <SplineBackground />
 
       <motion.div
         initial={{ opacity: 0, y: 40, scale: 0.95 }}

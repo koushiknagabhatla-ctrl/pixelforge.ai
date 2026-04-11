@@ -10,7 +10,7 @@ import {
 const navItems = [
   { name: 'HOME', path: '/', icon: HiOutlineHome },
   { name: 'FORGE AI', path: '/chatbot', icon: HiOutlineChatAlt2 },
-  { name: 'GENERATION', path: '/tools?mode=synth', icon: HiOutlineSparkles },
+  { name: 'GENERATION', path: '/tools?mode=generate', icon: HiOutlineSparkles },
   { name: 'ARCHIVES', path: '/history', icon: HiOutlineClock },
 ];
 

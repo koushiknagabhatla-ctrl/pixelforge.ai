@@ -15,7 +15,7 @@ import { useState } from 'react'
 
 const navigation = [
   { name: 'HOME', path: '/', icon: HiOutlineHome },
-  { name: 'GENERATION', path: '/tools?mode=synth', icon: HiOutlineSparkles, mode: 'synth' },
+  { name: 'GENERATION', path: '/tools?mode=generate', icon: HiOutlineSparkles, mode: 'generate' },
   { name: 'ENHANCEMENT', path: '/tools?mode=enhance', icon: HiOutlineLightningBolt, mode: 'enhance' },
   { name: 'FORGE AI', path: '/chatbot', icon: HiOutlineChatAlt2 },
   { name: 'ARCHIVES', path: '/history', icon: HiOutlineClock },

@@ -5,7 +5,7 @@ import useAuthStore from '../store/useAuthStore';
 import useImageStore from '../store/useImageStore';
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
 import { HiOutlineSparkles, HiOutlineDownload, HiOutlineRefresh, HiOutlineCloudUpload, HiOutlineCheckCircle } from 'react-icons/hi';
-import FramerBackground from '../components/FramerBackground';
+import SplineBackground from '../components/SplineBackground';
 
 export default function Dashboard() {
   const { user } = useAuthStore();
@@ -59,8 +59,8 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen pt-24 px-4 sm:px-8 lg:px-24 pb-32 font-sans relative selection:bg-white/10 bg-transparent flex flex-col justify-center">
       
-      {/* 🚀 NEW CRASH-PROOF FRAMER BACKGROUND */}
-      <FramerBackground mouse={{ current: { x: 0.5, y: 0.5 } }} />
+      {/* 🚀 TRUE 3D WEBGL SPLINE ENGINE */}
+      <SplineBackground />
 
       <div className="max-w-6xl mx-auto w-full relative z-10">
         
