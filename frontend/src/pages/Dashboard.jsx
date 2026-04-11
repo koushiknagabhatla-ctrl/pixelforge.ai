@@ -5,7 +5,7 @@ import useAuthStore from '../store/useAuthStore';
 import useImageStore from '../store/useImageStore';
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
 import { HiOutlineSparkles, HiOutlineDownload, HiOutlineRefresh, HiOutlineCloudUpload, HiOutlineCheckCircle } from 'react-icons/hi';
-import SplineBackground from '../components/SplineBackground';
+import ParticleBackground from '../components/ParticleBackground';
 
 export default function Dashboard() {
   const { user } = useAuthStore();
@@ -59,8 +59,8 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen pt-24 px-4 sm:px-8 lg:px-24 pb-32 font-sans relative selection:bg-white/10 bg-transparent flex flex-col justify-center">
       
-      {/* 🚀 TRUE 3D WEBGL SPLINE ENGINE */}
-      <SplineBackground />
+      {/* 🚀 FLAWLESS HTML5 3D PARTICLE ENGINE */}
+      <ParticleBackground />
 
       <div className="max-w-6xl mx-auto w-full relative z-10">
         

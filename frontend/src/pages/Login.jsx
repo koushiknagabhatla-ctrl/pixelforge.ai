@@ -5,7 +5,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { HiOutlineMail, HiOutlineLockClosed } from 'react-icons/hi'
 import useAuthStore from '../store/useAuthStore'
 import toast from 'react-hot-toast'
-import SplineBackground from '../components/SplineBackground'
+import ParticleBackground from '../components/ParticleBackground'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -43,7 +43,7 @@ export default function Login() {
 
   return (
     <div onMouseMove={handleMouseMove} className="min-h-screen bg-transparent flex items-center justify-center p-8 relative overflow-hidden font-sans selection:bg-white/10">
-      <SplineBackground />
+      <ParticleBackground />
 
       <motion.div
         initial={{ opacity: 0, y: 40, scale: 0.95 }}

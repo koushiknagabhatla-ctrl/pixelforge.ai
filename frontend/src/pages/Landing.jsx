@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useRef, useEffect } from 'react';
-import SplineBackground from '../components/SplineBackground';
+import ParticleBackground from '../components/ParticleBackground';
 import useAuthStore from '../store/useAuthStore';
 import { 
   HiOutlineSparkles, 
@@ -42,8 +42,8 @@ const Landing = () => {
   return (
     <div ref={containerRef} onMouseMove={handleMouseMove} className="min-h-screen bg-transparent overflow-x-hidden pt-20 selection:bg-white/10 relative z-10 w-full font-sans">
       
-      {/* 🚀 TRUE 3D WEBGL SPLINE ENGINE */}
-      <SplineBackground />
+      {/* 🚀 FLAWLESS HTML5 3D PARTICLE ENGINE */}
+      <ParticleBackground />
 
       {/* 🏙️ HERO SECTION - BUILT FROM SCRATCH */}
       <section className="relative min-h-[90vh] px-4 sm:px-10 py-10 sm:py-20 flex flex-col items-center justify-center text-center">
