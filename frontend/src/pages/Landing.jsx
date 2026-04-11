@@ -1,21 +1,17 @@
 import { Link } from 'react-router-dom';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import ThreeBackground from '../components/ThreeBackground';
 import { 
   HiOutlineSparkles, 
   HiOutlineLightningBolt, 
   HiOutlineChatAlt2, 
-  HiArrowRight,
-  HiOutlineCube,
-  HiOutlineTrendingUp,
-  HiOutlineTerminal
+  HiArrowRight 
 } from 'react-icons/hi';
 import { FaGithub } from 'react-icons/fa';
-import { useEffect, useState } from 'react';
 
 const ASSETS = {
   nexus: "/assets/nexus.png",
-  enhancer: "/assets/enhancer.png",
-  entity: "/assets/entity.png"
 };
 
 const MotionSection = ({ children, className, id }) => (
@@ -32,195 +28,154 @@ const MotionSection = ({ children, className, id }) => (
 );
 
 const Landing = () => {
-  // Mobile check to adjust parallax intensity safely
-  const [windowSize, setWindowSize] = useState({ width: 1000, height: 1000 });
-  
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-       const handleResize = () => setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-       window.addEventListener('resize', handleResize);
-       return () => window.removeEventListener('resize', handleResize);
-    }
-  }, []);
-
-  const mouseX = useMotionValue(windowSize.width / 2);
-  const mouseY = useMotionValue(windowSize.height / 2);
-  const springX = useSpring(mouseX, { stiffness: 40, damping: 25 });
-  const springY = useSpring(mouseY, { stiffness: 40, damping: 25 });
-
-  // 3D Parallax mappings (Inverse logic for floating effect)
-  const floatX1 = useTransform(springX, [0, windowSize.width], [60, -60]);
-  const floatY1 = useTransform(springY, [0, windowSize.height], [60, -60]);
-  
-  const floatX2 = useTransform(springX, [0, windowSize.width], [-90, 90]);
-  const floatY2 = useTransform(springY, [0, windowSize.height], [-90, 90]);
+  const mouseRef = useRef({ x: 0.5, y: 0.5 });
+  const containerRef = useRef(null);
 
   const handleMouseMove = (e) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
+      // Normalize to 0-1 for the 3D Engine
+      mouseRef.current.x = e.clientX / window.innerWidth;
+      mouseRef.current.y = e.clientY / window.innerHeight;
   };
 
   return (
-    <div onMouseMove={handleMouseMove} className="min-h-screen bg-transparent overflow-x-hidden pt-20 selection:bg-white/20 relative z-10 w-full">
+    <div ref={containerRef} onMouseMove={handleMouseMove} className="min-h-screen bg-transparent overflow-x-hidden pt-20 selection:bg-white/10 relative z-10 w-full">
       
-      {/* 🔮 3D MOTION BACKGROUND (PARALLAX + KEYFRAMED) */}
-      <div className="absolute inset-0 w-full h-[100vh] overflow-hidden -z-20 pointer-events-none perspective-[1000px]">
-         <motion.div 
-            style={{ x: floatX1, y: floatY1 }}
-            animate={{ scale: [1, 1.1, 1], opacity: [0.4, 0.6, 0.4] }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="absolute top-[-10%] left-[-10%] w-[120vw] sm:w-[50vw] h-[120vw] sm:h-[50vw] rounded-full bg-white/[0.04] blur-[100px] sm:blur-[150px]"
-         />
-         <motion.div 
-            style={{ x: floatX2, y: floatY2 }}
-            animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
-            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-[-20%] right-[-10%] w-[150vw] sm:w-[40vw] h-[150vw] sm:h-[40vw] rounded-full bg-white/[0.02] blur-[90px] sm:blur-[120px]"
-         />
-      </div>
+      {/* NATIVE 3D MODEL BACKGROUND */}
+      <ThreeBackground mouse={mouseRef} />
 
       {/* 🏙️ HERO SECTION */}
-      <section className="relative min-h-[85vh] px-4 sm:px-10 py-10 sm:py-20 flex flex-col items-center justify-center text-center">
+      <section className="relative min-h-[90vh] px-4 sm:px-10 py-10 sm:py-20 flex flex-col items-center justify-center text-center">
         
         <motion.div
-           initial={{ opacity: 0, scale: 0.98 }}
+           initial={{ opacity: 0, scale: 0.95 }}
            animate={{ opacity: 1, scale: 1 }}
            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-           className="space-y-6 sm:space-y-10 max-w-4xl w-full"
+           className="space-y-6 sm:space-y-10 max-w-5xl w-full"
         >
             <div className="inline-block">
-                <div className="glass-text-inner flex items-center gap-2 sm:gap-3 px-3 sm:px-4">
-                    <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-white/60 animate-pulse" />
-                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.5em] text-white/50">Ultimate Creation Interface</span>
+                <div className="glass-text-inner flex items-center gap-2 sm:gap-3 px-4 py-2 bg-black/40">
+                    <div className="w-1.5 h-1.5 rounded-full bg-white/60 animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/50">Next Generation Architect</span>
                 </div>
             </div>
 
-            <div className="relative group mx-auto w-full sm:w-fit px-4 sm:px-0">
-                <div className="glass-hyper p-6 sm:p-10 border-white/[0.05] relative w-full overflow-hidden rounded-[1.5rem] sm:rounded-2xl">
-                    <h1 className="text-3xl xs:text-4xl sm:text-[42px] md:text-[54px] font-black leading-tight tracking-tight text-glass relative z-10 uppercase break-words sm:whitespace-nowrap">
+            <div className="relative group mx-auto w-full px-2 sm:px-0">
+                <div className="p-2 sm:p-6 relative w-full overflow-hidden">
+                    <h1 className="text-4xl xs:text-5xl sm:text-[60px] md:text-[80px] font-black leading-none tracking-tighter text-white relative z-10 uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.15)]">
                         Pixel Forge AI
                     </h1>
                 </div>
             </div>
 
             <div className="max-w-xl mx-auto px-4 sm:px-0">
-                <div className="glass-text-inner p-4 sm:p-5 border-white/10 bg-white/[0.01] rounded-[1rem]">
-                    <p className="text-[11px] sm:text-[12px] text-gray-400 font-bold max-w-lg mx-auto leading-relaxed uppercase tracking-[0.1em] sm:tracking-[0.2em]">
-                      A high-precision design laboratory. Shape the future of your imagination using our premium generative workspace.
-                    </p>
-                </div>
+                <p className="text-[12px] sm:text-[14px] text-gray-300 font-bold max-w-lg mx-auto leading-relaxed uppercase tracking-widest drop-shadow-md">
+                    Seamless synthesis of native 3D geometry and artificial intelligence. Build, restore, and generate with flawless perfection.
+                </p>
             </div>
 
-            {/* Mobile gap fixes for buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-6 sm:pt-8 w-full px-6 sm:px-0">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-8 w-full px-6 sm:px-0">
                 <Link to="/signup" className="w-full sm:w-auto">
-                  <button className="btn-monochrome h-12 w-full sm:w-auto px-10 text-[10px] sm:text-[11px]">
+                  <button className="btn-monochrome h-14 w-full sm:w-auto px-12 text-[11px] shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)]">
                     Generate Now
                   </button>
                 </Link>
                 <Link to="/login" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto px-8 py-4 glass border border-white/10 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.4em] hover:bg-white/10 transition-all h-12 flex items-center justify-center gap-3">
-                    Sign In <HiArrowRight className="w-3.5 h-3.5" />
+                  <button className="w-full sm:w-auto px-10 py-5 glass border border-white/10 text-[10px] font-black uppercase tracking-[0.4em] hover:bg-white/10 transition-all h-14 flex items-center justify-center gap-3 bg-black/40 backdrop-blur-xl">
+                    Sign In <HiArrowRight className="w-4 h-4" />
                   </button>
                 </Link>
             </div>
         </motion.div>
       </section>
 
-      {/* 🏛️ VISION SECTION */}
-      <MotionSection id="about" className="px-5 sm:px-10 py-16 sm:py-20 max-w-7xl mx-auto relative cursor-default">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-16 items-center">
-            <div className="lg:col-span-7 space-y-6 sm:space-y-8">
-                <div className="glass-text-inner px-4 py-2 inline-block">
-                    <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/40">Vision</span>
+      {/* 🏛️ ABOUT SECTION */}
+      <MotionSection id="about" className="px-5 sm:px-10 py-20 sm:py-32 max-w-7xl mx-auto relative cursor-default">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-20 items-center">
+            <div className="space-y-6 sm:space-y-8">
+                <div className="glass-text-inner px-4 py-2 inline-block bg-black/40">
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/50">Our Vision</span>
                 </div>
-                <div className="glass-premium p-6 sm:p-10 border-white/10 relative overflow-hidden group rounded-[1.5rem] sm:rounded-2xl">
+                <div className="glass-premium p-8 sm:p-12 border-white/10 relative overflow-hidden group rounded-[2rem] bg-black/60 backdrop-blur-3xl">
                     <div className="absolute inset-0 bg-gradient-to-br from-white/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                    <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-4 sm:mb-6 underline decoration-white/10 underline-offset-8 leading-snug">
-                        Limitless Clarity.
+                    <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-6 underline decoration-white/10 underline-offset-8 leading-snug">
+                        Absolute Purity.
                     </h2>
-                    <p className="text-[12px] sm:text-[13px] text-gray-300 font-bold leading-relaxed mb-4">
-                        Pixel Forge is built for creators who demand absolute perfection. We bridge the gap between abstract ideas and flawless reality.
+                    <p className="text-[14px] text-gray-200 font-bold leading-relaxed mb-6 tracking-wide shadow-black drop-shadow-md">
+                        We don't settle for imitations. Pixel Forge is an uncompromising suite of neural tools built directly on top of raw 3D rendering engines and state-of-the-art APIs.
                     </p>
-                    <p className="text-[11px] sm:text-[12px] text-gray-500 font-bold leading-loose uppercase tracking-wide sm:tracking-widest">
-                        Utilizing the world's best generative models and smartest enhancing pipelines, we give you unprecedented control over digital asset creation. No friction, no complex hurdles—just pure, high-fidelity design.
+                    <p className="text-[12px] text-gray-400 font-bold leading-loose uppercase tracking-[0.15em]">
+                        From generating complex imagery instantly to chatting naturally with our semantic core, every interaction is perfectly tailored to accelerate human creativity without technical friction.
                     </p>
                 </div>
             </div>
             
-            <div className="lg:col-span-5 relative w-full h-full min-h-[300px] flex items-center justify-center pointer-events-none sm:pointer-events-auto">
-               <motion.div 
-                 style={{ rotateX: floatY2, rotateY: floatX1 }}
-                 className="relative w-full h-full perspective-[1500px]"
-               >
-                 <div className="relative glass-hyper p-2 sm:p-3 border-white/10 shadow-2xl rounded-[1.5rem] sm:rounded-2xl w-full">
-                    <img src={ASSETS.nexus} alt="Generative Hub" className="w-full h-auto object-cover rounded-[1rem] sm:rounded-[1.5rem] filter contrast-[1.05]" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-[1.5rem]" />
-                 </div>
-               </motion.div>
+            <div className="relative w-full h-[400px] flex items-center justify-center">
+                 <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent rounded-[2rem] -z-10 blur-xl" />
+                 <img src={ASSETS.nexus} alt="Generative Hub" className="w-[90%] h-auto max-h-[500px] object-cover rounded-[2rem] filter contrast-125 drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] border border-white/5" />
             </div>
         </div>
       </MotionSection>
 
-      {/* 🛰️ CORE FEATURES */}
-      <MotionSection className="px-5 sm:px-10 py-16 sm:py-20 relative bg-[#030303]/40 border-y border-white/[0.02]">
+      {/* 🛰️ CORE FEATURES DIRECT ROUTING */}
+      <MotionSection className="px-5 sm:px-10 py-20 sm:py-32 relative bg-[#030303]/80 border-t border-white/[0.03]">
         <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12 sm:mb-16 space-y-4 sm:space-y-5">
-                <div className="glass-text-inner px-4 py-2 inline-block">
-                    <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/40">Tool Suite</span>
+            <div className="text-center mb-16 sm:mb-20 space-y-5">
+                <div className="glass-text-inner px-5 py-2 inline-block bg-black/40">
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/50">The Core Suite</span>
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Professional Utilities</h3>
+                <h3 className="text-3xl sm:text-4xl font-black text-white tracking-tight">Direct Access Tools</h3>
+                <p className="text-gray-400 font-bold text-[11px] uppercase tracking-widest mt-4">Select an interface below to begin immediately</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-                { title: "Generate", desc: "Instantly create high-resolution imagery.", icon: HiOutlineSparkles, img: ASSETS.nexus },
-                { title: "Enhance", desc: "Upscale and restore details flawlessly.", icon: HiOutlineLightningBolt, img: ASSETS.enhancer },
-                { title: "Chatbot", desc: "Discuss concepts natively with AI.", icon: HiOutlineChatAlt2, img: ASSETS.entity }
+                { title: "Generate Space", desc: "Build images from pure thought.", icon: HiOutlineSparkles, link: "/tools?mode=generate" },
+                { title: "Enhance Lab", desc: "Sharpen and upscale your assets.", icon: HiOutlineLightningBolt, link: "/tools?mode=enhance" },
+                { title: "Neural Chat", desc: "Speak directly to the machine.", icon: HiOutlineChatAlt2, link: "/chatbot" }
             ].map((tool, i) => (
-                <div key={i} className="glass-premium p-6 sm:p-8 border border-white/10 flex flex-col gap-4 sm:gap-5 group relative overflow-hidden rounded-[1.5rem] sm:rounded-2xl">
-                    <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.15] transition-all duration-1000 transform group-hover:scale-105 pointer-events-none">
-                        <img src={tool.img} alt="" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="relative z-10 space-y-4">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 glass flex items-center justify-center text-white/30 border-white/10 group-hover:text-white transition-colors duration-1000 rounded-[1rem]">
-                            <tool.icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                        </div>
-                        <div className="glass-text-inner px-3 py-1 inline-block">
-                            <h3 className="text-[10px] sm:text-[11px] font-black text-white tracking-widest uppercase">{tool.title}</h3>
-                        </div>
-                        <p className="text-gray-400 font-bold text-[10px] sm:text-[11px] uppercase tracking-widest leading-loose">
-                            {tool.desc}
-                        </p>
-                    </div>
-                </div>
+                <Link to={tool.link} key={i}>
+                  <div className="glass-premium p-8 sm:p-10 border border-white/10 flex flex-col gap-6 group relative overflow-hidden rounded-[2rem] hover:-translate-y-2 transition-transform duration-500 bg-black/50 hover:bg-black/70">
+                      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                      <div className="relative z-10 space-y-5">
+                          <div className="w-14 h-14 glass flex items-center justify-center text-white border-white/20 group-hover:scale-110 transition-transform duration-500 rounded-2xl shadow-2xl bg-white/5">
+                              <tool.icon className="w-7 h-7" />
+                          </div>
+                          <div>
+                              <h3 className="text-[14px] font-black text-white tracking-widest uppercase mb-2 group-hover:text-gray-200">{tool.title}</h3>
+                              <p className="text-gray-400 font-bold text-[11px] uppercase tracking-[0.2em] leading-relaxed">
+                                  {tool.desc}
+                              </p>
+                          </div>
+                      </div>
+                  </div>
+                </Link>
             ))}
             </div>
         </div>
       </MotionSection>
 
       {/* 🏙️ FOOTER */}
-      <footer className="px-5 sm:px-10 py-12 sm:py-16 border-t border-white/5 mt-10 sm:mt-20 relative">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 md:gap-10">
-            <div className="space-y-3 flex flex-col items-center md:items-start text-center md:text-left">
-              <div className="flex items-center justify-center md:justify-start gap-3">
-                  <div className="w-8 h-8 glass flex items-center justify-center border-white/10 rounded-lg p-0.5">
-                      <img src="/assets/logo.png" alt="Logo" className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
+      <footer className="px-5 sm:px-10 py-16 border-t border-white/[0.05] relative bg-black">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+            <div className="space-y-4 flex flex-col items-center md:items-start text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-4">
+                  <div className="w-10 h-10 glass flex items-center justify-center border-white/10 rounded-xl p-1 bg-white/5">
+                      <img src="/assets/logo.png" alt="Logo" className="w-full h-full object-contain filter drop-shadow-[0_0_10px_rgba(255,255,255,1)]" />
                   </div>
-                  <div className="glass-text-inner px-4 py-1">
-                    <h2 className="text-[9px] font-black uppercase tracking-[0.4em]">Pixel Forge AI</h2>
+                  <div className="glass-text-inner px-5 py-2">
+                    <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white">Pixel Forge AI</h2>
                   </div>
               </div>
-              <p className="text-[9px] text-gray-600 font-bold uppercase tracking-widest md:ml-12">Production Ready 2026</p>
+              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em] md:ml-14">Architecture Finalized 2026</p>
            </div>
            
-           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-center sm:text-right w-full sm:w-auto">
+           <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-center sm:text-right w-full sm:w-auto">
               <div>
-                <p className="text-[9px] text-gray-600 font-black uppercase tracking-widest mb-1.5">Architect</p>
-                <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Koushik Nagabhatla</h3>
+                <p className="text-[10px] text-gray-500 font-black uppercase tracking-[0.3em] mb-2">Architect</p>
+                <h3 className="text-[11px] font-black text-white uppercase tracking-[0.4em]">Koushik Nagabhatla</h3>
               </div>
-              <a href="https://github.com/koushiknagabhatla-ctrl" target="_blank" rel="noreferrer" className="w-10 h-10 glass flex items-center justify-center hover:bg-white hover:text-black transition-all rounded-lg border-white/10">
-                <FaGithub className="w-5 h-5" />
+              <a href="https://github.com/koushiknagabhatla-ctrl" target="_blank" rel="noreferrer" className="w-12 h-12 glass flex items-center justify-center hover:bg-white hover:text-black transition-colors duration-300 rounded-xl border-white/10 shadow-xl">
+                <FaGithub className="w-6 h-6" />
               </a>
            </div>
         </div>

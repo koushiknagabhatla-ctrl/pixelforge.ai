@@ -10,15 +10,15 @@ export default function Dashboard() {
   const { isGenerating, resultImage, generateImage, runTool, fetchHistory, clearResult } = useImageStore();
   const [prompt, setPrompt] = useState("");
   const [searchParams] = useSearchParams();
-  const mode = searchParams.get('mode') || 'synth'; 
+  const mode = searchParams.get('mode') || 'generate'; 
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     if (user) fetchHistory(user.id);
   }, [user]);
 
-  const handleForge = () => {
-    if (mode === 'synth') {
+  const handleExecute = () => {
+    if (mode === 'generate') {
       if (!prompt.trim()) return;
       generateImage(prompt, user.id);
     } else {
@@ -34,67 +34,65 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen pt-20 px-4 sm:px-8 lg:px-24 pb-32 font-sans relative selection:bg-white/10">
+    <div className="min-h-screen pt-24 px-4 sm:px-8 lg:px-24 pb-32 font-sans relative selection:bg-white/10 bg-[#010101]">
       <div className="max-w-6xl mx-auto">
         
-        {/* 🎭 HEADER STAGE (v26.0 DASHBOARD) */}
-        <div className="mb-8 sm:mb-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 sm:gap-10">
-           <div className="space-y-3 sm:space-y-4">
+        {/* 🎭 HEADER SECTION */}
+        <div className="mb-10 sm:mb-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 sm:gap-10">
+           <div className="space-y-4">
               <div className="flex items-center gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
-                  <div className="glass-text-inner !px-3 !py-0.5">
-                    <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.5em] block">NEXUS CORE v26.0</span>
+                  <div className="w-2 h-2 rounded-full bg-white/20" />
+                  <div className="glass-text-inner px-4 py-1">
+                    <span className="text-[10px] font-black text-white/50 uppercase tracking-[0.4em] block">Workspace Active</span>
                   </div>
               </div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tighter leading-none">
-                {mode === 'synth' ? <><span className="text-gray-700">Image</span> Generation</> : <><span className="text-gray-700">Local</span> Enhancer</>}
+              <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tighter leading-none">
+                {mode === 'generate' ? <><span className="text-gray-600">Image</span> Generator</> : <><span className="text-gray-600">Image</span> Upscaler</>}
               </h2>
            </div>
-           <div className="flex items-center gap-6 py-3 px-6 sm:py-4 sm:px-8 glass border-white/5 shadow-2xl">
-              <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white/40 animate-pulse border border-white/10" />
-              <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Engine Safe</span>
+           <div className="flex items-center gap-4 py-3 px-6 glass shadow-2xl rounded-xl">
+              <div className="w-2.5 h-2.5 rounded-full border border-white/20 bg-green-500/80 animate-pulse" />
+              <span className="text-[10px] font-black text-white/50 uppercase tracking-[0.3em]">System Ready</span>
            </div>
         </div>
 
-        {/* 🏛️ WORKSPACE ARCHITECTURE */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 mb-10 sm:mb-20">
+        {/* 🏛️ CREATION MODULE */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="lg:col-span-8"
+            className="lg:col-span-8 flex flex-col h-full"
           >
-            <div className="glass-premium p-1 sm:p-4 h-full flex flex-col border border-white/10 shadow-3xl relative overflow-hidden group">
+            <div className="glass-premium p-2 sm:p-4 flex-1 flex flex-col border border-white/10 shadow-2xl relative overflow-hidden group rounded-[2rem] bg-[#050505]/60">
                 
-                {mode === 'synth' ? (
-                  <div className="relative flex-1">
+                {mode === 'generate' ? (
+                  <div className="relative flex-1 flex flex-col">
                     <textarea
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value.slice(0, 500))}
-                      placeholder="Describe the directives..."
-                      className="w-full h-64 sm:h-80 bg-[#050505]/40 border border-white/[0.03] rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-10 text-base sm:text-lg font-medium resize-none focus:outline-none focus:bg-white/[0.04] transition-all duration-1000 placeholder:text-gray-900 leading-relaxed"
+                      placeholder="Describe what you want to create..."
+                      className="flex-1 w-full min-h-[300px] bg-transparent rounded-[1.5rem] p-6 sm:p-8 text-base sm:text-lg font-medium resize-none focus:outline-none transition-all placeholder:text-gray-600 text-white"
                     />
-                    <div className="absolute bottom-6 right-6 sm:bottom-10 sm:right-10 text-[9px] sm:text-[10px] font-black text-gray-900 uppercase tracking-widest">
+                    <div className="absolute bottom-6 right-6 text-[10px] font-black text-gray-700 uppercase tracking-widest">
                       {prompt.length} / 500
                     </div>
                   </div>
                 ) : (
-                  <div className="tool-dropzone flex flex-col items-center justify-center min-h-[300px] sm:min-h-[400px] flex-1 border-white/[0.05] relative">
+                  <div className="flex flex-col items-center justify-center min-h-[300px] flex-1 relative">
                     <input 
                       type="file" 
                       accept="image/*"
                       onChange={handleFileChange}
-                      className="absolute inset-0 opacity-0 cursor-pointer z-10" 
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
                     />
-                    <div className="flex flex-col items-center gap-6 sm:gap-10 text-center pointer-events-none p-6">
-                      <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-[1.2rem] sm:rounded-[1.5rem] glass-strong flex items-center justify-center text-white/30 border border-white/10 shadow-inner group-hover:scale-110 transition-transform duration-700">
-                        <HiOutlineCloudUpload className="w-8 h-8 sm:w-10 sm:h-10" />
+                    <div className="flex flex-col items-center gap-6 text-center pointer-events-none p-6">
+                      <div className="w-20 h-20 rounded-2xl glass-strong flex items-center justify-center text-white border border-white/20 shadow-xl bg-white/5">
+                        <HiOutlineCloudUpload className="w-10 h-10" />
                       </div>
-                      <div className="space-y-3 sm:space-y-4">
-                        <div className="glass-text-inner !px-4 !py-1 sm:!px-5 sm:!py-1">
-                            <h3 className="text-lg sm:text-xl font-black text-white tracking-tight uppercase">Upload Directive</h3>
-                        </div>
-                        <p className="text-[9px] sm:text-[10px] font-black text-gray-800 uppercase tracking-[0.4em]">
-                             ASSET MODULE :: MAX 10MB
+                      <div className="space-y-4">
+                        <h3 className="text-xl font-black text-white tracking-tight uppercase">Upload Media</h3>
+                        <p className="text-[11px] font-black text-gray-500 uppercase tracking-[0.3em]">
+                             {selectedFile ? selectedFile.name : "Select an image (Max 4.5MB)"}
                         </p>
                       </div>
                     </div>
@@ -103,46 +101,46 @@ export default function Dashboard() {
             </div>
 
             <button
-              onClick={handleForge}
-              disabled={isGenerating || (mode === 'synth' ? !prompt.trim() : !selectedFile)}
-              className={`w-full mt-6 sm:mt-10 h-16 sm:h-20 rounded-[1.5rem] sm:rounded-[2rem] font-black text-[10px] sm:text-[12px] uppercase tracking-[0.6em] transition-all duration-1000 flex items-center justify-center gap-5 sm:gap-8 border border-white/5 shadow-2xl ${
+              onClick={handleExecute}
+              disabled={isGenerating || (mode === 'generate' ? !prompt.trim() : !selectedFile)}
+              className={`w-full mt-6 h-16 sm:h-20 rounded-[1.5rem] font-black text-[12px] uppercase tracking-[0.4em] transition-all duration-300 flex items-center justify-center gap-4 border border-white/10 ${
                 isGenerating 
-                ? 'bg-white/5 text-gray-800 cursor-not-allowed' 
-                : 'bg-white text-black hover:scale-[1.01] active:scale-[0.98] shadow-white/10 shadow-4xl'
+                ? 'bg-white/5 text-gray-600 cursor-not-allowed' 
+                : 'bg-white text-black hover:bg-gray-200'
               }`}
             >
               {isGenerating ? (
                 <>
                   <div className="w-5 h-5 border-4 border-black/20 border-t-black rounded-full animate-spin" />
-                  Forging...
+                  Processing...
                 </>
               ) : (
                 <>
                   <HiOutlineSparkles className="w-5 h-5" />
-                  Initialize Matrix
+                  {mode === 'generate' ? 'Generate Image' : 'Enhance Image'}
                 </>
               )}
             </button>
           </motion.div>
 
-          {/* 📜 NEURAL DIRECTIVES */}
-          <div className="lg:col-span-4 flex flex-col gap-6 sm:gap-8">
-              <div className="glass-premium p-8 sm:p-10 flex-1 border border-white/10 flex flex-col justify-center relative overflow-hidden">
-                  <div className="glass-text-inner !px-4 !py-1 mb-6 sm:mb-10 w-fit">
-                    <h4 className="text-[10px] font-black text-white/30 uppercase tracking-[0.5em]">Directives</h4>
+          {/* 📜 INSTRUCTIONS */}
+          <div className="lg:col-span-4 flex flex-col">
+              <div className="glass-premium p-8 sm:p-10 flex-1 border border-white/10 flex flex-col justify-center relative overflow-hidden rounded-[2rem] bg-[#050505]/40">
+                  <div className="glass-text-inner px-4 py-2 mb-8 w-fit bg-black">
+                    <h4 className="text-[10px] font-black text-white/50 uppercase tracking-[0.4em]">Guidelines</h4>
                   </div>
-                  <ul className="space-y-5 sm:space-y-8 text-[10px] sm:text-[11px] text-gray-600 font-bold uppercase tracking-widest leading-loose">
-                      <li className="flex gap-4 sm:gap-5 group hover:text-white transition-colors cursor-default">
-                          <span className="text-white/10 group-hover:text-white/40 transition-colors">01</span>
-                          <span>Maintain fidelity.</span>
+                  <ul className="space-y-6 text-[12px] text-gray-400 font-bold uppercase tracking-widest leading-loose">
+                      <li className="flex gap-4 group cursor-default">
+                          <span className="text-white/20">01</span>
+                          <span className="group-hover:text-white transition-colors">Be highly specific.</span>
                       </li>
-                      <li className="flex gap-4 sm:gap-5 group hover:text-white transition-colors cursor-default">
-                          <span className="text-white/10 group-hover:text-white/40 transition-colors">02</span>
-                          <span>Calibrate lux.</span>
+                      <li className="flex gap-4 group cursor-default">
+                          <span className="text-white/20">02</span>
+                          <span className="group-hover:text-white transition-colors">Select correct modes.</span>
                       </li>
-                      <li className="flex gap-4 sm:gap-5 group hover:text-white transition-colors cursor-default">
-                          <span className="text-white/10 group-hover:text-white/40 transition-colors">03</span>
-                          <span>Sync engine.</span>
+                      <li className="flex gap-4 group cursor-default">
+                          <span className="text-white/20">03</span>
+                          <span className="group-hover:text-white transition-colors">Wait for confirmation.</span>
                       </li>
                   </ul>
               </div>
@@ -153,22 +151,22 @@ export default function Dashboard() {
         <AnimatePresence mode="wait">
           {resultImage && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.98, y: 40 }}
+              initial={{ opacity: 0, scale: 0.98, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-10 sm:mt-32 pt-10 sm:pt-28 border-t border-white/5"
+              transition={{ duration: 0.5 }}
+              className="mt-16 pt-16 border-t border-white/[0.05]"
             >
-               <div className="max-w-4xl mx-auto glass-hyper p-2 sm:p-4 relative group overflow-hidden shadow-6xl border border-white/10 rounded-[2.5rem] sm:rounded-[3.5rem]">
-                  <div className="absolute top-6 right-6 sm:top-10 sm:right-10 z-20 flex gap-4 sm:gap-6 opacity-0 group-hover:opacity-100 transition-all duration-1000 translate-y-4 group-hover:translate-y-0">
-                      <a href={resultImage} download className="h-12 w-12 sm:h-16 sm:w-16 glass-premium rounded-xl sm:rounded-2xl text-white flex items-center justify-center hover:bg-white hover:text-black transition-all shadow-4xl backdrop-blur-3xl">
-                          <HiOutlineDownload className="w-5 h-5 sm:w-6 sm:h-6" />
+               <div className="max-w-4xl mx-auto glass-hyper p-4 relative group overflow-hidden border border-white/10 rounded-[2.5rem]">
+                  <div className="absolute top-8 right-8 z-20 flex gap-4 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                      <a href={resultImage} download className="h-16 w-16 glass-premium rounded-2xl text-white flex items-center justify-center hover:bg-white hover:text-black transition-colors backdrop-blur-3xl border border-white/20">
+                          <HiOutlineDownload className="w-6 h-6" />
                       </a>
-                      <button onClick={clearResult} className="h-12 w-12 sm:h-16 sm:w-16 glass-premium rounded-xl sm:rounded-2xl text-white flex items-center justify-center hover:bg-white/10 transition-all shadow-4xl backdrop-blur-3xl">
-                          <HiOutlineRefresh className="w-5 h-5 sm:w-6 sm:h-6" />
+                      <button onClick={clearResult} className="h-16 w-16 glass-premium rounded-2xl text-white flex items-center justify-center hover:bg-white/10 transition-colors backdrop-blur-3xl border border-white/20">
+                          <HiOutlineRefresh className="w-6 h-6" />
                       </button>
                   </div>
-                  <img src={resultImage} alt="Neural Output" className="w-full h-auto rounded-[2rem] sm:rounded-[3rem] shadow-black shadow-4xl" />
+                  <img src={resultImage} alt="Tool Result" className="w-full h-auto rounded-[2rem]" />
                </div>
             </motion.div>
           )}

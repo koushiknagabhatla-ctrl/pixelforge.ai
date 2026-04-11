@@ -12,7 +12,7 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 h-20 bg-black/40 backdrop-blur-3xl border-b border-white/[0.04] z-[100] px-4 sm:px-12 flex items-center justify-between selection:bg-white/10">
       
-      <Link to="/" className="flex items-center gap-3 sm:gap-4 group cursor-pointer">
+      <Link to="/" onClick={() => window.scrollTo(0, 0)} className="flex items-center gap-3 sm:gap-4 group cursor-pointer">
         <div className="w-9 h-9 sm:w-10 sm:h-10 glass flex items-center justify-center border-white/5 group-hover:bg-white group-hover:bg-opacity-5 transition-all duration-700 shadow-2xl shrink-0 p-1">
           <img src="/assets/logo.png" alt="Logo" className="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
         </div>
@@ -24,11 +24,14 @@ const Navbar = () => {
       <div className="flex items-center gap-4 sm:gap-12">
         <Link 
           to="/#about" 
-          onClick={() => {
-            const element = document.getElementById('about');
-            if (element) element.scrollIntoView({ behavior: 'smooth' });
+          onClick={(e) => {
+            if (window.location.pathname === '/') {
+                e.preventDefault();
+                const element = document.getElementById('about');
+                if (element) element.scrollIntoView({ behavior: 'smooth' });
+            }
           }}
-          className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-700 hover:text-white transition-all hidden md:block cursor-pointer"
+          className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-400 hover:text-white transition-all hidden md:block cursor-pointer"
         >
           About
         </Link>
