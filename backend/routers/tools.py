@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from backend.services import cloudinary_service, supabase_service, segmind_service
 
-router = APIRouter(prefix="/tools")
+router = APIRouter()
 
 @router.post("/enhance")
 @router.post("/enhance/")

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from backend.services import gemini_service, cloudinary_service, supabase_service, segmind_service
+from backend.services import gemini_service, supabase_service
 from pydantic import BaseModel
 import uuid
 
@@ -26,20 +26,12 @@ async def generate_image(request: GenerateRequest):
         # 1. Optimize Prompt
         enhanced_prompt = await gemini_service.optimize_prompt(request.prompt)
         
-        # 2. Forge Image (Segmind Flux)
-        image_bytes = await segmind_service.segmind_service.generate_image(enhanced_prompt)
-        if not image_bytes:
-             raise HTTPException(status_code=500, detail="Segmind Matrix synchronization failed.")
-
-        # 3. Synchronize with Cloudinary
-        upload_result = await cloudinary_service.upload_image(
-            file_bytes=image_bytes,
-            filename=f"flux_{uuid.uuid4()}.jpg"
-        )
+        from backend.services import replicate_service
         
-        image_url = upload_result.get("image_url")
+        # 2. Forge Image (Replicate SDXL)
+        image_url = await replicate_service.generate_image(enhanced_prompt)
         if not image_url:
-            raise HTTPException(status_code=500, detail="Cloudinary synchronization failed.")
+             raise HTTPException(status_code=500, detail="Replicate Network synchronization failed.")
 
         # 4. Save to Neural Archives (Supabase)
         await supabase_service.save_enhancement(

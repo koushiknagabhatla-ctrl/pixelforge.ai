@@ -56,3 +56,30 @@ async def enhance_image(image_url: str, mode: str, scale: int) -> dict:
     except Exception as e:
         print(f"Replicate Error: {e}")
         raise Exception(f"Failed to enhance image via Replicate: {str(e)}")
+
+async def generate_image(prompt: str) -> str:
+    """
+    Generate an image utilizing the ultra-premium SDXL models on Replicate.
+    Returns direct URL string.
+    """
+    print(f"Replicate Service: Generating SDXL for prompt: {prompt}")
+    try:
+        # SDXL
+        output = replicate_client.run(
+            "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5d1c712de7dfea535525255b1aa35c5565e08b",
+            input={
+                "prompt": prompt,
+                "width": 1024,
+                "height": 1024,
+                "refine": "expert_ensemble_refiner",
+                "apply_watermark": False,
+                "num_inference_steps": 35
+            }
+        )
+        # Replicate usually returns an array of URLs for SDXL. We pick the first.
+        if isinstance(output, list) and len(output) > 0:
+            return str(output[0])
+        return str(output)
+    except Exception as e:
+        print(f"Replicate Generation Error: {e}")
+        raise Exception(f"Failed to generate image via Replicate SDXL: {str(e)}")

@@ -1,25 +1,34 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { FcGoogle } from 'react-icons/fc'
 import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUser } from 'react-icons/hi'
 import useAuthStore from '../store/useAuthStore'
 import toast from 'react-hot-toast'
+import FramerBackground from '../components/FramerBackground'
 
 export default function Signup() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
+  const [formData, setFormData] = useState({ fullName: '', email: '', password: '' })
   const [isPasswordFocused, setIsPasswordFocused] = useState(false)
   const { signUpWithEmail, signInWithGoogle, loading } = useAuthStore()
   const navigate = useNavigate()
+  
+  const mouseRef = useRef({ x: 0.5, y: 0.5 })
+  const handleMouseMove = (e) => {
+      mouseRef.current.x = e.clientX / window.innerWidth;
+      mouseRef.current.y = e.clientY / window.innerHeight;
+  };
 
-  const handleSignup = async (e) => {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const handleEmailSignup = async (e) => {
     e.preventDefault()
     try {
-      await signUpWithEmail(email, password, name)
-      toast.success('Neural identity registered.')
-      navigate('/chatbot')
+      await signUpWithEmail(formData.email, formData.password, formData.fullName)
+      toast.success('Registration Complete. Please verify your email.')
+      navigate('/login')
     } catch (error) {
       toast.error(error.message)
     }
@@ -28,7 +37,7 @@ export default function Signup() {
   const handleGoogleSignup = async () => {
     try {
       await signInWithGoogle()
-      toast.success('Google mapping complete.')
+      toast.success('Google Registration Complete.')
       navigate('/chatbot')
     } catch (error) {
       toast.error(error.message)
@@ -36,109 +45,101 @@ export default function Signup() {
   }
 
   return (
-    <div className="min-h-screen bg-[#010101] flex items-center justify-center p-8 relative overflow-hidden font-sans selection:bg-white/10">
-      <div className="bg-animated" />
-      <div className="absolute inset-0 neural-grain opacity-[0.05]" />
+    <div onMouseMove={handleMouseMove} className="min-h-screen bg-transparent flex items-center justify-center p-8 relative overflow-hidden font-sans selection:bg-white/10">
+      <FramerBackground mouse={mouseRef} />
 
       <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.98 }}
+        initial={{ opacity: 0, y: 40, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-lg glass-hyper p-16 rounded-[4rem] border border-white/5 shadow-[0_80px_160px_rgba(0,0,0,1)] relative z-10"
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-lg glass-hyper p-10 sm:p-16 rounded-[4rem] border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,1)] relative z-10 bg-black/50 backdrop-blur-3xl"
       >
-        <div className="text-center mb-16">
-          <div className="w-16 h-16 rounded-[1.5rem] glass-premium flex items-center justify-center mx-auto mb-10 border border-white/10 shadow-3xl">
+        <div className="text-center mb-10 sm:mb-14">
+          <div className="w-16 h-16 rounded-2xl glass-premium flex items-center justify-center mx-auto mb-8 border border-white/20 shadow-2xl bg-white/5">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 10L12 2L20 10L12 18L4 10Z" stroke="white" strokeWidth="2.5" strokeLinecap="square"/>
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="white" strokeWidth="2.5" strokeLinejoin="round"/>
+                <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2.5" strokeLinejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2.5" strokeLinejoin="round"/>
             </svg>
           </div>
-          <h1 className="text-4xl font-black mb-4 tracking-tighter text-white">Initialize Identity</h1>
-          <p className="text-[10px] text-gray-700 font-bold uppercase tracking-[0.4em]">Map your neural footprint</p>
+          <h1 className="text-4xl sm:text-5xl font-black mb-4 tracking-tighter text-white">Register</h1>
+          <p className="text-[11px] text-gray-500 font-black uppercase tracking-[0.4em]">Initialize V2 Workspace</p>
         </div>
 
         <button
           onClick={handleGoogleSignup}
-          className="w-full h-18 py-5 glass border border-white/10 rounded-2xl flex items-center justify-center gap-6 hover:border-white/20 transition-all mb-10 group relative overflow-hidden"
+          className="w-full h-16 py-5 glass border border-white/20 shadow-lg rounded-[1.5rem] flex items-center justify-center gap-6 hover:bg-white/10 transition-all mb-10 group relative overflow-hidden bg-white/5"
         >
           <div className="relative">
             <FcGoogle className="w-6 h-6 relative z-10" />
-            <div className="absolute inset-0 bg-white blur-xl opacity-40 group-hover:opacity-100 transition-opacity rounded-full scale-125" />
+            <div className="absolute inset-0 bg-white blur-xl opacity-10 group-hover:opacity-40 transition-opacity rounded-full scale-150" />
           </div>
-          <span className="text-[12px] font-black uppercase tracking-[0.4em] text-white">Sign up with Google</span>
+          <span className="text-[12px] font-black uppercase tracking-[0.3em] text-white group-hover:text-gray-200">Register with Google</span>
         </button>
 
-        <div className="flex items-center gap-10 mb-10">
-          <div className="flex-1 h-px bg-white/5" />
-          <span className="text-[10px] text-gray-900 font-bold uppercase tracking-[0.5em]">or</span>
-          <div className="flex-1 h-px bg-white/5" />
+        <div className="flex items-center gap-8 mb-10">
+          <div className="flex-1 h-px bg-white/10" />
+          <span className="text-[10px] text-gray-600 font-extrabold uppercase tracking-[0.5em]">or</span>
+          <div className="flex-1 h-px bg-white/10" />
         </div>
 
-        <form onSubmit={handleSignup} className="space-y-8">
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold text-gray-800 uppercase tracking-[0.5em] ml-2">Display Label</label>
+        <form onSubmit={handleEmailSignup} className="space-y-6">
+          
+          <div className="space-y-3">
+            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.4em] ml-2">Full Name</label>
             <div className="relative group">
-              <HiOutlineUser className="absolute left-8 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-800 group-focus-within:text-white transition-colors" />
+              <HiOutlineUser className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-500 group-focus-within:text-white transition-colors" />
               <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
                 placeholder="Architect Name"
                 required
-                className="w-full h-18 pl-20 pr-8 bg-white/[0.015] border border-white/5 rounded-2xl text-white text-base focus:outline-none focus:border-white/20 transition-all font-medium placeholder:text-gray-900 shadow-inner"
+                className="w-full h-16 pl-16 pr-6 bg-white/[0.03] border border-white/10 rounded-[1.5rem] text-white text-[15px] focus:outline-none focus:border-white/30 transition-all font-medium placeholder:text-gray-700 shadow-inner"
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold text-gray-800 uppercase tracking-[0.5em] ml-2">Neural Registry</label>
+          <div className="space-y-3">
+            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.4em] ml-2">Email Address</label>
             <div className="relative group">
-              <HiOutlineMail className="absolute left-8 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-800 group-focus-within:text-white transition-colors" />
+              <HiOutlineMail className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-500 group-focus-within:text-white transition-colors" />
               <input
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="identity@neural.link"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="hello@pixelforge.ai"
                 required
-                className="w-full h-18 pl-20 pr-8 bg-white/[0.015] border border-white/5 rounded-2xl text-white text-base focus:outline-none focus:border-white/20 transition-all font-medium placeholder:text-gray-900 shadow-inner"
+                className="w-full h-16 pl-16 pr-6 bg-white/[0.03] border border-white/10 rounded-[1.5rem] text-white text-[15px] focus:outline-none focus:border-white/30 transition-all font-medium placeholder:text-gray-700 shadow-inner"
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold text-gray-800 uppercase tracking-[0.5em] ml-2">Secure Key</label>
+          <div className="space-y-3">
+            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.4em] ml-2">Password</label>
             <div className="relative">
-              <HiOutlineLockClosed className={`absolute left-8 top-1/2 -translate-y-1/2 w-6 h-6 transition-colors z-20 ${isPasswordFocused ? 'text-white' : 'text-gray-800'}`} />
+              <HiOutlineLockClosed className={`absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 transition-colors z-20 ${isPasswordFocused ? 'text-white' : 'text-gray-500'}`} />
               
               <motion.div
                 animate={{ 
-                    boxShadow: isPasswordFocused ? "0 0 30px rgba(255,255,255,0.15)" : "0 0 0px rgba(255,255,255,0)",
+                    boxShadow: isPasswordFocused ? "0 0 30px rgba(255,255,255,0.05)" : "0 0 0px rgba(255,255,255,0)",
                     scale: isPasswordFocused ? 1.01 : 1
                 }}
                 className="relative"
               >
                   <input
                     type="password"
-                    value={password}
+                    name="password"
+                    value={formData.password}
                     onFocus={() => setIsPasswordFocused(true)}
                     onBlur={() => setIsPasswordFocused(false)}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={handleChange}
                     placeholder="••••••••"
                     required
-                    minLength={8}
-                    className="w-full h-18 pl-20 pr-8 bg-white/[0.015] border border-white/5 rounded-2xl text-white text-base focus:outline-none focus:border-white/20 transition-all font-medium placeholder:text-gray-900 shadow-inner relative z-10"
+                    className="w-full h-16 pl-16 pr-6 bg-white/[0.03] border border-white/10 rounded-[1.5rem] text-white text-[15px] hover:bg-white/[0.05] focus:outline-none focus:border-white/30 transition-all font-medium placeholder:text-gray-700 shadow-inner relative z-10"
                   />
-                  
-                  {/* Password Entry Pulse */}
-                  <AnimatePresence>
-                    {isPasswordFocused && password.length > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="absolute inset-0 bg-white/[0.02] blur-xl rounded-2xl -z-10"
-                      />
-                    )}
-                  </AnimatePresence>
               </motion.div>
             </div>
           </div>
@@ -146,19 +147,19 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-18 bg-white text-black rounded-2xl font-black text-[12px] uppercase tracking-[0.6em] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center shadow-[0_30px_60px_rgba(255,255,255,0.1)]"
+            className="w-full h-16 mt-6 bg-white text-black rounded-[1.5rem] font-black text-[12px] uppercase tracking-[0.4em] hover:bg-gray-300 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)]"
           >
             {loading ? (
-              <div className="w-5 h-5 border-4 border-black/20 border-t-black rounded-full animate-spin" />
+              <div className="w-5 h-5 border-2 border-black/10 border-t-black rounded-full animate-spin" />
             ) : (
-              'Forge Identity'
+              'Create Account'
             )}
           </button>
         </form>
 
-        <p className="text-center mt-16 text-[11px] text-gray-800 font-bold uppercase tracking-[0.4em]">
-          Existing Link? {' '}
-          <Link to="/login" className="text-white hover:text-gray-400 transition-colors border-b border-white/10 pb-0.5">Authorize Here</Link>
+        <p className="text-center mt-12 text-[11px] text-gray-500 font-extrabold uppercase tracking-[0.3em]">
+          Already have an account? {' '}
+          <Link to="/login" className="text-white hover:text-gray-300 transition-colors border-b-2 border-white/20 pb-1">Sign In</Link>
         </p>
       </motion.div>
     </div>

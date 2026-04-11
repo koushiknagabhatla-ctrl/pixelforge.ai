@@ -9,8 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@react-three/drei": "^9.112.0",
-    "@react-three/fiber": "^8.17.6",
     "@supabase/supabase-js": "^2.45.0",
     "axios": "^1.7.4",
     "class-variance-authority": "^0.7.1",
@@ -26,7 +24,6 @@
     "react-router-dom": "^6.26.0",
     "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7",
-    "three": "^0.168.0",
     "zustand": "^4.5.4"
   },
   "devDependencies": {
