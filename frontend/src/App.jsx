@@ -16,6 +16,7 @@ const History = lazy(() => import('./pages/History'))
 const ChatbotPage = lazy(() => import('./pages/ChatbotPage'))
 const Login = lazy(() => import('./pages/Login'))
 const Signup = lazy(() => import('./pages/Signup'))
+const About = lazy(() => import('./pages/About'))
 
 /* ===== Protected Route ===== */
 function ProtectedRoute({ children, allowGuest = false }) {
@@ -105,6 +106,13 @@ export default function App() {
                 <Route path="/login" element={
                   <PageTransition>
                     <Login />
+                  </PageTransition>
+                } 
+                />
+                
+                <Route path="/about" element={
+                  <PageTransition>
+                    <About />
                   </PageTransition>
                 } 
                 />

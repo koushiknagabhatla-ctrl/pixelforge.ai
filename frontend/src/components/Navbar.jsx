@@ -23,7 +23,8 @@ const Navbar = () => {
 
       <div className="flex items-center gap-4 sm:gap-10">
         <Link 
-          to="/#about" 
+          to="/about" 
+          onClick={() => window.scrollTo(0, 0)}
           className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-400 hover:text-white transition-all hidden md:block"
         >
           About
