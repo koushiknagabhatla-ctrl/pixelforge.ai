@@ -21,19 +21,24 @@ const Navbar = () => {
         </div>
       </Link>
 
-      <div className="flex items-center gap-4 sm:gap-12">
+      <div className="flex items-center gap-4 sm:gap-10">
         <Link 
           to="/#about" 
-          onClick={(e) => {
-            if (window.location.pathname === '/') {
-                e.preventDefault();
-                const element = document.getElementById('about');
-                if (element) element.scrollIntoView({ behavior: 'smooth' });
-            }
-          }}
-          className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-400 hover:text-white transition-all hidden md:block cursor-pointer"
+          className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-400 hover:text-white transition-all hidden md:block"
         >
           About
+        </Link>
+        <Link 
+          to="/gallery" 
+          className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-400 hover:text-white transition-all hidden md:block"
+        >
+          Gallery
+        </Link>
+        <Link 
+          to="/docs" 
+          className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-400 hover:text-white transition-all hidden md:block"
+        >
+          Documentation
         </Link>
         
         {user ? (

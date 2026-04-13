@@ -26,12 +26,12 @@ async def generate_image(request: GenerateRequest):
         # 1. Optimize Prompt
         enhanced_prompt = await gemini_service.optimize_prompt(request.prompt)
         
-        from backend.services import replicate_service
+        from backend.services.nvidia_service import nvidia_service
         
-        # 2. Forge Image (Replicate SDXL)
-        image_url = await replicate_service.generate_image(enhanced_prompt)
+        # 2. Forge Image (NVIDIA NIM)
+        image_url = await nvidia_service.generate_image(enhanced_prompt)
         if not image_url:
-             raise HTTPException(status_code=500, detail="Replicate Network synchronization failed.")
+             raise HTTPException(status_code=500, detail="NVIDIA Network synchronization failed.")
 
         # 4. Save to Neural Archives (Supabase)
         await supabase_service.save_enhancement(

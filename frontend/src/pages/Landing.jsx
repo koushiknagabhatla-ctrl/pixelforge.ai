@@ -1,27 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useRef, useEffect } from 'react';
-import ParticleBackground from '../components/ParticleBackground';
+import { useRef } from 'react';
+import Background3D from '../components/Background3D';
 import useAuthStore from '../store/useAuthStore';
-import { 
-  HiOutlineSparkles, 
-  HiOutlineLightningBolt, 
-  HiOutlineChatAlt2, 
-  HiArrowRight 
-} from 'react-icons/hi';
-import { FaGithub } from 'react-icons/fa';
 
-const ASSETS = {
-  nexus: "/assets/nexus.png",
-};
-
+// Simple animation wrappers
 const MotionSection = ({ children, className, id }) => (
   <motion.section
     id={id}
-    initial={{ opacity: 0, y: 40 }}
+    initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-50px" }}
-    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+    transition={{ duration: 0.8, ease: "easeOut" }}
     className={className}
   >
     {children}
@@ -29,164 +19,172 @@ const MotionSection = ({ children, className, id }) => (
 );
 
 const Landing = () => {
-  const mouseRef = useRef({ x: 0.5, y: 0.5 });
   const containerRef = useRef(null);
   const { user } = useAuthStore();
   const navigate = useNavigate();
 
-  const handleMouseMove = (e) => {
-      mouseRef.current.x = e.clientX / window.innerWidth;
-      mouseRef.current.y = e.clientY / window.innerHeight;
-  };
-
   return (
-    <div ref={containerRef} onMouseMove={handleMouseMove} className="min-h-screen bg-transparent overflow-x-hidden pt-20 selection:bg-white/10 relative z-10 w-full font-sans">
+    <div ref={containerRef} className="min-h-screen bg-[#131313] text-[#e2e2e2] overflow-x-hidden pt-16 relative w-full font-['Inter']">
       
-      {/* 🚀 FLAWLESS HTML5 3D PARTICLE ENGINE */}
-      <ParticleBackground />
+      {/* Interactive 3D Cursor Tracking Background */}
+      <Background3D />
 
-      {/* 🏙️ HERO SECTION - BUILT FROM SCRATCH */}
-      <section className="relative min-h-[90vh] px-4 sm:px-10 py-10 sm:py-20 flex flex-col items-center justify-center text-center">
-        
+      {/* Grid overlay for aesthetic */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)',
+        backgroundSize: '40px 40px',
+        opacity: 0.2
+      }}></div>
+
+      {/* Hero Section */}
+      <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-8 text-center z-10">
         <motion.div
            initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-           className="space-y-6 sm:space-y-12 max-w-5xl w-full"
+           className="relative z-10 w-full max-w-4xl"
         >
-            <div className="inline-block relative">
-                <div className="absolute inset-0 bg-white blur-xl opacity-10 rounded-full" />
-                <div className="glass-premium flex items-center gap-2 sm:gap-3 px-6 py-3 rounded-full border border-white/20 shadow-2xl relative z-10">
-                    <div className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_10px_2px_rgba(255,255,255,0.8)]" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white">System Online</span>
-                </div>
-            </div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-white/5 blur-[120px] rounded-full pointer-events-none"></div>
 
-            <div className="relative group mx-auto w-full px-2 sm:px-0 mt-8">
-                <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-black leading-[0.9] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-600 relative z-10 uppercase drop-shadow-[0_0_40px_rgba(255,255,255,0.15)]">
-                    Pixel Forge
-                </h1>
-                <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-black leading-none tracking-tight text-white relative z-10 uppercase mt-2">
-                   V2 Architecture
-                </h1>
-            </div>
+          <h1 className="font-['Manrope'] font-extrabold text-5xl md:text-7xl lg:text-[9rem] leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 drop-shadow-2xl mb-6">
+              PIXEL FORGE
+          </h1>
+          <p className="font-['Manrope'] font-light tracking-[0.4em] text-zinc-400 text-xs md:text-sm lg:text-base max-w-2xl mx-auto uppercase">
+              THE ARCHITECT'S CONSOLE FOR NEURAL IMAGE SYNTHESIS
+          </p>
 
-            <div className="max-w-xl mx-auto px-4 sm:px-0 mt-8">
-                <p className="text-[13px] sm:text-[15px] text-gray-400 font-bold max-w-lg mx-auto leading-relaxed uppercase tracking-[0.25em] drop-shadow-md">
-                    Seamless synthesis of pure aesthetics and artificial intelligence. Built for absolute perfection.
-                </p>
-            </div>
+          <div className="mt-16 flex flex-col md:flex-row items-center justify-center gap-6">
+            {user ? (
+               <button onClick={() => navigate('/chatbot')} className="group relative px-10 py-5 bg-white text-black rounded-full font-['Manrope'] font-bold text-sm tracking-widest uppercase overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_20px_40px_rgba(255,255,255,0.1)]">
+                 <span className="relative z-10">ENTER FORGE</span>
+                 <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-white opacity-0 group-hover:opacity-100 transition-opacity"></div>
+               </button>
+            ) : (
+              <>
+                <button onClick={() => navigate('/signup')} className="group relative px-10 py-5 bg-white text-black rounded-full font-['Manrope'] font-bold text-sm tracking-widest uppercase overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_20px_40px_rgba(255,255,255,0.1)]">
+                  <span className="relative z-10">ENTER FORGE</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-white opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </button>
+                <button onClick={() => navigate('/login')} className="px-10 py-5 bg-[#353535] text-white rounded-full font-['Manrope'] font-bold text-sm tracking-widest uppercase transition-all hover:bg-[#474747] active:scale-95 backdrop-blur-md border border-white/10">
+                    SIGN IN
+                </button>
+              </>
+            )}
+          </div>
+        </motion.div>
 
-            {/* AUTH LISTENER LOGIC ("ENTER" REPLACEMENT) */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-12 w-full px-6 sm:px-0">
-                {user ? (
-                   <button onClick={() => navigate('/chatbot')} className="btn-monochrome h-16 w-full sm:w-auto px-16 text-[12px] shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)] flex items-center justify-center gap-4">
-                     Enter <HiArrowRight className="w-5 h-5" />
-                   </button>
-                ) : (
-                  <>
-                    <button onClick={() => navigate('/signup')} className="btn-monochrome h-16 w-full sm:w-auto px-12 text-[11px] shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)]">
-                      Generate Now
-                    </button>
-                    <button onClick={() => navigate('/login')} className="w-full sm:w-auto px-10 h-16 glass border border-white/20 rounded-[2rem] text-[11px] font-black uppercase tracking-[0.4em] hover:bg-white/10 transition-all flex items-center justify-center gap-3 bg-black/40 backdrop-blur-2xl shadow-xl">
-                      Sign In <HiArrowRight className="w-4 h-4" />
-                    </button>
-                  </>
-                )}
-            </div>
+        {/* Scroll Indicator */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 1 }}
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
+        >
+          <span className="font-['Inter'] uppercase tracking-widest text-[10px] text-zinc-500">Discover Foundry</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-zinc-600 to-transparent"></div>
         </motion.div>
       </section>
 
-      {/* 🏛️ ABOUT SECTION - GLASS REDESIGN */}
-      <MotionSection id="about" className="px-5 sm:px-10 py-20 sm:py-32 max-w-7xl mx-auto relative cursor-default">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-20 items-center">
-            <div className="space-y-6 sm:space-y-8">
-                <div className="glass-premium px-5 py-2 inline-block rounded-full border-white/20">
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white">Our Vision</span>
-                </div>
-                <div className="glass-hyper p-8 sm:p-12 border-white/10 relative overflow-hidden group rounded-[3rem]">
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                    <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight mb-8">
-                        Absolute Purity.
-                    </h2>
-                    <p className="text-[15px] text-gray-300 font-medium leading-relaxed mb-6 tracking-wide drop-shadow-md">
-                        We abandoned imitations. Pixel Forge is an uncompromising suite of neural tools built directly on top of rapid processing engines and state-of-the-art APIs.
-                    </p>
-                    <p className="text-[12px] text-gray-500 font-black leading-loose uppercase tracking-[0.15em]">
-                        From generating complex imagery instantly to chatting naturally with our semantic core, every interaction is tailored to accelerate human creativity.
-                    </p>
-                </div>
+      {/* Features Bento Grid */}
+      <MotionSection className="max-w-7xl mx-auto px-8 py-32 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          
+          {/* Large Feature Card */}
+          <div className="md:col-span-8 bg-[#1B1B1B]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-12 relative overflow-hidden group">
+            <div className="absolute inset-y-0 right-0 w-1/2 opacity-40 mix-blend-screen pointer-events-none transition-transform duration-1000 group-hover:scale-105">
+              <img className="w-full h-full object-cover filter grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoUrR5l4sqBZICYK6AKYgbrhNECw_CJv8x-_thNaBqmv8gZcSGW4o9JTg0VguM9LTxGyG5zNkSi50v0jeZB7TfN7aW79ksX02bxv3h4rMft4-uHd9Y1J7tlD_klgxTiExELlX1zp_nXL-OrQlcsMFjyrZiePbbYov3VwX32PRIs9aRr8dlVmsyIEWgDhPHr3aoqUneBBCjIPSXEzhhiEC2cQDwMzcsB_hoCQIhYaWsGukcIauGnvJTI34YP5HKkeekJFh8nvg4qafp" alt="Abstract render" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#1B1B1B] to-transparent"></div>
             </div>
-            
-            <div className="relative w-full h-[400px] flex items-center justify-center perspective-[1000px]">
-                 <div className="absolute inset-0 bg-white/5 rounded-[3rem] -z-10 blur-3xl animate-pulse" />
-                 <img src={ASSETS.nexus} alt="Generative Hub" className="w-[90%] h-auto max-h-[500px] object-cover rounded-[3rem] filter contrast-125 drop-shadow-[0_40px_80px_rgba(0,0,0,0.8)] border border-white/10 transform hover:rotate-y-12 hover:scale-105 transition-all duration-700" />
+            <div className="relative z-10 max-w-md">
+              <span className="font-['Inter'] uppercase tracking-widest text-[10px] text-zinc-500 mb-4 block">Engine Core</span>
+              <h2 className="text-white font-['Manrope'] text-4xl font-bold mb-6">Neural Foundry</h2>
+              <p className="text-zinc-400 font-['Inter'] text-lg leading-relaxed mb-8">
+                  Experience the next generation of generative AI. Our proprietary architecture delivers unparalleled fidelity, ensuring every pixel is synthesized with architectural precision and creative intent.
+              </p>
+              <span className="inline-flex items-center gap-2 text-white font-['Manrope'] font-bold text-sm tracking-widest uppercase cursor-pointer group-hover:gap-4 transition-all">
+                  Explore Technicals <span className="material-symbols-outlined text-lg">arrow_forward</span>
+              </span>
             </div>
+          </div>
+
+          {/* Small Feature Card 1 */}
+          <div className="md:col-span-4 bg-[#2A2A2A]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-8 flex flex-col justify-between hover:bg-[#353535]/80 transition-colors">
+            <span className="material-symbols-outlined text-4xl text-white mb-8">tune</span>
+            <div>
+              <h3 className="text-white font-['Manrope'] text-xl font-bold mb-3">Precision Control</h3>
+              <p className="text-zinc-400 font-['Inter'] text-sm leading-relaxed">
+                  Fine-tune every aspect of your synthesis with modular weights, negative prompting, and latent space manipulation.
+              </p>
+            </div>
+          </div>
+
+          {/* Small Feature Card 2 */}
+          <div className="md:col-span-4 bg-[#1F1F1F]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-8 flex flex-col justify-between hover:bg-[#2A2A2A]/80 transition-colors">
+            <span className="material-symbols-outlined text-4xl text-white mb-8">sync_alt</span>
+            <div>
+              <h3 className="text-white font-['Manrope'] text-xl font-bold mb-3">Real-time Sync</h3>
+              <p className="text-zinc-400 font-['Inter'] text-sm leading-relaxed">
+                  Synchronize your forge assets across desktop and cloud seamlessly with ultra-low latency infrastructure.
+              </p>
+            </div>
+          </div>
+
+          {/* Medium Feature Card */}
+          <div className="md:col-span-8 bg-[#0E0E0E]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-12 flex items-center justify-between gap-12 group overflow-hidden relative">
+             <div className="absolute inset-0 opacity-10 pointer-events-none">
+                 <div className="absolute inset-0 bg-white/10 blur-[100px] group-hover:bg-white/20 transition-all rounded-full scale-150"></div>
+             </div>
+            <div className="relative z-10 max-w-sm">
+              <h2 className="text-white font-['Manrope'] text-3xl font-bold mb-4">Architectural Motifs</h2>
+              <p className="text-zinc-500 font-['Inter'] text-base">
+                  Built for professionals who demand structural integrity in their visual assets. Perfect for architectural visualization and high-end concept art.
+              </p>
+            </div>
+            <div className="hidden md:flex relative z-10 w-48 h-48 rounded-full border border-white/10 items-center justify-center group-hover:rotate-180 transition-all duration-1000">
+              <div className="w-32 h-32 border-t border-b border-white/40 rounded-full animate-spin-slow"></div>
+            </div>
+          </div>
+          
         </div>
       </MotionSection>
 
-      {/* 🛰️ CORE FEATURES DIRECT ROUTING */}
-      <MotionSection className="px-5 sm:px-10 py-20 sm:py-32 relative bg-[#020202]/90 border-t border-white/[0.05]">
-        <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 sm:mb-24 space-y-6">
-                <div className="glass-premium px-6 py-3 inline-block rounded-full border-white/20 shadow-2xl">
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white">The Core Suite</span>
+      {/* Creative Showcase */}
+      <MotionSection className="bg-[#1B1B1B] py-32 px-8 border-y border-white/5 relative z-10">
+        <div className="max-w-7xl mx-auto text-center mb-20">
+          <h2 className="font-['Manrope'] font-extrabold text-4xl md:text-5xl text-white mb-6 tracking-tight">FORGED REALITIES</h2>
+          <div className="w-24 h-1 bg-white mx-auto"></div>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          {[
+              { src: "https://lh3.googleusercontent.com/aida-public/AB6AXuCG50XxpqH_XRzZL1-lyrCZqdPZ-LHJHb4HMXlV4rBqnMgZaEfQvoXsXy_9O5wc6CPIrgb4_8m9WVpxePLCEdOpemK22ILVOJqB6VUWSkK6FWeRl97CLYgfDh2IOoKvSsIlVg2Vy_nBlAU8tKbSjCa-dpmO5c7RHAR7QiZhBBxeBDS6J7XliwbLJ8fnDr7olHwhmmD-eLx-LFo6rdWJsIT0dAdfQqkCliIlqJDJiqjRCEKGcaQsSGixTWRoOEChEwtqPPj00H99IUPh", title: "Subject_01: Brutalist Core" },
+              { src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDgEi0B2qqcEYTkZwr95gZAcnEqNQT6CPm9xgWLcopPN73tPcLpE12K_wAcYImonG_OGifMSfVp82mG9htB5uf-oYQ5hmUgb8hoSVHgSqLYXbTh2YzZVyJPu-wGR5WvQRCVLAgY8J6-_yqbChsJqHpgaHZd-1n3AEWkZpLLBK4uWI34uyeo6OhJpwxJyRr1XsomLg71_Z5YwAU9GeD4_DDXLWbzUuh6blXx91FicmEGz3NSeQ_MUyySLd4L9G26LHZ7fTkWvO9LHNzm", title: "Subject_02: Synaptic Mesh", mt: "mt-8" },
+              { src: "https://lh3.googleusercontent.com/aida-public/AB6AXuAf4QkWeXuGNE-SEgYXyWmZ0ez8EznXgAZbovk1FBlIFjawn2wQ0jbYQFKt55QykzZkUbIZZfg5g5sum6hlTNNf4LdLLw077L-3uAsv3mDxOGGbylaF3TmWD-5vXnszskDwsTxbVcbKHieZiqb3nQihklcQMApVKQUkuXGSVxSZo1iEbRUmBIJep2SSikeMvflwC8GqPFu5r4IkUsNuJ4LHJQG4_oPtXt80ep9nVj5jzU5Kzp8LyXl7v-Fn93vXjcUhQWU6JJrtSz22", title: "Subject_03: Fluid Form" },
+              { src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDnGjCBV_INoVrHxjW4EKWGZ15coIEcBSW5XTJHfokvgzf6U_ZGuCxjsU3a8r6r2OrIIJvJyAWqXbY-ddAJnri2rF1DPcqTaohPtftVT5uiXbrpu-hGvHZELl7MZ_M9_86CPwOjJ-EfHo539kvkxY4cuzSlWgKB7TGx5IoWbJPNVb_u8ghSu3-yG7uc5esicPSa3WTW4vbDx_leL9adAY0wZp_s-lSn3nfpF5DHDW3A6z49r30NwzEgxY6udlOrvCePc3KLk2SmvU9L", title: "Subject_04: Obsidian Void", mt: "mt-8" }
+          ].map((item, i) => (
+             <div key={i} className={`aspect-[4/5] bg-surface rounded-xl overflow-hidden relative group border border-white/10 shadow-2xl ${item.mt || ''}`}>
+                <img className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-700 hover:scale-110" src={item.src} alt={item.title} />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-700"></div>
+                <div className="absolute bottom-0 left-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black via-black/80 to-transparent w-full">
+                   <p className="text-[10px] font-['Inter'] uppercase tracking-widest text-white">{item.title}</p>
                 </div>
-                <h3 className="text-4xl sm:text-5xl font-black text-white tracking-tighter drop-shadow-md">Direct Access</h3>
-                <p className="text-gray-500 font-black text-[12px] uppercase tracking-[0.3em] mt-4">Select an interface below to begin immediately</p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
-            {[
-                { title: "Generate Space", desc: "Build images from pure thought.", icon: HiOutlineSparkles, link: "/tools?mode=generate" },
-                { title: "Enhance Lab", desc: "Sharpen and upscale your assets.", icon: HiOutlineLightningBolt, link: "/tools?mode=enhance" },
-                { title: "Neural Chat", desc: "Speak directly to the machine.", icon: HiOutlineChatAlt2, link: "/chatbot" }
-            ].map((tool, i) => (
-                <Link to={tool.link} key={i}>
-                  <div className="glass-hyper p-8 sm:p-10 border border-white/10 flex flex-col gap-6 group relative overflow-hidden rounded-[3rem] hover:-translate-y-3 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(255,255,255,0.05)]">
-                      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                      <div className="relative z-10 space-y-6">
-                          <div className="w-16 h-16 glass flex items-center justify-center text-white border-white/20 group-hover:scale-110 transition-transform duration-500 rounded-2xl shadow-xl bg-white/5">
-                              <tool.icon className="w-8 h-8" />
-                          </div>
-                          <div>
-                              <h3 className="text-[15px] font-black text-white tracking-widest uppercase mb-3 group-hover:text-gray-200">{tool.title}</h3>
-                              <p className="text-gray-400 font-bold text-[12px] uppercase tracking-[0.2em] leading-relaxed">
-                                  {tool.desc}
-                              </p>
-                          </div>
-                      </div>
-                  </div>
-                </Link>
-            ))}
-            </div>
+             </div>
+          ))}
         </div>
       </MotionSection>
 
-      {/* 🏙️ FOOTER */}
-      <footer className="px-5 sm:px-10 py-16 border-t border-white/[0.05] relative bg-[#010101]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
-            <div className="space-y-4 flex flex-col items-center md:items-start text-center md:text-left">
-              <div className="flex items-center justify-center md:justify-start gap-5">
-                  <div className="w-12 h-12 glass flex items-center justify-center border-white/10 rounded-[1rem] p-2 bg-white/5 shadow-2xl">
-                      <img src="/assets/logo.png" alt="Logo" className="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]" />
-                  </div>
-                  <div className="glass-premium px-6 py-3 rounded-full border border-white/10">
-                    <h2 className="text-[11px] font-black uppercase tracking-[0.4em] text-white">Pixel Forge AI</h2>
-                  </div>
-              </div>
-              <p className="text-[10px] text-gray-600 font-black uppercase tracking-[0.4em] md:ml-16">Architecture V2 Finalized</p>
-           </div>
-           
-           <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-center sm:text-right w-full sm:w-auto">
-              <div>
-                <p className="text-[10px] text-gray-600 font-black uppercase tracking-[0.4em] mb-2">Architect</p>
-                <h3 className="text-[12px] font-black text-white uppercase tracking-[0.4em]">Koushik Nagabhatla</h3>
-              </div>
-              <a href="https://github.com/koushiknagabhatla-ctrl" target="_blank" rel="noreferrer" className="w-14 h-14 glass flex items-center justify-center hover:bg-white hover:text-black transition-colors duration-300 rounded-[1rem] border-white/10 shadow-2xl">
-                <FaGithub className="w-7 h-7" />
-              </a>
-           </div>
+      {/* Footer / CTA Section */}
+      <footer className="py-32 px-8 text-center relative z-10 bg-[#0E0E0E]">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-b from-white/20 to-transparent"></div>
+        <h2 className="font-['Manrope'] font-bold text-4xl md:text-6xl text-white mb-8 tracking-tighter mt-12">PREPARE FOR IGNITION</h2>
+        <p className="text-zinc-500 font-['Inter'] uppercase tracking-widest text-xs mb-12">Architectural Grade Generation</p>
+        
+        <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
+            <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-white text-sm">token</span>
+                <span className="text-sm font-black tracking-tighter text-white uppercase font-['Manrope']">PIXEL FORGE</span>
+            </div>
+            <span className="hidden md:inline text-white/20">|</span>
+            <p className="text-[10px] uppercase tracking-[0.3em] text-neutral-600">© 2024 Pixel Forge Neural Systems</p>
         </div>
       </footer>
     </div>
