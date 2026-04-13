@@ -7,17 +7,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(0 0% 0%)",
-        foreground: "hsl(0 0% 100%)",
+        border: "rgba(99, 102, 241, 0.08)",
+        input: "rgba(99, 102, 241, 0.06)",
+        ring: "rgba(99, 102, 241, 0.2)",
+        background: "#0a0a0f",
+        foreground: "#ffffff",
         primary: {
-          DEFAULT: "#ffffff",
-          foreground: "#000000",
+          DEFAULT: "#6366f1",
+          foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "rgba(255, 255, 255, 0.03)",
+          DEFAULT: "rgba(99, 102, 241, 0.05)",
           foreground: "#ffffff",
         },
       },
@@ -28,10 +28,12 @@ export default {
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
+        headline: ["Manrope", "sans-serif"],
       },
       animation: {
         "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "fade-in": "fadeIn 0.5s ease-out forwards",
+        "spin-slow": "spin 20s linear infinite",
       },
       keyframes: {
         fadeIn: {

@@ -1,102 +1,185 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { FaGithub } from 'react-icons/fa';
+import { HiOutlineSparkles, HiOutlineLightningBolt, HiOutlineChatAlt2 } from 'react-icons/hi';
+import Background3D from '../components/Background3D';
 
-// Section animation wrapper for parallax feeling
-const FadeInSection = ({ children, delay = 0, className = "" }) => (
+/* ═══════════════════════════════════════════
+   ANIMATION WRAPPER
+   ═══════════════════════════════════════════ */
+const FadeUp = ({ children, delay = 0, className = '' }) => (
   <motion.div
-    initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
-    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-    viewport={{ once: true, margin: "-50px" }}
-    transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
+    initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+    whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+    viewport={{ once: true, margin: '-60px' }}
+    transition={{ duration: 1, delay, ease: [0.16, 1, 0.3, 1] }}
     className={className}
   >
     {children}
   </motion.div>
 );
 
+/* ═══════════════════════════════════════════
+   ABOUT PAGE
+   ═══════════════════════════════════════════ */
 const About = () => {
+  const platformTools = [
+    { icon: HiOutlineSparkles, title: 'AI Image Generator', desc: 'Transform text descriptions into stunning, high-fidelity images using cutting-edge Stable Diffusion neural networks. Generate photorealistic renders, concept art, architectural visualizations, and creative compositions — all from natural language prompts. Our engine supports advanced prompt engineering with negative prompting, cfg scale controls, and seed manipulation for reproducible results.' },
+    { icon: HiOutlineLightningBolt, title: 'Precision Image Enhancer', desc: 'Elevate any image with AI-powered super-resolution upscaling. Our neural enhancement pipeline analyzes pixel-level patterns and intelligently reconstructs missing detail, producing sharp, artifact-free results even at 4x magnification. Perfect for restoring old photographs, upscaling web assets, or preparing print-quality deliverables from low-resolution sources.' },
+    { icon: HiOutlineChatAlt2, title: 'Neural Chat Assistant', desc: 'Engage in natural conversation with our AI-powered creative assistant. Get real-time guidance on prompt engineering, receive artistic suggestions, troubleshoot generation issues, and explore new creative directions. The assistant understands context across your session and can help refine your creative workflow from ideation to final output.' },
+  ];
+
+  const techStack = [
+    { label: 'Frontend', items: ['React 18', 'Vite', 'Framer Motion', 'Three.js', 'TailwindCSS'] },
+    { label: 'Backend', items: ['FastAPI', 'Python', 'NVIDIA NIM', 'Stable Diffusion'] },
+    { label: 'Infrastructure', items: ['Vercel', 'Render', 'Supabase', 'Cloudinary'] },
+  ];
+
   return (
-    <div className="min-h-screen bg-[#0E0E0E] text-[#e2e2e2] overflow-x-hidden pt-32 pb-24 relative font-['Inter']">
+    <div className="min-h-screen bg-[#0a0a0f] text-white overflow-x-hidden relative">
       
-      {/* Dynamic Background */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-         <div className="absolute top-[-10%] right-[-5%] w-[800px] h-[800px] bg-white/5 blur-[150px] rounded-full mix-blend-screen" />
-         <div className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-[#2A2A2A]/40 blur-[150px] rounded-full mix-blend-screen" />
-         <div className="absolute inset-0" style={{
-            backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)',
-            backgroundSize: '80px 80px',
-         }}></div>
-      </div>
+      <Background3D />
 
-      <div className="max-w-7xl mx-auto px-8 relative z-10">
-        
-        {/* Header Title */}
-        <FadeInSection className="text-center mb-24 max-w-4xl mx-auto">
-           <span className="font-['Manrope'] font-bold tracking-[0.5em] text-[10px] text-zinc-500 uppercase block mb-6">About The Engine</span>
-           <h1 className="font-['Manrope'] font-black text-5xl md:text-7xl lg:text-8xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-600 mb-8 leading-tight">
-               ARCHITECTURAL <br/> SYNTHESIS
-           </h1>
-           <p className="text-zinc-400 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto">
-               Pixel Forge is an uncompromising suite of neural tools built directly on top of rapid processing engines to accelerate human creativity with zero latency.
-           </p>
-        </FadeInSection>
-
-        {/* Cinematic Content Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center mb-32">
-            <FadeInSection>
-               <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_30px_80px_rgba(255,255,255,0.05)] border border-white/5 group">
-                  <div className="absolute inset-0 bg-black/40 z-10 group-hover:bg-transparent transition-colors duration-1000"></div>
-                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG50XxpqH_XRzZL1-lyrCZqdPZ-LHJHb4HMXlV4rBqnMgZaEfQvoXsXy_9O5wc6CPIrgb4_8m9WVpxePLCEdOpemK22ILVOJqB6VUWSkK6FWeRl97CLYgfDh2IOoKvSsIlVg2Vy_nBlAU8tKbSjCa-dpmO5c7RHAR7QiZhBBxeBDS6J7XliwbLJ8fnDr7olHwhmmD-eLx-LFo6rdWJsIT0dAdfQqkCliIlqJDJiqjRCEKGcaQsSGixTWRoOEChEwtqPPj00H99IUPh" 
-                       className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000" alt="Brutalist Architecture Render" />
-               </div>
-            </FadeInSection>
-
-            <div className="space-y-12">
-               <FadeInSection delay={0.2}>
-                  <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6">
-                      <span className="material-symbols-outlined text-white text-xl">precision_manufacturing</span>
-                  </div>
-                  <h2 className="font-['Manrope'] text-3xl md:text-4xl font-bold text-white mb-4">Unparalleled Fidelity</h2>
-                  <p className="text-zinc-400 text-base leading-loose">
-                      The core engine leverages specialized latent diffusion models optimized directly for architectural coherence and high-end photographic concept art. We abandoned imitations to give professionals pixel-perfect control over structural integrity.
-                  </p>
-               </FadeInSection>
-               
-               <FadeInSection delay={0.4}>
-                  <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6">
-                      <span className="material-symbols-outlined text-white text-xl">speed</span>
-                  </div>
-                  <h2 className="font-['Manrope'] text-3xl md:text-4xl font-bold text-white mb-4">Zero-Friction Workflow</h2>
-                  <p className="text-zinc-400 text-base leading-loose">
-                      Time is the ultimate creative constraint. Our integration with the latest proprietary Nvidia inference microservices guarantees that generation happens at the speed of thought. Your data is instantly stored, synchronized, and refined in our private cloud.
-                  </p>
-               </FadeInSection>
-            </div>
+      {/* ═══ HERO ═══ */}
+      <section className="relative z-10 pt-32 pb-20 px-6">
+        <div className="max-w-5xl mx-auto text-center">
+          <FadeUp>
+            <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-indigo-300/50 block mb-6">About The Platform</span>
+            <h1 className="font-['Manrope'] font-extrabold text-5xl md:text-7xl lg:text-8xl tracking-tighter leading-[0.9] mb-8">
+              <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-indigo-200/40">The Architect's</span>
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-b from-indigo-100 to-indigo-400/30">Console</span>
+            </h1>
+            <p className="text-white/40 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+              Pixel Forge is a full-stack AI creative platform that puts the power of neural image synthesis directly into the hands of creators, designers, and developers. No compromises. No barriers.
+            </p>
+          </FadeUp>
         </div>
+      </section>
 
-        {/* Developer Footer Node */}
-        <FadeInSection delay={0.3} className="pt-32 border-t border-white/10 mt-32 flex flex-col items-center text-center">
-            <span className="font-['Manrope'] font-black tracking-[0.4em] text-[12px] text-zinc-600 uppercase block mb-12">Foundry Architect</span>
+      {/* ═══ MISSION ═══ */}
+      <section className="relative z-10 py-24 px-6 border-t border-white/[0.04]">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <FadeUp>
+            <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-indigo-300/40 block mb-4">Our Vision</span>
+            <h2 className="font-['Manrope'] font-bold text-3xl md:text-4xl text-white tracking-tight mb-6">
+              Democratizing Creative AI
+            </h2>
+            <div className="space-y-5 text-white/40 text-[15px] leading-relaxed">
+              <p>
+                We believe every creative professional should have access to the same AI tools that were once locked behind expensive enterprise subscriptions and complex technical setups. Pixel Forge removes every barrier between your imagination and the final pixel.
+              </p>
+              <p>
+                Our platform is built on open-source AI models and cloud-native infrastructure, delivering enterprise-grade capabilities through an interface that feels as intuitive as a conversation. Whether you're generating concept art for a feature film, upscaling product photography for e-commerce, or simply exploring the boundaries of AI creativity — Pixel Forge adapts to your workflow.
+              </p>
+              <p>
+                Every feature is designed with obsessive attention to speed, quality, and reliability. From the moment you type a prompt to the second your generated image appears on screen, we've optimized every millisecond of the pipeline.
+              </p>
+            </div>
+          </FadeUp>
+
+          <FadeUp delay={0.2}>
+            <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-8 space-y-8">
+              <h3 className="font-['Manrope'] font-bold text-lg text-white">Why Pixel Forge?</h3>
+              {[
+                { num: '01', text: 'Instant generation — no GPU required on your end. All processing runs on NVIDIA cloud infrastructure.' },
+                { num: '02', text: 'Permanent cloud storage — every generated and enhanced image is automatically archived in high-availability storage.' },
+                { num: '03', text: 'Built for iteration — compare, refine, and version your creative work with intelligent history tracking.' },
+                { num: '04', text: 'Privacy first — your prompts, images, and creative data are never used for model training or shared with third parties.' },
+              ].map((item, i) => (
+                <div key={i} className="flex gap-4">
+                  <span className="text-indigo-400/40 font-bold text-sm font-['Manrope'] shrink-0">{item.num}</span>
+                  <p className="text-white/35 text-sm leading-relaxed">{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* ═══ PLATFORM TOOLS ═══ */}
+      <section className="relative z-10 py-24 px-6 bg-gradient-to-b from-[#0a0a0f] to-[#0d0d15] border-t border-white/[0.04]">
+        <div className="max-w-5xl mx-auto">
+          <FadeUp className="text-center mb-16">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-indigo-300/40 block mb-4">Core Tools</span>
+            <h2 className="font-['Manrope'] font-bold text-3xl md:text-4xl text-white tracking-tight">Everything You Need</h2>
+            <p className="text-white/30 text-sm mt-4 max-w-xl mx-auto">Three powerful tools, one unified platform. Each tool is purpose-built for a specific creative need.</p>
+          </FadeUp>
+
+          <div className="space-y-6">
+            {platformTools.map((tool, i) => (
+              <FadeUp key={i} delay={i * 0.1}>
+                <div className="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-8 md:p-10 hover:bg-white/[0.04] hover:border-indigo-500/10 transition-all duration-500 group">
+                  <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
+                    <div className="w-14 h-14 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:bg-indigo-500/20 transition-colors">
+                      <tool.icon className="w-7 h-7 text-indigo-300" />
+                    </div>
+                    <div>
+                      <h3 className="font-['Manrope'] text-xl font-bold text-white mb-3">{tool.title}</h3>
+                      <p className="text-white/35 text-[15px] leading-relaxed">{tool.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              </FadeUp>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ TECH STACK ═══ */}
+      <section className="relative z-10 py-24 px-6 border-t border-white/[0.04]">
+        <div className="max-w-5xl mx-auto">
+          <FadeUp className="text-center mb-16">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-indigo-300/40 block mb-4">Under The Hood</span>
+            <h2 className="font-['Manrope'] font-bold text-3xl md:text-4xl text-white tracking-tight">Technology Stack</h2>
+          </FadeUp>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {techStack.map((stack, i) => (
+              <FadeUp key={i} delay={i * 0.1}>
+                <div className="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-7">
+                  <h3 className="font-['Manrope'] font-bold text-sm text-indigo-300/60 uppercase tracking-wider mb-5">{stack.label}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {stack.items.map((item, j) => (
+                      <span key={j} className="px-3 py-1.5 bg-white/[0.04] border border-white/[0.06] rounded-lg text-xs text-white/50 font-medium">{item}</span>
+                    ))}
+                  </div>
+                </div>
+              </FadeUp>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ DEVELOPER ═══ */}
+      <section className="relative z-10 py-24 px-6 border-t border-white/[0.04]">
+        <div className="max-w-5xl mx-auto">
+          <FadeUp className="flex flex-col items-center text-center">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-indigo-300/40 block mb-12">Built By</span>
             
-            <a href="https://github.com/koushiknagabhatla-ctrl" target="_blank" rel="noopener noreferrer" 
-               className="group relative bg-[#1B1B1B]/80 backdrop-blur-xl border border-white/10 px-12 py-10 rounded-[3rem] w-full max-w-2xl overflow-hidden hover:shadow-[0_20px_80px_rgba(255,255,255,0.05)] hover:-translate-y-2 transition-all duration-500">
-               <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-               
-               <div className="relative z-10 flex flex-col items-center gap-6">
-                   <div className="w-20 h-20 bg-white/5 rounded-full border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-white transition-all duration-500 shadow-2xl">
-                       <FaGithub className="w-10 h-10 text-white group-hover:text-black transition-colors duration-500" />
-                   </div>
-                   <div>
-                       <h3 className="font-['Manrope'] text-2xl font-bold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-zinc-500 transition-all duration-500">Koushik Nagabhatla</h3>
-                       <p className="font-['Inter'] text-[11px] text-zinc-500 uppercase tracking-widest mt-2">Lead Developer / AI Synthesis</p>
-                   </div>
-               </div>
+            <a 
+              href="https://github.com/koushiknagabhatla-ctrl" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="group relative bg-white/[0.02] border border-white/[0.06] hover:border-indigo-500/20 rounded-2xl px-12 py-10 w-full max-w-lg overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(99,102,241,0.08)]"
+            >
+              <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              
+              <div className="relative z-10 flex flex-col items-center gap-5">
+                <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center group-hover:bg-indigo-500 group-hover:scale-110 transition-all duration-500">
+                  <FaGithub className="w-8 h-8 text-indigo-300 group-hover:text-white transition-colors duration-500" />
+                </div>
+                <div>
+                  <h3 className="font-['Manrope'] text-xl font-bold text-white mb-1">Koushik Nagabhatla</h3>
+                  <p className="text-xs text-white/30 uppercase tracking-wider">Developer & AI Engineer</p>
+                </div>
+              </div>
             </a>
-            
-            <p className="font-['Inter'] text-[10px] uppercase tracking-[0.3em] text-neutral-600 mt-20">© 2024 Pixel Forge Neural Systems</p>
-        </FadeInSection>
 
-      </div>
+            <p className="text-[10px] uppercase tracking-[0.3em] text-white/15 mt-16">© 2024 Pixel Forge Neural Systems</p>
+          </FadeUp>
+        </div>
+      </section>
     </div>
   );
 };

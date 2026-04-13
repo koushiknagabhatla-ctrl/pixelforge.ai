@@ -1,101 +1,91 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
-import { HiOutlineUser, HiOutlineLogout } from 'react-icons/hi';
+import { HiOutlineLogout } from 'react-icons/hi';
 import { FcGoogle } from 'react-icons/fc';
 import useAuthStore from '../store/useAuthStore';
 
 const Navbar = () => {
   const { user, signOut } = useAuthStore();
   const [showIdentity, setShowIdentity] = useState(false);
+  const location = useLocation();
+
+  const navLinks = [
+    { to: '/about', label: 'About' },
+    { to: '/tools?mode=generate', label: 'Generator' },
+  ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 h-20 bg-black/40 backdrop-blur-3xl border-b border-white/[0.04] z-[100] px-4 sm:px-12 flex items-center justify-between selection:bg-white/10">
+    <nav className="fixed top-0 left-0 right-0 h-16 bg-[#0a0a0f]/80 backdrop-blur-2xl border-b border-white/[0.04] z-[100] px-5 sm:px-10 flex items-center justify-between">
       
-      <Link to="/" onClick={() => window.scrollTo(0, 0)} className="flex items-center gap-3 sm:gap-4 group cursor-pointer">
-        <div className="w-9 h-9 sm:w-10 sm:h-10 glass flex items-center justify-center border-white/5 group-hover:bg-white group-hover:bg-opacity-5 transition-all duration-700 shadow-2xl shrink-0 p-1">
-          <img src="/assets/logo.png" alt="Logo" className="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
+      {/* Logo */}
+      <Link to="/" onClick={() => window.scrollTo(0, 0)} className="flex items-center gap-3 group">
+        <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center group-hover:bg-indigo-500/20 transition-all">
+          <div className="w-3 h-3 rounded-sm bg-indigo-400" />
         </div>
-        <div className="glass-text-inner !px-3 sm:!px-4 !py-1 hidden xs:block">
-          <h1 className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.4em] sm:tracking-[0.5em] text-white whitespace-nowrap">Pixel Forge AI</h1>
-        </div>
+        <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/80 hidden sm:block font-['Manrope']">Pixel Forge</span>
       </Link>
 
-      <div className="flex items-center gap-4 sm:gap-10">
-        <Link 
-          to="/about" 
-          onClick={() => window.scrollTo(0, 0)}
-          className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-400 hover:text-white transition-all hidden md:block"
-        >
-          About
-        </Link>
-        <Link 
-          to="/gallery" 
-          className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-400 hover:text-white transition-all hidden md:block"
-        >
-          Gallery
-        </Link>
-        <Link 
-          to="/docs" 
-          className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-400 hover:text-white transition-all hidden md:block"
-        >
-          Documentation
-        </Link>
+      {/* Nav & Auth */}
+      <div className="flex items-center gap-6 sm:gap-8">
+        {navLinks.map(link => (
+          <Link 
+            key={link.to}
+            to={link.to}
+            onClick={() => window.scrollTo(0, 0)}
+            className={`text-[10px] font-semibold uppercase tracking-[0.25em] transition-colors hidden md:block ${
+              location.pathname === link.to ? 'text-indigo-300' : 'text-white/30 hover:text-white/60'
+            }`}
+          >
+            {link.label}
+          </Link>
+        ))}
         
         {user ? (
           <div className="relative">
             <button 
-                onClick={() => setShowIdentity(!showIdentity)}
-                className="flex items-center gap-3 sm:gap-4 glass !pr-3 sm:!pr-4 !pl-1.5 py-1.5 border-white/10 hover:bg-white/5 transition-all group"
+              onClick={() => setShowIdentity(!showIdentity)}
+              className="flex items-center gap-3 px-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06] transition-all group"
             >
-                <div className="relative">
-                   <div className="w-7 h-7 rounded-full glass-strong flex items-center justify-center border border-white/10 relative z-10 shadow-inner group-hover:scale-110 transition-transform">
-                       <FcGoogle className="w-4 h-4" />
-                   </div>
-                   <div className="absolute inset-0 bg-white blur-md opacity-40 rounded-full scale-125 group-hover:opacity-100 transition-opacity" />
+              <div className="relative">
+                <div className="w-6 h-6 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
+                  <FcGoogle className="w-3.5 h-3.5" />
                 </div>
-                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-white hidden sm:block truncate max-w-[100px]">
-                  {user.email?.split('@')[0]}
-                </span>
+              </div>
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-white/60 hidden sm:block truncate max-w-[80px]">
+                {user.email?.split('@')[0]}
+              </span>
             </button>
 
             <AnimatePresence>
-                {showIdentity && (
-                   <motion.div 
-                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                     className="absolute right-0 mt-4 w-60 sm:w-64 glass-strong p-4 border-white/10 shadow-4xl"
-                   >
-                       <div className="mb-4 pb-4 border-b border-white/5">
-                           <p className="text-[7px] font-bold text-gray-800 uppercase tracking-widest mb-1">Identity Protocol</p>
-                           <p className="text-[10px] font-black text-white truncate">{user.email}</p>
-                       </div>
-                       <button 
-                          onClick={() => {
-                              if(window.confirm('Terminate Neural Sync?')) signOut();
-                              setShowIdentity(false);
-                          }}
-                          className="w-full h-12 glass flex items-center justify-center gap-3 hover:bg-white hover:text-black transition-all group"
-                       >
-                           <HiOutlineLogout className="w-5 h-5 opacity-40 group-hover:opacity-100" />
-                           <span className="text-[9px] font-black uppercase tracking-widest">Sign Out</span>
-                       </button>
-                   </motion.div>
-                )}
+              {showIdentity && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                  className="absolute right-0 mt-3 w-56 bg-[#14141f]/95 backdrop-blur-2xl rounded-xl border border-white/[0.06] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+                >
+                  <div className="mb-3 pb-3 border-b border-white/[0.05] px-2">
+                    <p className="text-[9px] text-white/20 uppercase tracking-widest mb-1">Signed in as</p>
+                    <p className="text-xs font-medium text-white/70 truncate">{user.email}</p>
+                  </div>
+                  <button 
+                    onClick={() => { if(window.confirm('Sign out?')) signOut(); setShowIdentity(false); }}
+                    className="w-full px-3 py-2.5 rounded-lg flex items-center gap-3 hover:bg-white/[0.05] transition-colors text-white/40 hover:text-white/70"
+                  >
+                    <HiOutlineLogout className="w-4 h-4" />
+                    <span className="text-[10px] font-semibold uppercase tracking-wider">Sign Out</span>
+                  </button>
+                </motion.div>
+              )}
             </AnimatePresence>
           </div>
         ) : (
           <Link to="/login">
-            <button className="flex items-center gap-3 sm:gap-4 glass !px-4 sm:!px-6 py-2 sm:py-2.5 border-white/10 hover:bg-white/5 transition-all group relative overflow-hidden">
-                <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-5 transition-opacity" />
-                <div className="relative flex items-center gap-2 sm:gap-3">
-                   <div className="relative">
-                      <FcGoogle className="w-3.5 h-3.5 sm:w-4 sm:h-4 relative z-10" />
-                      <div className="absolute inset-0 bg-white blur-md opacity-40 rounded-full scale-150" />
-                   </div>
-                   <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white">Sign In</span>
-                </div>
+            <button className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 hover:bg-indigo-500/20 transition-all group">
+              <FcGoogle className="w-3.5 h-3.5" />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-indigo-200/70 group-hover:text-indigo-200">Sign In</span>
             </button>
           </Link>
         )}
