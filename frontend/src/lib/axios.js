@@ -18,7 +18,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     const errorDetail = error.response?.data?.detail || error.response?.data?.error || error.message;
-    console.error('Archon API Failure:', errorDetail);
+    console.error('Pixel Forge API Failure:', errorDetail);
     
     // If we catch a 500 in production, we log the specific bridge failure
     if (error.response?.status === 500) {

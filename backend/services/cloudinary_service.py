@@ -25,10 +25,7 @@ class CloudinaryService:
                 folder="pixelforge",
                 public_id=filename.rsplit(".", 1)[0],
                 resource_type="image",
-                overwrite=True,
-                transformation=[
-                    {"quality": "auto", "fetch_format": "auto"}
-                ],
+                overwrite=True
             )
             return {
                 "image_url": result["secure_url"],
@@ -46,10 +43,7 @@ class CloudinaryService:
                 url,
                 folder="pixelforge/enhanced",
                 resource_type="image",
-                overwrite=True,
-                transformation=[
-                    {"quality": "auto", "fetch_format": "auto"}
-                ],
+                overwrite=True
             )
             return {
                 "image_url": result["secure_url"],
