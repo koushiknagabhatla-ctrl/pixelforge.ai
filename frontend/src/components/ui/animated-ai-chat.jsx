@@ -1,16 +1,6 @@
-import { useEffect, useRef, useCallback, useTransition, useState } from "react"
+import { useEffect, useRef, useCallback, useState } from "react"
 import { cn } from "../../lib/utils"
-import {
-  ImageIcon,
-  Figma,
-  MonitorIcon,
-  Paperclip,
-  SendIcon,
-  XIcon,
-  LoaderIcon,
-  Sparkles,
-  Command,
-} from "lucide-react"
+import { SendIcon, LoaderIcon } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { prompt_deepseek } from "../../services/api"
 import useAuthStore from "../../store/useAuthStore"
@@ -18,40 +8,21 @@ import useAuthStore from "../../store/useAuthStore"
 /* ═══ Auto-resize textarea hook ═══ */
 function useAutoResizeTextarea({ minHeight, maxHeight }) {
   const textareaRef = useRef(null)
-
   const adjustHeight = useCallback(
     (reset) => {
       const textarea = textareaRef.current
       if (!textarea) return
-
-      if (reset) {
-        textarea.style.height = `${minHeight}px`
-        return
-      }
-
+      if (reset) { textarea.style.height = `${minHeight}px`; return }
       textarea.style.height = `${minHeight}px`
-      const newHeight = Math.max(
-        minHeight,
-        Math.min(textarea.scrollHeight, maxHeight ?? Infinity)
-      )
+      const newHeight = Math.max(minHeight, Math.min(textarea.scrollHeight, maxHeight ?? Infinity))
       textarea.style.height = `${newHeight}px`
     },
     [minHeight, maxHeight]
   )
-
   useEffect(() => {
     const textarea = textareaRef.current
-    if (textarea) {
-      textarea.style.height = `${minHeight}px`
-    }
+    if (textarea) textarea.style.height = `${minHeight}px`
   }, [minHeight])
-
-  useEffect(() => {
-    const handleResize = () => adjustHeight()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [adjustHeight])
-
   return { textareaRef, adjustHeight }
 }
 
@@ -59,136 +30,32 @@ function useAutoResizeTextarea({ minHeight, maxHeight }) {
 export function AnimatedAIChat() {
   const { user } = useAuthStore()
   const [value, setValue] = useState("")
-  const [attachments, setAttachments] = useState([])
   const [isTyping, setIsTyping] = useState(false)
-  const [isPending, startTransition] = useTransition()
-  const [activeSuggestion, setActiveSuggestion] = useState(-1)
-  const [showCommandPalette, setShowCommandPalette] = useState(false)
-  const [recentCommand, setRecentCommand] = useState(null)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const { textareaRef, adjustHeight } = useAutoResizeTextarea({
-    minHeight: 60,
-    maxHeight: 200,
-  })
-  const [inputFocused, setInputFocused] = useState(false)
-  const commandPaletteRef = useRef(null)
+  const { textareaRef, adjustHeight } = useAutoResizeTextarea({ minHeight: 56, maxHeight: 200 })
+  const scrollRef = useRef(null)
 
-  // Chat messages state wired to real API
   const [messages, setMessages] = useState([
     {
       role: "assistant",
       content: user
-        ? `Hey ${user.email?.split("@")[0]}! How can I help you today?`
+        ? `Hey ${user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split("@")[0]}! How can I help you today?`
         : "Hey! How can I help you today?",
     },
   ])
-  const scrollRef = useRef(null)
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
   }, [messages, isTyping])
 
-  const commandSuggestions = [
-    {
-      icon: <ImageIcon className="w-4 h-4" />,
-      label: "Clone UI",
-      description: "Generate a UI from a screenshot",
-      prefix: "/clone",
-    },
-    {
-      icon: <Figma className="w-4 h-4" />,
-      label: "Import Figma",
-      description: "Import a design from Figma",
-      prefix: "/figma",
-    },
-    {
-      icon: <MonitorIcon className="w-4 h-4" />,
-      label: "Create Page",
-      description: "Generate a new web page",
-      prefix: "/page",
-    },
-    {
-      icon: <Sparkles className="w-4 h-4" />,
-      label: "Improve",
-      description: "Improve existing UI design",
-      prefix: "/improve",
-    },
-  ]
-
-  useEffect(() => {
-    if (value.startsWith("/") && !value.includes(" ")) {
-      setShowCommandPalette(true)
-      const matchIdx = commandSuggestions.findIndex((cmd) =>
-        cmd.prefix.startsWith(value)
-      )
-      setActiveSuggestion(matchIdx >= 0 ? matchIdx : -1)
-    } else {
-      setShowCommandPalette(false)
-    }
-  }, [value])
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
-    }
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [])
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      const target = event.target
-      const commandButton = document.querySelector("[data-command-button]")
-      if (
-        commandPaletteRef.current &&
-        !commandPaletteRef.current.contains(target) &&
-        !commandButton?.contains(target)
-      ) {
-        setShowCommandPalette(false)
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
-
   const handleKeyDown = (e) => {
-    if (showCommandPalette) {
-      if (e.key === "ArrowDown") {
-        e.preventDefault()
-        setActiveSuggestion((prev) =>
-          prev < commandSuggestions.length - 1 ? prev + 1 : 0
-        )
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault()
-        setActiveSuggestion((prev) =>
-          prev > 0 ? prev - 1 : commandSuggestions.length - 1
-        )
-      } else if (e.key === "Tab" || e.key === "Enter") {
-        e.preventDefault()
-        if (activeSuggestion >= 0) {
-          const selectedCommand = commandSuggestions[activeSuggestion]
-          setValue(selectedCommand.prefix + " ")
-          setShowCommandPalette(false)
-          setRecentCommand(selectedCommand.label)
-          setTimeout(() => setRecentCommand(null), 3500)
-        }
-      } else if (e.key === "Escape") {
-        e.preventDefault()
-        setShowCommandPalette(false)
-      }
-    } else if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault()
-      if (value.trim()) {
-        handleSendMessage()
-      }
+      if (value.trim()) handleSendMessage()
     }
   }
 
   const handleSendMessage = async () => {
     if (!value.trim() || isTyping) return
-
     const userMessage = value.trim()
     setMessages((prev) => [...prev, { role: "user", content: userMessage }])
     setValue("")
@@ -197,261 +64,136 @@ export function AnimatedAIChat() {
 
     try {
       const response = await prompt_deepseek(userMessage)
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: response },
-      ])
+      setMessages((prev) => [...prev, { role: "assistant", content: response }])
     } catch (error) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: "Synchronization failure. Core unavailable.",
-        },
-      ])
+      setMessages((prev) => [...prev, { role: "assistant", content: "Synchronization failure. Core unavailable." }])
     } finally {
       setIsTyping(false)
     }
   }
 
-  const handleAttachFile = () => {
-    const mockFileName = `file-${Math.floor(Math.random() * 1000)}.pdf`
-    setAttachments((prev) => [...prev, mockFileName])
-  }
-
-  const removeAttachment = (index) => {
-    setAttachments((prev) => prev.filter((_, i) => i !== index))
-  }
-
-  const selectCommandSuggestion = (index) => {
-    const selectedCommand = commandSuggestions[index]
-    setValue(selectedCommand.prefix + " ")
-    setShowCommandPalette(false)
-    setRecentCommand(selectedCommand.label)
-    setTimeout(() => setRecentCommand(null), 2000)
-  }
-
   return (
-    <div className="min-h-screen flex flex-col w-full items-center justify-center bg-transparent text-white p-6 relative overflow-hidden">
-      {/* Ambient glow blobs */}
+    <div className="min-h-[calc(100vh-80px)] flex flex-col w-full items-center justify-center text-white p-4 sm:p-6 relative overflow-hidden">
+      {/* Ambient glow */}
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full mix-blend-normal filter blur-[128px] animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full mix-blend-normal filter blur-[128px] animate-pulse delay-700" />
-        <div className="absolute top-1/4 right-1/3 w-64 h-64 bg-fuchsia-500/10 rounded-full mix-blend-normal filter blur-[96px] animate-pulse delay-1000" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/5 rounded-full mix-blend-normal filter blur-[128px] animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full mix-blend-normal filter blur-[128px] animate-pulse" style={{ animationDelay: '700ms' }} />
       </div>
 
       <div className="w-full max-w-2xl mx-auto relative">
         <motion.div
-          className="relative z-10 space-y-8"
+          className="relative z-10 space-y-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           {/* Header */}
-          <div className="text-center space-y-3">
-            <motion.div
+          <div className="text-center space-y-2">
+            <motion.h1
+              className="text-2xl sm:text-3xl font-semibold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white/90 to-white/40 pb-1 font-['Manrope']"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="inline-block"
+              transition={{ delay: 0.2 }}
             >
-              <h1 className="text-3xl font-medium tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white/90 to-white/40 pb-1">
-                How can I help today?
-              </h1>
-              <motion.div
-                className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                initial={{ width: 0, opacity: 0 }}
-                animate={{ width: "100%", opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-              />
-            </motion.div>
-            <motion.p
-              className="text-sm text-white/40"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              Type a command or ask a question
-            </motion.p>
+              Forge AI
+            </motion.h1>
+            <motion.div
+              className="h-px bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent mx-auto"
+              initial={{ width: 0 }}
+              animate={{ width: "50%" }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            />
           </div>
 
           {/* Messages area */}
-          {messages.length > 1 && (
-            <div
-              ref={scrollRef}
-              className="max-h-[40vh] overflow-y-auto space-y-4 px-2 scrollbar-hide"
-            >
-              <AnimatePresence mode="popLayout">
-                {messages.map((msg, i) => (
-                  <motion.div
-                    key={i}
-                    layout
-                    initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className={`flex ${
-                      msg.role === "user" ? "justify-end" : "justify-start"
-                    }`}
-                  >
-                    <div
-                      className={cn(
-                        "max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed",
-                        msg.role === "user"
-                          ? "bg-white/[0.08] text-white/90 border border-white/[0.06]"
-                          : "bg-white/[0.03] text-white/70 border border-white/[0.04]"
-                      )}
-                    >
-                      {msg.content}
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-          )}
-
-          {/* Input area */}
-          <motion.div
-            className="relative backdrop-blur-2xl bg-white/[0.02] rounded-2xl border border-white/[0.05] shadow-2xl"
-            initial={{ scale: 0.98 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.1 }}
+          <div
+            ref={scrollRef}
+            className="max-h-[50vh] overflow-y-auto space-y-4 px-1 scrollbar-hide"
           >
-            {/* Command palette */}
-            <AnimatePresence>
-              {showCommandPalette && (
+            <AnimatePresence mode="popLayout">
+              {messages.map((msg, i) => (
                 <motion.div
-                  ref={commandPaletteRef}
-                  className="absolute left-4 right-4 bottom-full mb-2 backdrop-blur-xl bg-black/90 rounded-lg z-50 shadow-lg border border-white/10 overflow-hidden"
+                  key={i}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                >
+                  <div
+                    className={cn(
+                      "max-w-[85%] px-5 py-3.5 rounded-2xl text-sm leading-relaxed",
+                      msg.role === "user"
+                        ? "bg-indigo-500/10 text-white/90 border border-indigo-500/15"
+                        : "bg-white/[0.03] text-white/70 border border-white/[0.04]"
+                    )}
+                  >
+                    {msg.content}
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+
+            {/* Typing indicator */}
+            <AnimatePresence>
+              {isTyping && (
+                <motion.div
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 5 }}
-                  transition={{ duration: 0.15 }}
+                  exit={{ opacity: 0 }}
+                  className="flex justify-start"
                 >
-                  <div className="py-1 bg-black/95">
-                    {commandSuggestions.map((suggestion, index) => (
-                      <motion.div
-                        key={suggestion.prefix}
-                        className={cn(
-                          "flex items-center gap-2 px-3 py-2 text-xs transition-colors cursor-pointer",
-                          activeSuggestion === index
-                            ? "bg-white/10 text-white"
-                            : "text-white/70 hover:bg-white/5"
-                        )}
-                        onClick={() => selectCommandSuggestion(index)}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: index * 0.03 }}
-                      >
-                        <div className="w-5 h-5 flex items-center justify-center text-white/60">
-                          {suggestion.icon}
-                        </div>
-                        <div className="font-medium">{suggestion.label}</div>
-                        <div className="text-white/40 text-xs ml-1">
-                          {suggestion.prefix}
-                        </div>
-                      </motion.div>
-                    ))}
+                  <div className="bg-white/[0.03] border border-white/[0.04] rounded-2xl px-5 py-3.5 flex items-center gap-2">
+                    <span className="text-xs text-white/40">Thinking</span>
+                    <div className="flex items-center gap-1">
+                      {[0, 1, 2].map((dot) => (
+                        <motion.div
+                          key={dot}
+                          className="w-1.5 h-1.5 bg-indigo-400/60 rounded-full"
+                          animate={{ opacity: [0.3, 1, 0.3], scale: [0.85, 1.1, 0.85] }}
+                          transition={{ duration: 1.2, repeat: Infinity, delay: dot * 0.15 }}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
+          </div>
 
-            <div className="p-4">
+          {/* Input area — clean, no attachments, no quick actions */}
+          <motion.div
+            className="relative backdrop-blur-2xl rounded-2xl border border-white/[0.05] overflow-hidden"
+            style={{
+              background: 'linear-gradient(160deg, rgba(20,20,35,0.6) 0%, rgba(10,10,18,0.7) 100%)',
+              boxShadow: '0 0 6px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.08), inset 3px 3px 0.5px -3px rgba(99,102,241,0.15), inset -3px -3px 0.5px -3px rgba(99,102,241,0.1), 0 0 12px rgba(99,102,241,0.05)',
+            }}
+          >
+            <div className="p-3 sm:p-4">
               <textarea
                 ref={textareaRef}
                 value={value}
-                onChange={(e) => {
-                  setValue(e.target.value)
-                  adjustHeight()
-                }}
+                onChange={(e) => { setValue(e.target.value); adjustHeight() }}
                 onKeyDown={handleKeyDown}
-                onFocus={() => setInputFocused(true)}
-                onBlur={() => setInputFocused(false)}
-                placeholder="Ask Forge a question..."
-                className={cn(
-                  "w-full px-4 py-3",
-                  "resize-none",
-                  "bg-transparent",
-                  "border-none",
-                  "text-white/90 text-sm",
-                  "focus:outline-none",
-                  "placeholder:text-white/20",
-                  "min-h-[60px]"
-                )}
+                placeholder="Ask Forge anything..."
+                className="w-full px-3 py-2 resize-none bg-transparent border-none text-white/90 text-sm focus:outline-none placeholder:text-white/15 min-h-[56px]"
                 style={{ overflow: "hidden" }}
               />
             </div>
 
-            {/* Attachments */}
-            <AnimatePresence>
-              {attachments.length > 0 && (
-                <motion.div
-                  className="px-4 pb-3 flex gap-2 flex-wrap"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                >
-                  {attachments.map((file, index) => (
-                    <motion.div
-                      key={index}
-                      className="flex items-center gap-2 text-xs bg-white/[0.03] py-1.5 px-3 rounded-lg text-white/70"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                    >
-                      <span>{file}</span>
-                      <button
-                        onClick={() => removeAttachment(index)}
-                        className="text-white/40 hover:text-white transition-colors"
-                      >
-                        <XIcon className="w-3 h-3" />
-                      </button>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Actions bar */}
-            <div className="p-4 border-t border-white/[0.05] flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <motion.button
-                  type="button"
-                  onClick={handleAttachFile}
-                  whileTap={{ scale: 0.94 }}
-                  className="p-2 text-white/40 hover:text-white/90 rounded-lg transition-colors relative group"
-                >
-                  <Paperclip className="w-4 h-4" />
-                </motion.button>
-                <motion.button
-                  type="button"
-                  data-command-button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setShowCommandPalette((prev) => !prev)
-                  }}
-                  whileTap={{ scale: 0.94 }}
-                  className={cn(
-                    "p-2 text-white/40 hover:text-white/90 rounded-lg transition-colors relative group",
-                    showCommandPalette && "bg-white/10 text-white/90"
-                  )}
-                >
-                  <Command className="w-4 h-4" />
-                </motion.button>
-              </div>
-
+            {/* Send bar */}
+            <div className="px-3 sm:px-4 pb-3 sm:pb-4 flex items-center justify-end">
               <motion.button
                 type="button"
                 onClick={handleSendMessage}
-                whileHover={{ scale: 1.01 }}
+                whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 disabled={isTyping || !value.trim()}
                 className={cn(
-                  "px-4 py-2 rounded-lg text-sm font-medium transition-all",
-                  "flex items-center gap-2",
+                  "px-5 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2",
                   value.trim()
-                    ? "bg-white text-[#0A0A0B] shadow-lg shadow-white/10"
-                    : "bg-white/[0.05] text-white/40"
+                    ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-400"
+                    : "bg-white/[0.04] text-white/20"
                 )}
               >
                 {isTyping ? (
@@ -463,93 +205,8 @@ export function AnimatedAIChat() {
               </motion.button>
             </div>
           </motion.div>
-
-          {/* Quick actions */}
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            {commandSuggestions.map((suggestion, index) => (
-              <motion.button
-                key={suggestion.prefix}
-                onClick={() => selectCommandSuggestion(index)}
-                className="flex items-center gap-2 px-3 py-2 bg-white/[0.02] hover:bg-white/[0.05] rounded-lg text-sm text-white/60 hover:text-white/90 transition-all relative group border border-white/[0.05]"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                {suggestion.icon}
-                <span>{suggestion.label}</span>
-              </motion.button>
-            ))}
-          </div>
         </motion.div>
       </div>
-
-      {/* Thinking indicator */}
-      <AnimatePresence>
-        {isTyping && (
-          <motion.div
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 backdrop-blur-2xl bg-white/[0.02] rounded-full px-4 py-2 shadow-lg border border-white/[0.05]"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-7 rounded-full bg-white/[0.05] flex items-center justify-center text-center">
-                <span className="text-xs font-medium text-white/90 mb-0.5">
-                  PF
-                </span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-white/70">
-                <span>Thinking</span>
-                <TypingDots />
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Mouse-follow glow */}
-      {inputFocused && (
-        <motion.div
-          className="fixed w-[50rem] h-[50rem] rounded-full pointer-events-none z-0 opacity-[0.02] bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 blur-[96px]"
-          animate={{
-            x: mousePosition.x - 400,
-            y: mousePosition.y - 400,
-          }}
-          transition={{
-            type: "spring",
-            damping: 25,
-            stiffness: 150,
-            mass: 0.5,
-          }}
-        />
-      )}
-    </div>
-  )
-}
-
-function TypingDots() {
-  return (
-    <div className="flex items-center ml-1">
-      {[1, 2, 3].map((dot) => (
-        <motion.div
-          key={dot}
-          className="w-1.5 h-1.5 bg-white/90 rounded-full mx-0.5"
-          initial={{ opacity: 0.3 }}
-          animate={{
-            opacity: [0.3, 0.9, 0.3],
-            scale: [0.85, 1.1, 0.85],
-          }}
-          transition={{
-            duration: 1.2,
-            repeat: Infinity,
-            delay: dot * 0.15,
-            ease: "easeInOut",
-          }}
-          style={{
-            boxShadow: "0 0 4px rgba(255, 255, 255, 0.3)",
-          }}
-        />
-      ))}
     </div>
   )
 }

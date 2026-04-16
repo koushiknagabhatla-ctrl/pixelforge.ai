@@ -36,6 +36,10 @@ export default {
           DEFAULT: "rgba(15, 15, 25, 0.6)",
           foreground: "#ffffff",
         },
+        popover: {
+          DEFAULT: "rgba(20, 20, 31, 0.95)",
+          foreground: "#ffffff",
+        },
       },
       borderRadius: {
         xl: "1rem",

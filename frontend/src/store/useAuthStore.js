@@ -64,7 +64,6 @@ const useAuthStore = create((set, get) => ({
   },
 
   signInWithGoogle: async () => {
-    // Set loading to true while we prepare OAuth
     set({ loading: true })
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -74,6 +73,20 @@ const useAuthStore = create((set, get) => ({
           prompt: 'select_account',
           access_type: 'offline',
         },
+      },
+    })
+    if (error) {
+      set({ loading: false })
+      throw error
+    }
+  },
+
+  signInWithGithub: async () => {
+    set({ loading: true })
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        redirectTo: window.location.origin + '/tools',
       },
     })
     if (error) {

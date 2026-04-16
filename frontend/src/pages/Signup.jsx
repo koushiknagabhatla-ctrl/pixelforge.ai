@@ -1,167 +1,105 @@
-import { useState, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { FcGoogle } from 'react-icons/fc'
-import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUser } from 'react-icons/hi'
-import useAuthStore from '../store/useAuthStore'
-import toast from 'react-hot-toast'
-import ParticleBackground from '../components/ParticleBackground'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '../components/ui/button';
+import { Particles } from '../components/ui/particles';
+import { ChevronLeft } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa';
+import useAuthStore from '../store/useAuthStore';
+import toast from 'react-hot-toast';
+
+const GoogleIcon = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M12.479,14.265v-3.279h11.049c0.108,0.571,0.164,1.247,0.164,1.979c0,2.46-0.672,5.502-2.84,7.669C18.744,22.829,16.051,24,12.483,24C5.869,24,0.308,18.613,0.308,12S5.869,0,12.483,0c3.659,0,6.265,1.436,8.223,3.307L18.392,5.62c-1.404-1.317-3.307-2.341-5.913-2.341C7.65,3.279,3.873,7.171,3.873,12s3.777,8.721,8.606,8.721c3.132,0,4.916-1.258,6.059-2.401c0.927-0.927,1.537-2.251,1.777-4.059L12.479,14.265z" />
+  </svg>
+);
 
 export default function Signup() {
-  const [formData, setFormData] = useState({ fullName: '', email: '', password: '' })
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false)
-  const { signUpWithEmail, signInWithGoogle, loading } = useAuthStore()
-  const navigate = useNavigate()
-  
-  const mouseRef = useRef({ x: 0.5, y: 0.5 })
-  const handleMouseMove = (e) => {
-      mouseRef.current.x = e.clientX / window.innerWidth;
-      mouseRef.current.y = e.clientY / window.innerHeight;
-  };
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
-
-  const handleEmailSignup = async (e) => {
-    e.preventDefault()
-    try {
-      await signUpWithEmail(formData.email, formData.password, formData.fullName)
-      toast.success('Registration Complete. Please verify your email.')
-      navigate('/login')
-    } catch (error) {
-      toast.error(error.message)
-    }
-  }
+  const { signInWithGoogle, signInWithGithub, loading } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleGoogleSignup = async () => {
     try {
-      await signInWithGoogle()
-      toast.success('Google Registration Complete.')
-      navigate('/chatbot')
+      await signInWithGoogle();
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
-  }
+  };
+
+  const handleGithubSignup = async () => {
+    try {
+      await signInWithGithub();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
-    <div onMouseMove={handleMouseMove} className="min-h-screen bg-transparent flex items-center justify-center p-8 relative overflow-hidden font-sans selection:bg-white/10">
-      <ParticleBackground />
+    <div className="relative md:h-[calc(100vh-80px)] md:overflow-hidden w-full">
+      <Particles
+        color="#818cf8"
+        quantity={80}
+        ease={20}
+        size={0.5}
+        className="absolute inset-0"
+      />
+      <div aria-hidden className="absolute inset-0 isolate -z-10 contain-strict pointer-events-none">
+        <div className="absolute bottom-0 right-0 h-[500px] w-[300px] translate-y-1/2 rotate-45 rounded-full bg-[radial-gradient(68%_69%_at_55%_31%,rgba(99,102,241,0.08)_0,rgba(99,102,241,0.02)_50%,rgba(99,102,241,0.01)_80%)]" />
+        <div className="absolute top-0 left-0 h-[500px] w-[200px] -translate-y-1/2 -rotate-45 rounded-full bg-[radial-gradient(50%_50%_at_50%_50%,rgba(99,102,241,0.05)_0,rgba(99,102,241,0.01)_80%,transparent_100%)]" />
+      </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-lg glass-hyper p-10 sm:p-16 rounded-[4rem] border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,1)] relative z-10 bg-black/50 backdrop-blur-3xl"
-      >
-        <div className="text-center mb-10 sm:mb-14">
-          <div className="w-16 h-16 rounded-2xl glass-premium flex items-center justify-center mx-auto mb-8 border border-white/20 shadow-2xl bg-white/5">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="white" strokeWidth="2.5" strokeLinejoin="round"/>
-                <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2.5" strokeLinejoin="round"/>
-                <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2.5" strokeLinejoin="round"/>
-            </svg>
+      <div className="relative mx-auto flex min-h-[calc(100vh-80px)] max-w-6xl flex-col justify-center px-6">
+        <Button variant="ghost" className="absolute top-4 left-4 text-white/50 hover:text-white hover:bg-white/5" onClick={() => navigate('/')}>
+          <ChevronLeft className="mr-1 w-4 h-4" />
+          Home
+        </Button>
+
+        <div className="mx-auto space-y-6 w-full max-w-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L4 7V17L12 22L20 17V7L12 2Z" stroke="#818cf8" strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M12 8L8 10.5V15.5L12 18L16 15.5V10.5L12 8Z" fill="#6366f1" fillOpacity="0.3" stroke="#818cf8" strokeWidth="1" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <p className="text-lg font-bold text-white font-['Manrope'] tracking-tight">Pixel Forge</p>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-black mb-4 tracking-tighter text-white">Register</h1>
-          <p className="text-[11px] text-gray-500 font-black uppercase tracking-[0.4em]">Initialize V2 Workspace</p>
+
+          <div className="flex flex-col space-y-1.5">
+            <h1 className="text-2xl font-extrabold tracking-tight text-white font-['Manrope']">
+              Create Your Account
+            </h1>
+            <p className="text-white/40 text-sm">
+              Join the neural creative platform.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <button
+              onClick={handleGoogleSignup}
+              disabled={loading}
+              className="w-full h-12 rounded-xl bg-white text-black font-semibold text-sm flex items-center justify-center gap-3 hover:bg-gray-100 transition-all hover:scale-[1.01] active:scale-[0.99] shadow-[0_10px_30px_rgba(255,255,255,0.1)]"
+            >
+              <GoogleIcon className="w-4 h-4" />
+              Continue with Google
+            </button>
+            <button
+              onClick={handleGithubSignup}
+              disabled={loading}
+              className="w-full h-12 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white font-semibold text-sm flex items-center justify-center gap-3 hover:bg-white/[0.1] transition-all hover:scale-[1.01] active:scale-[0.99]"
+            >
+              <FaGithub className="w-4 h-4" />
+              Continue with GitHub
+            </button>
+          </div>
+
+          <p className="text-white/25 text-xs pt-4">
+            By clicking continue, you agree to our{' '}
+            <a href="#" className="hover:text-indigo-300 underline underline-offset-4 text-white/40">Terms of Service</a>
+            {' '}and{' '}
+            <a href="#" className="hover:text-indigo-300 underline underline-offset-4 text-white/40">Privacy Policy</a>.
+          </p>
         </div>
-
-        <button
-          onClick={handleGoogleSignup}
-          className="w-full h-16 py-5 glass border border-white/20 shadow-lg rounded-[1.5rem] flex items-center justify-center gap-6 hover:bg-white/10 transition-all mb-10 group relative overflow-hidden bg-white/5"
-        >
-          <div className="relative">
-            <FcGoogle className="w-6 h-6 relative z-10" />
-            <div className="absolute inset-0 bg-white blur-xl opacity-10 group-hover:opacity-40 transition-opacity rounded-full scale-150" />
-          </div>
-          <span className="text-[12px] font-black uppercase tracking-[0.3em] text-white group-hover:text-gray-200">Register with Google</span>
-        </button>
-
-        <div className="flex items-center gap-8 mb-10">
-          <div className="flex-1 h-px bg-white/10" />
-          <span className="text-[10px] text-gray-600 font-extrabold uppercase tracking-[0.5em]">or</span>
-          <div className="flex-1 h-px bg-white/10" />
-        </div>
-
-        <form onSubmit={handleEmailSignup} className="space-y-6">
-          
-          <div className="space-y-3">
-            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.4em] ml-2">Full Name</label>
-            <div className="relative group">
-              <HiOutlineUser className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-500 group-focus-within:text-white transition-colors" />
-              <input
-                type="text"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                placeholder="Architect Name"
-                required
-                className="w-full h-16 pl-16 pr-6 bg-white/[0.03] border border-white/10 rounded-[1.5rem] text-white text-[15px] focus:outline-none focus:border-white/30 transition-all font-medium placeholder:text-gray-700 shadow-inner"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.4em] ml-2">Email Address</label>
-            <div className="relative group">
-              <HiOutlineMail className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-500 group-focus-within:text-white transition-colors" />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="hello@pixelforge.ai"
-                required
-                className="w-full h-16 pl-16 pr-6 bg-white/[0.03] border border-white/10 rounded-[1.5rem] text-white text-[15px] focus:outline-none focus:border-white/30 transition-all font-medium placeholder:text-gray-700 shadow-inner"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.4em] ml-2">Password</label>
-            <div className="relative">
-              <HiOutlineLockClosed className={`absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 transition-colors z-20 ${isPasswordFocused ? 'text-white' : 'text-gray-500'}`} />
-              
-              <motion.div
-                animate={{ 
-                    boxShadow: isPasswordFocused ? "0 0 30px rgba(255,255,255,0.05)" : "0 0 0px rgba(255,255,255,0)",
-                    scale: isPasswordFocused ? 1.01 : 1
-                }}
-                className="relative"
-              >
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onFocus={() => setIsPasswordFocused(true)}
-                    onBlur={() => setIsPasswordFocused(false)}
-                    onChange={handleChange}
-                    placeholder="••••••••"
-                    required
-                    className="w-full h-16 pl-16 pr-6 bg-white/[0.03] border border-white/10 rounded-[1.5rem] text-white text-[15px] hover:bg-white/[0.05] focus:outline-none focus:border-white/30 transition-all font-medium placeholder:text-gray-700 shadow-inner relative z-10"
-                  />
-              </motion.div>
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full h-16 mt-6 bg-white text-black rounded-[1.5rem] font-black text-[12px] uppercase tracking-[0.4em] hover:bg-gray-300 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)]"
-          >
-            {loading ? (
-              <div className="w-5 h-5 border-2 border-black/10 border-t-black rounded-full animate-spin" />
-            ) : (
-              'Create Account'
-            )}
-          </button>
-        </form>
-
-        <p className="text-center mt-12 text-[11px] text-gray-500 font-extrabold uppercase tracking-[0.3em]">
-          Already have an account? {' '}
-          <Link to="/login" className="text-white hover:text-gray-300 transition-colors border-b-2 border-white/20 pb-1">Sign In</Link>
-        </p>
-      </motion.div>
+      </div>
     </div>
-  )
+  );
 }
