@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../components/ui/button';
+import { motion } from 'framer-motion';
 import { Particles } from '../components/ui/particles';
 import { ChevronLeft } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
@@ -17,92 +17,49 @@ export default function Login() {
   const { signInWithGoogle, signInWithGithub, loading } = useAuthStore();
   const navigate = useNavigate();
 
-  const handleGoogleLogin = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  const handleGithubLogin = async () => {
-    try {
-      await signInWithGithub();
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  const handleGoogle = async () => { try { await signInWithGoogle(); } catch (e) { toast.error(e.message); } };
+  const handleGithub = async () => { try { await signInWithGithub(); } catch (e) { toast.error(e.message); } };
 
   return (
-    <div className="relative md:h-[calc(100vh-80px)] md:overflow-hidden w-full">
-      <Particles
-        color="#6366f1"
-        quantity={80}
-        ease={20}
-        size={0.5}
-        className="absolute inset-0"
-      />
-      {/* Ambient radial gradients */}
-      <div aria-hidden className="absolute inset-0 isolate -z-10 contain-strict pointer-events-none">
-        <div className="absolute top-0 left-0 h-[500px] w-[300px] -translate-y-1/2 -rotate-45 rounded-full bg-[radial-gradient(68%_69%_at_55%_31%,rgba(99,102,241,0.08)_0,rgba(99,102,241,0.02)_50%,rgba(99,102,241,0.01)_80%)]" />
-        <div className="absolute top-0 right-0 h-[500px] w-[200px] -translate-y-1/2 rotate-45 rounded-full bg-[radial-gradient(50%_50%_at_50%_50%,rgba(99,102,241,0.05)_0,rgba(99,102,241,0.01)_80%,transparent_100%)]" />
-      </div>
+    <div className="relative md:h-[calc(100vh-64px)] md:overflow-hidden w-full">
+      <Particles color="#a1a1aa" quantity={60} ease={25} size={0.4} className="absolute inset-0" />
 
-      <div className="relative mx-auto flex min-h-[calc(100vh-80px)] max-w-6xl flex-col justify-center px-6">
-        <Button variant="ghost" className="absolute top-4 left-4 text-white/50 hover:text-white hover:bg-white/5" onClick={() => navigate('/')}>
-          <ChevronLeft className="mr-1 w-4 h-4" />
-          Home
-        </Button>
+      <div className="relative mx-auto flex min-h-[calc(100vh-64px)] max-w-5xl flex-col justify-center px-6">
+        <motion.button whileHover={{ x: -2 }} onClick={() => navigate('/')}
+          className="absolute top-6 left-6 text-white/30 hover:text-white/60 transition-colors flex items-center gap-1 text-sm">
+          <ChevronLeft className="w-4 h-4" /> Home
+        </motion.button>
 
-        <div className="mx-auto space-y-6 w-full max-w-sm">
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L4 7V17L12 22L20 17V7L12 2Z" stroke="#818cf8" strokeWidth="1.5" strokeLinejoin="round"/>
-                <path d="M12 8L8 10.5V15.5L12 18L16 15.5V10.5L12 8Z" fill="#6366f1" fillOpacity="0.3" stroke="#818cf8" strokeWidth="1" strokeLinejoin="round"/>
-              </svg>
+        <motion.div className="mx-auto space-y-6 w-full max-w-sm"
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}>
+          
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center">
+              <div className="w-2.5 h-2.5 rounded-sm bg-white/70" />
             </div>
-            <p className="text-lg font-bold text-white font-['Manrope'] tracking-tight">Pixel Forge</p>
+            <p className="text-base font-semibold text-white/90 font-['Space_Grotesk']">Pixel Forge</p>
           </div>
 
-          {/* Heading */}
-          <div className="flex flex-col space-y-1.5">
-            <h1 className="text-2xl font-extrabold tracking-tight text-white font-['Manrope']">
-              Sign In or Join Now
-            </h1>
-            <p className="text-white/40 text-sm">
-              Access the neural creative platform.
-            </p>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-white font-['Space_Grotesk']">Welcome back</h1>
+            <p className="text-white/30 text-sm mt-1">Sign in to access your creative studio.</p>
           </div>
 
-          {/* Auth Buttons */}
-          <div className="space-y-3">
-            <button
-              onClick={handleGoogleLogin}
-              disabled={loading}
-              className="w-full h-12 rounded-xl bg-white text-black font-semibold text-sm flex items-center justify-center gap-3 hover:bg-gray-100 transition-all hover:scale-[1.01] active:scale-[0.99] shadow-[0_10px_30px_rgba(255,255,255,0.1)]"
-            >
-              <GoogleIcon className="w-4 h-4" />
-              Continue with Google
-            </button>
-            <button
-              onClick={handleGithubLogin}
-              disabled={loading}
-              className="w-full h-12 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white font-semibold text-sm flex items-center justify-center gap-3 hover:bg-white/[0.1] transition-all hover:scale-[1.01] active:scale-[0.99]"
-            >
-              <FaGithub className="w-4 h-4" />
-              Continue with GitHub
-            </button>
+          <div className="space-y-3 pt-2">
+            <motion.button onClick={handleGoogle} disabled={loading} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
+              className="w-full h-12 rounded-xl bg-white text-black font-semibold text-sm flex items-center justify-center gap-3 hover:bg-white/90 transition-all">
+              <GoogleIcon className="w-4 h-4" /> Continue with Google
+            </motion.button>
+            <motion.button onClick={handleGithub} disabled={loading} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
+              className="w-full h-12 rounded-xl bg-white/[0.05] border border-white/[0.08] text-white/70 font-semibold text-sm flex items-center justify-center gap-3 hover:bg-white/[0.08] transition-all">
+              <FaGithub className="w-4 h-4" /> Continue with GitHub
+            </motion.button>
           </div>
 
-          <p className="text-white/25 text-xs pt-4">
-            By clicking continue, you agree to our{' '}
-            <a href="#" className="hover:text-indigo-300 underline underline-offset-4 text-white/40">Terms of Service</a>
-            {' '}and{' '}
-            <a href="#" className="hover:text-indigo-300 underline underline-offset-4 text-white/40">Privacy Policy</a>.
+          <p className="text-white/15 text-xs pt-4 leading-relaxed">
+            By continuing, you agree to our <a href="#" className="text-white/25 underline underline-offset-4">Terms</a> and <a href="#" className="text-white/25 underline underline-offset-4">Privacy Policy</a>.
           </p>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

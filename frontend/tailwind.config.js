@@ -7,38 +7,38 @@ export default {
   theme: {
     extend: {
       colors: {
-        border: "rgba(99, 102, 241, 0.08)",
-        input: "rgba(99, 102, 241, 0.06)",
-        ring: "rgba(99, 102, 241, 0.2)",
-        background: "#0a0a0f",
-        foreground: "#ffffff",
+        border: "rgba(255, 255, 255, 0.06)",
+        input: "rgba(255, 255, 255, 0.04)",
+        ring: "rgba(255, 255, 255, 0.1)",
+        background: "#09090b",
+        foreground: "#fafafa",
         primary: {
-          DEFAULT: "#6366f1",
-          foreground: "#ffffff",
+          DEFAULT: "#fafafa",
+          foreground: "#09090b",
         },
         secondary: {
-          DEFAULT: "rgba(99, 102, 241, 0.05)",
-          foreground: "#ffffff",
+          DEFAULT: "rgba(255, 255, 255, 0.04)",
+          foreground: "#fafafa",
         },
         destructive: {
-          DEFAULT: "#ef4444",
-          foreground: "#ffffff",
+          DEFAULT: "#dc2626",
+          foreground: "#fafafa",
         },
         muted: {
-          DEFAULT: "rgba(99, 102, 241, 0.03)",
-          foreground: "#94a3b8",
+          DEFAULT: "rgba(255, 255, 255, 0.03)",
+          foreground: "#a1a1aa",
         },
         accent: {
-          DEFAULT: "rgba(99, 102, 241, 0.08)",
-          foreground: "#ffffff",
+          DEFAULT: "rgba(255, 255, 255, 0.06)",
+          foreground: "#fafafa",
         },
         card: {
-          DEFAULT: "rgba(15, 15, 25, 0.6)",
-          foreground: "#ffffff",
+          DEFAULT: "rgba(255, 255, 255, 0.02)",
+          foreground: "#fafafa",
         },
         popover: {
-          DEFAULT: "rgba(20, 20, 31, 0.95)",
-          foreground: "#ffffff",
+          DEFAULT: "rgba(15, 15, 17, 0.96)",
+          foreground: "#fafafa",
         },
       },
       borderRadius: {
@@ -47,18 +47,23 @@ export default {
         "3xl": "2rem",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
-        headline: ["Manrope", "sans-serif"],
+        sans: ['"DM Sans"', "sans-serif"],
+        headline: ['"Space Grotesk"', "sans-serif"],
+        mono: ['"JetBrains Mono"', "monospace"],
       },
       animation: {
-        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "fade-in": "fadeIn 0.5s ease-out forwards",
+        "fade-in": "fadeIn 0.6s ease-out forwards",
+        "slide-up": "slideUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards",
         "spin-slow": "spin 20s linear infinite",
         "star-btn": "star-btn calc(var(--duration)*1s) linear infinite",
       },
       keyframes: {
         fadeIn: {
-          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        slideUp: {
+          "0%": { opacity: "0", transform: "translateY(16px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         "star-btn": {

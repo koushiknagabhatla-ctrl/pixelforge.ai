@@ -1,198 +1,121 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { WebGLShader } from '../components/ui/web-gl-shader';
 import { LiquidButton } from '../components/ui/liquid-glass-button';
 import { StarButton } from '../components/ui/star-button';
 import RadialOrbitalTimeline from '../components/ui/radial-orbital-timeline';
 import useAuthStore from '../store/useAuthStore';
-import { HiArrowRight } from 'react-icons/hi';
-import { Calendar, Code, FileText, User, Clock, Sparkles, Zap, Shield, Sliders, Cloud, Brain } from 'lucide-react';
+import { ArrowRight, Sparkles, Zap, Shield, Sliders, Cloud, Brain } from 'lucide-react';
+import { useRef } from 'react';
 
-/* ═══════════════════════════════════════════
-   ANIMATION WRAPPERS
-   ═══════════════════════════════════════════ */
+/* ═══ Scroll animation wrappers ═══ */
 const FadeUp = ({ children, className = '', delay = 0, id }) => (
-  <motion.div
-    id={id}
-    initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
-    whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-    viewport={{ once: true, margin: '-60px' }}
-    transition={{ duration: 1, delay, ease: [0.16, 1, 0.3, 1] }}
-    className={className}
-  >
+  <motion.div id={id}
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: '-80px' }}
+    transition={{ duration: 0.8, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
+    className={className}>
     {children}
   </motion.div>
 );
 
 const StaggerCard = ({ children, className = '', i = 0 }) => (
   <motion.div
-    initial={{ opacity: 0, y: 30, scale: 0.97 }}
-    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+    initial={{ opacity: 0, y: 24 }}
+    whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: '-40px' }}
-    transition={{ duration: 0.8, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
-    className={className}
-  >
+    transition={{ duration: 0.6, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+    className={className}>
     {children}
   </motion.div>
 );
 
-/* ═══════════════════════════════════════════
-   TIMELINE DATA for Orbital Timeline
-   ═══════════════════════════════════════════ */
+/* ═══ Timeline data ═══ */
 const timelineData = [
-  {
-    id: 1,
-    title: "AI Generation",
-    date: "Core",
-    content: "Create stunning visuals from text with neural synthesis powered by Stable Diffusion.",
-    category: "Generation",
-    icon: Sparkles,
-    relatedIds: [2],
-    status: "completed",
-    energy: 100,
-  },
-  {
-    id: 2,
-    title: "Enhancement",
-    date: "Core",
-    content: "Upscale and sharpen any image with AI super-resolution neural networks.",
-    category: "Enhancement",
-    icon: Zap,
-    relatedIds: [1, 3],
-    status: "completed",
-    energy: 95,
-  },
-  {
-    id: 3,
-    title: "Neural Chat",
-    date: "Core",
-    content: "Converse with our AI for creative guidance and prompt engineering help.",
-    category: "Chat",
-    icon: Brain,
-    relatedIds: [2, 4],
-    status: "completed",
-    energy: 90,
-  },
-  {
-    id: 4,
-    title: "Privacy",
-    date: "Security",
-    content: "All processing in isolated silos. Your creative work remains completely private.",
-    category: "Security",
-    icon: Shield,
-    relatedIds: [3, 5],
-    status: "completed",
-    energy: 85,
-  },
-  {
-    id: 5,
-    title: "Cloud Sync",
-    date: "Infra",
-    content: "Assets stored in high-availability cloud. Access from any device, anywhere.",
-    category: "Infrastructure",
-    icon: Cloud,
-    relatedIds: [4, 6],
-    status: "in-progress",
-    energy: 70,
-  },
-  {
-    id: 6,
-    title: "Fine Control",
-    date: "Pro",
-    content: "Advanced prompt engineering, negative prompting, and parameter control.",
-    category: "Pro",
-    icon: Sliders,
-    relatedIds: [5],
-    status: "in-progress",
-    energy: 60,
-  },
+  { id: 1, title: "Image Generation", date: "Core", content: "Turn your ideas into visuals. Describe what you're imagining, and watch it come to life in seconds.", category: "Generation", icon: Sparkles, relatedIds: [2], status: "completed", energy: 100 },
+  { id: 2, title: "Smart Enhancement", date: "Core", content: "Take any image and make it sharper, cleaner, and more detailed — without losing the original feel.", category: "Enhancement", icon: Zap, relatedIds: [1, 3], status: "completed", energy: 95 },
+  { id: 3, title: "Creative Assistant", date: "Core", content: "Not sure how to describe what you want? Chat with the assistant — it'll help you get there.", category: "Chat", icon: Brain, relatedIds: [2, 4], status: "completed", energy: 90 },
+  { id: 4, title: "Your Data, Your Rules", date: "Security", content: "We don't use your images to train anything. What you create stays yours, always.", category: "Security", icon: Shield, relatedIds: [3, 5], status: "completed", energy: 85 },
+  { id: 5, title: "Saved to the Cloud", date: "Infra", content: "Every image you create or enhance is saved automatically. Pick up where you left off, on any device.", category: "Infrastructure", icon: Cloud, relatedIds: [4, 6], status: "in-progress", energy: 70 },
+  { id: 6, title: "Dial It In", date: "Pro", content: "For the detail-oriented: tweak prompts, adjust parameters, and control exactly how your images turn out.", category: "Pro", icon: Sliders, relatedIds: [5], status: "in-progress", energy: 60 },
 ];
 
-/* ═══════════════════════════════════════════
-   LANDING PAGE
-   ═══════════════════════════════════════════ */
+/* ═══ LANDING PAGE ═══ */
 const Landing = () => {
   const { user } = useAuthStore();
   const navigate = useNavigate();
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.8], [1, 0.96]);
 
   const capabilities = [
-    { icon: Sparkles, title: 'Neural Synthesis', desc: 'State-of-the-art diffusion models generate images with extraordinary detail from natural language.' },
-    { icon: Zap, title: 'Zero-Latency Engine', desc: 'NVIDIA inference microservices for instantaneous generation. Your vision materializes in seconds.' },
-    { icon: Shield, title: 'Private & Secure', desc: 'All processing in isolated silos. Your creative work and data remain completely private.' },
-    { icon: Sliders, title: 'Precision Control', desc: 'Fine-tune every aspect with advanced prompt engineering and parameter control.' },
-    { icon: Cloud, title: 'Cloud Sync', desc: 'Assets permanently stored in high-availability cloud infrastructure.' },
-    { icon: Brain, title: 'Intelligent Assistant', desc: 'Neural chat understands context and guides you through complex creative workflows.' },
+    { icon: Sparkles, title: 'Text to Image', desc: 'Describe anything in plain language and get a high-quality image back. No design skills needed.' },
+    { icon: Zap, title: 'Fast Processing', desc: 'Images generate in seconds, not minutes. Powered by dedicated GPU infrastructure running 24/7.' },
+    { icon: Shield, title: 'Private by Default', desc: "Your images and prompts are never used for training. We don't sell your data or share it with anyone." },
+    { icon: Sliders, title: 'Full Control', desc: 'Adjust everything from style to composition. Negative prompts, seed control, and aspect ratios included.' },
+    { icon: Cloud, title: 'Auto-Saved', desc: 'Every creation is automatically stored in the cloud. Access your entire history from any browser.' },
+    { icon: Brain, title: 'Built-In Help', desc: "Stuck on a prompt? The AI assistant can suggest improvements, fix issues, and explore new directions with you." },
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white overflow-x-hidden relative w-full">
+    <div className="min-h-screen bg-[#09090b] text-white overflow-x-hidden relative w-full">
       
-      {/* ═══ HERO with WebGL Shader ═══ */}
-      <section className="relative min-h-[100vh] flex flex-col items-center justify-center text-center z-10 overflow-hidden">
-        {/* WebGL Background */}
+      {/* ═══ HERO ═══ */}
+      <motion.section ref={heroRef} style={{ opacity: heroOpacity, scale: heroScale }}
+        className="relative min-h-[100vh] flex flex-col items-center justify-center text-center z-10 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <WebGLShader />
-          {/* Dark overlay for readability */}
           <div className="absolute inset-0 bg-black/40" />
         </div>
 
         <div className="relative z-10 w-full">
-          <div className="relative border border-[#27272a]/50 p-2 w-full mx-auto max-w-3xl">
-            <main className="relative border border-[#27272a]/50 py-10 overflow-hidden backdrop-blur-sm bg-black/20">
-              
+          <div className="relative border border-zinc-800/50 p-2 w-full mx-auto max-w-3xl">
+            <main className="relative border border-zinc-800/50 py-10 overflow-hidden backdrop-blur-sm bg-black/20">
               <motion.div
-                initial={{ opacity: 0, scale: 0.9, filter: 'blur(20px)' }}
-                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
-                className="space-y-6"
-              >
-                <h1 className="mb-3 text-white text-center text-6xl sm:text-7xl font-extrabold tracking-tighter md:text-[clamp(2rem,8vw,7rem)] font-['Manrope']">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-indigo-200/40">PIXEL</span>
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="space-y-6">
+                
+                <h1 className="mb-3 text-center text-6xl sm:text-7xl font-bold tracking-tighter md:text-[clamp(2rem,8vw,7rem)] font-['Space_Grotesk']">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">PIXEL</span>
                   {' '}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-b from-indigo-100 to-indigo-400/30">FORGE</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-b from-white/80 to-white/25">FORGE</span>
                 </h1>
                 
-                <p className="text-white/60 px-6 text-center text-xs md:text-sm lg:text-lg max-w-lg mx-auto">
-                  Next-generation AI image synthesis platform. Create, enhance, and transform visual content with architectural precision.
+                <p className="text-white/45 px-6 text-center text-sm md:text-base max-w-md mx-auto leading-relaxed">
+                  Create and enhance images with AI. Simple tools, professional results, no learning curve.
                 </p>
                 
-                {/* Status indicator */}
                 <div className="flex items-center justify-center gap-1">
-                  <span className="relative flex h-3 w-3 items-center justify-center">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75"></span>
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
+                  <span className="relative flex h-2.5 w-2.5 items-center justify-center">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60"></span>
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
                   </span>
-                  <p className="text-xs text-green-500">Neural Engine Online</p>
+                  <p className="text-[11px] text-emerald-400/80 ml-1">Online</p>
                 </div>
 
-                {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
                   {user ? (
-                    <div className="flex justify-center">
-                      <LiquidButton 
-                        className="text-white border border-white/10 rounded-full" 
-                        size="xl"
-                        onClick={() => navigate('/chatbot')}
-                      >
-                        Enter Forge
-                      </LiquidButton>
-                    </div>
+                    <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                      onClick={() => navigate('/chatbot')}
+                      className="px-8 py-3 bg-white text-black rounded-full text-sm font-semibold hover:bg-white/90 transition-colors flex items-center gap-2">
+                      Open Studio <ArrowRight className="w-4 h-4" />
+                    </motion.button>
                   ) : (
                     <>
-                      <StarButton 
-                        lightColor="#818cf8" 
-                        className="rounded-3xl h-12 px-8 text-base"
+                      <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
                         onClick={() => navigate('/signup')}
-                      >
-                        Get Started
-                      </StarButton>
-                      <LiquidButton 
-                        className="text-white border border-white/10 rounded-full" 
-                        size="lg"
+                        className="px-8 py-3 bg-white text-black rounded-full text-sm font-semibold hover:bg-white/90 transition-colors">
+                        Get Started Free
+                      </motion.button>
+                      <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
                         onClick={() => navigate('/login')}
-                      >
+                        className="px-8 py-3 bg-white/[0.06] border border-white/[0.08] text-white/70 rounded-full text-sm font-medium hover:bg-white/[0.1] transition-colors">
                         Sign In
-                      </LiquidButton>
+                      </motion.button>
                     </>
                   )}
                 </div>
@@ -201,61 +124,61 @@ const Landing = () => {
           </div>
         </div>
 
-        {/* Scroll hint */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 1 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10"
-        >
-          <span className="text-[10px] uppercase tracking-[0.3em] text-white/20">Scroll to explore</span>
-          <div className="w-px h-8 bg-gradient-to-b from-white/20 to-transparent" />
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2, duration: 1 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-white/15">Scroll to explore</span>
+          <motion.div className="w-px h-8 bg-gradient-to-b from-white/15 to-transparent"
+            animate={{ scaleY: [1, 0.5, 1] }} transition={{ duration: 2, repeat: Infinity }} />
         </motion.div>
-      </section>
+      </motion.section>
 
-      {/* ═══ FEATURES — Radial Orbital Timeline ═══ */}
-      <section className="relative z-10 py-12 bg-gradient-to-b from-[#0a0a0f] to-[#0d0d15] border-t border-white/[0.04]">
+      {/* ═══ FEATURES — Orbital Timeline ═══ */}
+      <section className="relative z-10 py-12 bg-gradient-to-b from-[#09090b] to-[#0c0c0e] border-t border-white/[0.04]">
         <FadeUp className="text-center mb-4">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-indigo-300/50 block mb-4">Platform Capabilities</span>
-          <h2 className="font-['Manrope'] font-bold text-3xl md:text-5xl text-white tracking-tight">What Powers The Forge</h2>
-          <p className="text-white/30 text-sm mt-4 max-w-xl mx-auto">Click on any node to explore capabilities. Connected nodes show related features.</p>
+          <span className="text-[11px] font-medium uppercase tracking-[0.3em] text-white/25 block mb-4">What You Can Do</span>
+          <h2 className="font-['Space_Grotesk'] text-3xl md:text-5xl text-white tracking-tight">Explore the Platform</h2>
+          <p className="text-white/25 text-sm mt-4 max-w-lg mx-auto">Click on any node to see how each feature connects.</p>
         </FadeUp>
-
         <RadialOrbitalTimeline timelineData={timelineData} />
       </section>
 
-      {/* ═══ CAPABILITIES GRID ═══ */}
+      {/* ═══ CAPABILITIES ═══ */}
       <section className="relative z-10 py-28 border-t border-white/[0.04]">
-        <div className="max-w-6xl mx-auto px-6">
+        <div className="max-w-5xl mx-auto px-6">
           <FadeUp className="text-center mb-16">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-indigo-300/50 block mb-4">Engineered Capabilities</span>
-            <h2 className="font-['Manrope'] font-bold text-3xl md:text-5xl text-white tracking-tight">Built for Professionals</h2>
+            <span className="text-[11px] font-medium uppercase tracking-[0.3em] text-white/25 block mb-4">Features</span>
+            <h2 className="font-['Space_Grotesk'] text-3xl md:text-5xl text-white tracking-tight">Everything included</h2>
+            <p className="text-white/25 text-sm mt-4 max-w-md mx-auto">No feature gates, no hidden costs. Every tool is available from day one.</p>
           </FadeUp>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {capabilities.map((cap, i) => (
               <StaggerCard key={i} i={i} className="group">
-                <div className="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-7 hover:bg-white/[0.04] hover:border-indigo-500/10 transition-all duration-500">
-                  <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center mb-5 group-hover:bg-indigo-500/20 transition-colors">
-                    <cap.icon className="w-5 h-5 text-indigo-300" />
+                <motion.div
+                  className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-6 hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-400"
+                  whileHover={{ y: -4 }}
+                  transition={{ duration: 0.25 }}>
+                  <div className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center mb-4 group-hover:bg-white/[0.08] transition-colors">
+                    <cap.icon className="w-4 h-4 text-white/50 group-hover:text-white/70 transition-colors" />
                   </div>
-                  <h3 className="font-['Manrope'] text-base font-bold text-white mb-2">{cap.title}</h3>
-                  <p className="text-sm text-white/35 leading-relaxed">{cap.desc}</p>
-                </div>
+                  <h3 className="font-['Space_Grotesk'] text-[15px] font-semibold text-white/90 mb-2">{cap.title}</h3>
+                  <p className="text-[13px] text-white/30 leading-relaxed">{cap.desc}</p>
+                </motion.div>
               </StaggerCard>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══ FOOTER ═══ */}
-      <footer className="relative z-10 py-16 px-6 border-t border-white/[0.04]">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-indigo-400" />
-            <span className="font-['Manrope'] font-bold text-sm text-white/60 tracking-wide">Pixel Forge AI</span>
+      {/* ═══ Footer ═══ */}
+      <footer className="relative z-10 py-12 px-6 border-t border-white/[0.04]">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-sm bg-white/30" />
+            <span className="font-['Space_Grotesk'] font-medium text-sm text-white/40">Pixel Forge</span>
           </div>
-          <p className="text-xs text-white/20 tracking-wider">© 2024 Pixel Forge Neural Systems. All rights reserved.</p>
+          <p className="text-xs text-white/15">© 2024 Pixel Forge. All rights reserved.</p>
         </div>
       </footer>
     </div>
