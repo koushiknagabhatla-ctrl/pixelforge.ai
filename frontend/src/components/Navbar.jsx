@@ -3,17 +3,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { HiOutlineLogout } from 'react-icons/hi';
 import { FcGoogle } from 'react-icons/fc';
+import { Home, Info, Wrench, MessageSquare, BookOpen } from 'lucide-react';
 import useAuthStore from '../store/useAuthStore';
+
+const navItems = [
+  { to: '/', label: 'Home', icon: Home, gradientFrom: '#a955ff', gradientTo: '#ea51ff' },
+  { to: '/about', label: 'About', icon: Info, gradientFrom: '#56CCF2', gradientTo: '#2F80ED' },
+  { to: '/tools?mode=generate', label: 'Tools', icon: Wrench, gradientFrom: '#FF9966', gradientTo: '#FF5E62' },
+  { to: '/chatbot', label: 'Chat', icon: MessageSquare, gradientFrom: '#80FF72', gradientTo: '#7EE8FA', protected: true },
+];
 
 const Navbar = () => {
   const { user, signOut } = useAuthStore();
   const [showIdentity, setShowIdentity] = useState(false);
   const location = useLocation();
-
-  const navLinks = [
-    { to: '/about', label: 'About' },
-    { to: '/tools?mode=generate', label: 'Generator' },
-  ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 h-16 bg-[#0a0a0f]/80 backdrop-blur-2xl border-b border-white/[0.04] z-[100] px-5 sm:px-10 flex items-center justify-between">
@@ -26,21 +29,63 @@ const Navbar = () => {
         <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/80 hidden sm:block font-['Manrope']">Pixel Forge</span>
       </Link>
 
-      {/* Nav & Auth */}
-      <div className="flex items-center gap-6 sm:gap-8">
-        {navLinks.map(link => (
-          <Link 
-            key={link.to}
-            to={link.to}
-            onClick={() => window.scrollTo(0, 0)}
-            className={`text-[10px] font-semibold uppercase tracking-[0.25em] transition-colors hidden md:block ${
-              location.pathname === link.to ? 'text-indigo-300' : 'text-white/30 hover:text-white/60'
-            }`}
-          >
-            {link.label}
-          </Link>
-        ))}
-        
+      {/* Gradient Nav Menu */}
+      <div className="hidden md:flex items-center gap-3">
+        {navItems.map((item) => {
+          // Skip protected routes if not logged in
+          if (item.protected && !user) return null;
+          
+          const isActive = item.to === '/' 
+            ? location.pathname === '/' 
+            : location.pathname.startsWith(item.to.split('?')[0]);
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.to}
+              to={item.to}
+              onClick={() => window.scrollTo(0, 0)}
+              className="gradient-nav-item"
+              style={{
+                '--nav-gradient': `linear-gradient(45deg, ${item.gradientFrom}, ${item.gradientTo})`,
+                '--nav-glow': `${item.gradientFrom}40`,
+                ...(isActive ? {
+                  background: `linear-gradient(45deg, ${item.gradientFrom}, ${item.gradientTo})`,
+                  width: '120px',
+                  borderColor: 'transparent',
+                  boxShadow: `0 0 20px ${item.gradientFrom}40`,
+                } : {}),
+              }}
+            >
+              <span className={`nav-icon ${isActive ? '!scale-0 !opacity-0' : ''}`}>
+                <Icon className="w-4 h-4 text-white/50" />
+              </span>
+              <span className={`nav-label ${isActive ? '!scale-100' : ''}`}>
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Auth */}
+      <div className="flex items-center gap-4">
+        {/* Mobile nav labels */}
+        <div className="flex md:hidden items-center gap-4">
+          {navItems.slice(0, 3).map(link => (
+            <Link 
+              key={link.to}
+              to={link.to}
+              onClick={() => window.scrollTo(0, 0)}
+              className={`text-[10px] font-semibold uppercase tracking-[0.2em] transition-colors ${
+                location.pathname === link.to.split('?')[0] ? 'text-indigo-300' : 'text-white/30 hover:text-white/60'
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
         {user ? (
           <div className="relative">
             <button 
