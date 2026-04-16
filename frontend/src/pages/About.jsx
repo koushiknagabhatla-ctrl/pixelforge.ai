@@ -92,7 +92,7 @@ const About = () => {
           </SlideIn>
 
           <SlideIn direction="right" delay={0.15}>
-            <div className="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-8 space-y-7">
+            <AnimatedBorderCard className="p-8 space-y-7 flex flex-col justify-start">
               <h3 className="font-headline font-semibold text-base text-white/80">What makes this different</h3>
               {[
                 { num: '01', text: "No downloads, no setup. Everything works directly in your browser." },
@@ -106,7 +106,7 @@ const About = () => {
                   <p className="text-white/30 text-sm leading-relaxed">{item.text}</p>
                 </motion.div>
               ))}
-            </div>
+            </AnimatedBorderCard>
           </SlideIn>
         </div>
       </section>
@@ -153,9 +153,8 @@ const About = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {techStack.map((stack, i) => (
-              <ScaleReveal key={i} delay={i * 0.08}>
-                <motion.div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-6 hover:bg-white/[0.035] transition-all duration-400"
-                  whileHover={{ y: -3 }} transition={{ duration: 0.25 }}>
+              <ScaleReveal key={i} delay={i * 0.08} className="h-full">
+                <AnimatedBorderCard className="p-6 h-full flex flex-col justify-start text-left">
                   <h3 className="font-headline font-semibold text-xs text-white/35 uppercase tracking-wider mb-4">{stack.label}</h3>
                   <div className="flex flex-wrap gap-2">
                     {stack.items.map((item, j) => (
@@ -167,7 +166,7 @@ const About = () => {
                       </motion.span>
                     ))}
                   </div>
-                </motion.div>
+                </AnimatedBorderCard>
               </ScaleReveal>
             ))}
           </div>
@@ -180,18 +179,20 @@ const About = () => {
           <ScaleReveal className="flex flex-col items-center text-center">
             <span className="text-[11px] font-medium uppercase tracking-[0.3em] text-white/20 block mb-10">Built by</span>
             <motion.a href="https://github.com/koushiknagabhatla-ctrl" target="_blank" rel="noopener noreferrer"
-              className="bg-white/[0.02] border border-white/[0.05] rounded-2xl px-12 py-10 hover:bg-white/[0.04] hover:border-white/[0.08] transition-all duration-400 group block"
+              className="block group h-full"
               whileHover={{ y: -4, scale: 1.01 }} transition={{ duration: 0.25 }}>
-              <div className="flex flex-col items-center gap-4">
-                <motion.div className="w-14 h-14 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center group-hover:bg-white group-hover:border-white/20 transition-all duration-400"
-                  whileHover={{ rotate: 360 }} transition={{ duration: 0.5 }}>
-                  <FaGithub className="w-7 h-7 text-white/40 group-hover:text-black transition-colors duration-400" />
-                </motion.div>
-                <div>
-                  <h3 className="font-headline text-xl font-semibold text-white mb-1">Koushik Nagabhatla</h3>
-                  <p className="text-xs text-white/25">Developer & Designer</p>
+              <AnimatedBorderCard className="px-12 py-10">
+                <div className="flex flex-col items-center gap-4">
+                  <motion.div className="w-14 h-14 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center group-hover:bg-white group-hover:border-white/20 transition-all duration-400"
+                    whileHover={{ rotate: 360 }} transition={{ duration: 0.5 }}>
+                    <FaGithub className="w-7 h-7 text-white/40 group-hover:text-black transition-colors duration-400" />
+                  </motion.div>
+                  <div className="text-center">
+                    <h3 className="font-headline text-xl font-semibold text-white mb-1">Koushik Nagabhatla</h3>
+                    <p className="text-xs text-white/25">Developer & Designer</p>
+                  </div>
                 </div>
-              </div>
+              </AnimatedBorderCard>
             </motion.a>
 
             <p className="text-[11px] text-white/10 mt-16">© 2024 Pixel Forge</p>

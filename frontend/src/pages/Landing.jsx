@@ -4,6 +4,7 @@ import { WebGLShader } from '../components/ui/web-gl-shader';
 import { LiquidButton } from '../components/ui/liquid-glass-button';
 import { StarButton } from '../components/ui/star-button';
 import RadialOrbitalTimeline from '../components/ui/radial-orbital-timeline';
+import { AnimatedBorderCard } from '../components/ui/animated-border-card';
 import useAuthStore from '../store/useAuthStore';
 import { ArrowRight, Sparkles, Zap, Shield, Sliders, Cloud, Brain } from 'lucide-react';
 import { useRef } from 'react';
@@ -99,18 +100,18 @@ const Landing = () => {
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
                   {user ? (
-                    <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                      onClick={() => navigate('/chatbot')}
-                      className="px-8 py-3 bg-white text-black rounded-full text-sm font-semibold hover:bg-white/90 transition-colors flex items-center gap-2">
-                      Open Studio <ArrowRight className="w-4 h-4" />
-                    </motion.button>
+                    <div onClick={() => navigate('/chatbot')} className="cursor-pointer">
+                      <LiquidButton className="px-8 py-3 rounded-full text-sm font-semibold flex items-center gap-2">
+                        Open Studio <ArrowRight className="w-4 h-4" />
+                      </LiquidButton>
+                    </div>
                   ) : (
                     <>
-                      <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                        onClick={() => navigate('/signup')}
-                        className="px-8 py-3 bg-white text-black rounded-full text-sm font-semibold hover:bg-white/90 transition-colors">
-                        Get Started Free
-                      </motion.button>
+                      <div onClick={() => navigate('/signup')} className="cursor-pointer">
+                        <LiquidButton className="px-8 py-3 rounded-full text-sm font-semibold">
+                          Get Started Free
+                        </LiquidButton>
+                      </div>
                       <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
                         onClick={() => navigate('/login')}
                         className="px-8 py-3 bg-white/[0.06] border border-white/[0.08] text-white/70 rounded-full text-sm font-medium hover:bg-white/[0.1] transition-colors">
@@ -154,17 +155,14 @@ const Landing = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {capabilities.map((cap, i) => (
-              <StaggerCard key={i} i={i} className="group">
-                <motion.div
-                  className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-6 hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-400"
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.25 }}>
+              <StaggerCard key={i} i={i} className="group h-full">
+                <AnimatedBorderCard className="p-6 h-full flex flex-col items-start text-left">
                   <div className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center mb-4 group-hover:bg-white/[0.08] transition-colors">
                     <cap.icon className="w-4 h-4 text-white/50 group-hover:text-white/70 transition-colors" />
                   </div>
                   <h3 className="font-headline text-[15px] font-semibold text-white/90 mb-2">{cap.title}</h3>
                   <p className="text-[13px] text-white/30 leading-relaxed">{cap.desc}</p>
-                </motion.div>
+                </AnimatedBorderCard>
               </StaggerCard>
             ))}
           </div>
