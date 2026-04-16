@@ -61,10 +61,9 @@ async def remove_bg(user_id: str, file: UploadFile = File(...)):
             filename=f"raw_{user_id}_{uuid.uuid4().hex[:6]}.jpg"
         )
         
-        # We save as PNG to preserve transparency
         enh_res = await cloudinary_service.upload_image(
             file_bytes=processed_bytes,
-            filename=f"nobg_{user_id}_{uuid.uuid4().hex[:6]}.png"
+            filename=f"nobg_{user_id}_{uuid.uuid4().hex[:6]}.webp"
         )
         
         # 3. Save History
