@@ -77,4 +77,32 @@ class SegmindService:
                 print(f"SEGMIND ENHANCE FAILURE: {str(e)}")
                 return None
 
+    async def remove_background(self, image_bytes: bytes) -> Optional[bytes]:
+        """
+        Extracts subjects using Segmind's native background removal.
+        """
+        url = f"{self.base_url}/bg-removal"
+        base64_image = base64.b64encode(image_bytes).decode('utf-8')
+        
+        payload = {
+            "image": base64_image
+        }
+        
+        headers = {
+            "x-api-key": self.api_key,
+            "Content-Type": "application/json"
+        }
+
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.post(url, json=payload, headers=headers, timeout=120.0)
+                if response.status_code == 200:
+                    return response.content
+                else:
+                    print(f"SEGMIND BG ERROR [{response.status_code}]: {response.text}")
+                    return None
+            except Exception as e:
+                print(f"SEGMIND BG FAILURE: {str(e)}")
+                return None
+
 segmind_service = SegmindService()
