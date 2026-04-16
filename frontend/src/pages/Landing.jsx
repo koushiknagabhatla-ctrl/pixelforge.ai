@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { WebGLShader } from '../components/ui/web-gl-shader';
-import { LiquidButton } from '../components/ui/liquid-glass-button';
 import { StarButton } from '../components/ui/star-button';
 import RadialOrbitalTimeline from '../components/ui/radial-orbital-timeline';
 import { AnimatedBorderCard } from '../components/ui/animated-border-card';
@@ -80,15 +79,14 @@ const Landing = () => {
                 transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="space-y-6">
                 
-                <h1 className="mb-3 text-center text-6xl sm:text-7xl font-bold tracking-tighter md:text-[clamp(2rem,8vw,7rem)] font-headline">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">PIXEL</span>
-                  {' '}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-b from-white/80 to-white/25">FORGE</span>
+                <h1 className="mb-3 text-center text-6xl sm:text-7xl font-bold tracking-tighter md:text-[clamp(2rem,8vw,7rem)] font-headline flex flex-col sm:flex-row items-center justify-center gap-2">
+                  <motion.span initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.8 }} className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">PIXEL</motion.span>
+                  <motion.span initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="text-transparent bg-clip-text bg-gradient-to-b from-white/80 to-white/25">FORGE</motion.span>
                 </h1>
                 
-                <p className="text-white/45 px-6 text-center text-sm md:text-base max-w-md mx-auto leading-relaxed">
+                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5, duration: 0.8 }} className="text-white/45 px-6 text-center text-sm md:text-base max-w-md mx-auto leading-relaxed">
                   Create and enhance images with AI. Simple tools, professional results, no learning curve.
-                </p>
+                </motion.p>
                 
                 <div className="flex items-center justify-center gap-1">
                   <span className="relative flex h-2.5 w-2.5 items-center justify-center">
@@ -98,20 +96,20 @@ const Landing = () => {
                   <p className="text-[11px] text-emerald-400/80 ml-1">Online</p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7, duration: 0.8 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
                   {user ? (
-                    <div onClick={() => navigate('/chatbot')} className="cursor-pointer">
-                      <LiquidButton className="px-8 py-3 rounded-full text-sm font-semibold flex items-center gap-2">
-                        Open Studio <ArrowRight className="w-4 h-4" />
-                      </LiquidButton>
-                    </div>
+                    <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                      onClick={() => navigate('/chatbot')}
+                      className="px-8 py-3 bg-white text-black rounded-full text-sm font-semibold hover:bg-white/90 transition-colors flex items-center gap-2">
+                      Open Studio <ArrowRight className="w-4 h-4" />
+                    </motion.button>
                   ) : (
                     <>
-                      <div onClick={() => navigate('/signup')} className="cursor-pointer">
-                        <LiquidButton className="px-8 py-3 rounded-full text-sm font-semibold">
-                          Get Started Free
-                        </LiquidButton>
-                      </div>
+                      <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                        onClick={() => navigate('/signup')}
+                        className="px-8 py-3 bg-white text-black rounded-full text-sm font-semibold hover:bg-white/90 transition-colors">
+                        Get Started Free
+                      </motion.button>
                       <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
                         onClick={() => navigate('/login')}
                         className="px-8 py-3 bg-white/[0.06] border border-white/[0.08] text-white/70 rounded-full text-sm font-medium hover:bg-white/[0.1] transition-colors">
@@ -119,7 +117,7 @@ const Landing = () => {
                       </motion.button>
                     </>
                   )}
-                </div>
+                </motion.div>
               </motion.div>
             </main>
           </div>
@@ -173,7 +171,7 @@ const Landing = () => {
       <footer className="relative z-10 py-12 px-6 border-t border-white/[0.04]">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-sm bg-white/30" />
+            <img src="/logo.png" alt="Pixel Forge Logo" className="w-6 h-6 object-contain rounded-md border border-white/10" />
             <span className="font-headline font-medium text-sm text-white/40">Pixel Forge</span>
           </div>
           <p className="text-xs text-white/15">© 2024 Pixel Forge. All rights reserved.</p>

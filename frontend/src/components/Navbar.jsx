@@ -42,9 +42,9 @@ const Navbar = () => {
         <motion.div
           whileHover={{ rotate: 90 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center"
+          className="w-8 h-8 rounded-lg flex items-center justify-center border border-white/10 overflow-hidden"
         >
-          <div className="w-3 h-3 rounded-sm bg-white/80" />
+          <img src="/logo.png" alt="Pixel Forge Logo" className="w-full h-full object-cover" />
         </motion.div>
         <span className="text-sm font-semibold tracking-tight text-white/90 hidden sm:block font-['Space_Grotesk']">Pixel Forge</span>
       </Link>

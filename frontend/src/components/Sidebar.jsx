@@ -49,8 +49,8 @@ export default function Sidebar() {
         {/* Brand */}
         <Link to="/" className="mb-10 px-2 whitespace-nowrap overflow-hidden">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shrink-0">
-              <div className="w-2.5 h-2.5 rounded-sm bg-white/70" />
+            <div className="w-9 h-9 rounded-lg border border-white/10 flex items-center justify-center shrink-0 overflow-hidden">
+              <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
             </div>
             <motion.div animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : -10 }} transition={{ duration: 0.2 }}>
               <h2 className="text-[13px] font-semibold text-white/80 font-headline">Pixel Forge</h2>

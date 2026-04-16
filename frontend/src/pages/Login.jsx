@@ -34,8 +34,8 @@ export default function Login() {
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}>
           
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center">
-              <div className="w-2.5 h-2.5 rounded-sm bg-white/70" />
+            <div className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center overflow-hidden">
+              <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
             </div>
             <p className="text-base font-semibold text-white/90 font-headline">Pixel Forge</p>
           </div>

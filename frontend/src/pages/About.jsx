@@ -3,6 +3,7 @@ import { FaGithub } from 'react-icons/fa';
 import { Sparkles, Zap, MessageSquare } from 'lucide-react';
 import { useRef } from 'react';
 import { AnimatedBorderCard } from '../components/ui/animated-border-card';
+import { WebGLShader } from '../components/ui/web-gl-shader';
 
 /* ═══ Scroll wrappers ═══ */
 const FadeUp = ({ children, delay = 0, className = '' }) => (
@@ -55,8 +56,13 @@ const About = () => {
       <motion.div className="fixed top-16 left-0 right-0 h-px bg-white/20 z-50 origin-left" style={{ scaleX }} />
 
       {/* ═══ HERO ═══ */}
-      <section className="relative z-10 pt-28 pb-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="relative z-10 pt-28 pb-20 px-6 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <WebGLShader />
+          <div className="absolute inset-0 bg-[#010201]/70 backdrop-blur-3xl" />
+        </div>
+
+        <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}>
             <motion.span className="text-[11px] font-medium uppercase tracking-[0.3em] text-white/20 block mb-6"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
