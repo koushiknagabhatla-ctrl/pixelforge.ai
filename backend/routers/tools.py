@@ -1,7 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from backend.services import cloudinary_service, supabase_service
-from backend.services.stability_service import stability_service
-from backend.services.rembg_service import rembg_service
+from backend.services.replicate_service import enhance_image as replicate_enhance
 import uuid
 
 router = APIRouter()
@@ -10,72 +9,86 @@ router = APIRouter()
 @router.post("/enhance/")
 async def enhance(user_id: str, file: UploadFile = File(...)):
     """
-    Enhanced Image Processor using Stability AI.
+    Enhanced Image Processor using Replicate Real-ESRGAN natively.
     """
     try:
         contents = await file.read()
         
-        # 1. Enhance using Stability AI
-        enhanced_bytes = await stability_service.enhance_image(contents)
-        
-        # 2. Upload both to Cloudinary
+        # 1. Cloudinary upload FIRST (Replicate requires a standard URL)
         raw_res = await cloudinary_service.upload_image(
             file_bytes=contents,
             filename=f"raw_{user_id}_{uuid.uuid4().hex[:6]}.jpg"
         )
-        
-        enh_res = await cloudinary_service.upload_image(
-            file_bytes=enhanced_bytes,
-            filename=f"enh_{user_id}_{uuid.uuid4().hex[:6]}.webp"
+        raw_url = raw_res.get("image_url")
+        if not raw_url:
+            raise HTTPException(status_code=500, detail="Cloudinary upload failure.")
+
+        # 2. Enhance using Replicate
+        rep_result = await replicate_enhance(
+            image_url=raw_url,
+            mode="enhance", 
+            scale=2
         )
+        ephemeral_url = rep_result.get("enhanced_url")
+        if not ephemeral_url:
+             raise HTTPException(status_code=500, detail="Replicate upscaler processing failed.")
         
-        # 3. Save History
+        # 3. Permanent Hosting
+        final_res = await cloudinary_service.upload_from_url(url=ephemeral_url)
+        public_url = final_res.get("image_url")
+        
+        # 4. Save History
         await supabase_service.save_enhancement(
             user_id=user_id,
-            original_url=raw_res.get("image_url"),
-            enhanced_url=enh_res.get("image_url"),
+            original_url=raw_url,
+            enhanced_url=public_url,
             mode="enhance",
             scale=1
         )
         
-        return {"url": enh_res.get("image_url")}
+        return {"url": public_url}
     except Exception as e:
-        print(f"Enhance Tool Failure: {e}")
+        print(f"Tool Critical Failure: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/remove-bg")
 @router.post("/remove-bg/")
 async def remove_bg(user_id: str, file: UploadFile = File(...)):
     """
-    Background Remover using RemBG.
+    Background Remover using Replicate (lucataco/remove-bg).
     """
     try:
         contents = await file.read()
         
-        # 1. Process via RemBG API
-        processed_bytes = await rembg_service.remove_background(contents)
-        
-        # 2. Upload original and processed to Cloudinary
+        # 1. Upload original
         raw_res = await cloudinary_service.upload_image(
             file_bytes=contents,
             filename=f"raw_{user_id}_{uuid.uuid4().hex[:6]}.jpg"
         )
+        raw_url = raw_res.get("image_url")
         
-        enh_res = await cloudinary_service.upload_image(
-            file_bytes=processed_bytes,
-            filename=f"nobg_{user_id}_{uuid.uuid4().hex[:6]}.webp"
+        # 2. Process via Replicate
+        rep_result = await replicate_enhance(
+            image_url=raw_url,
+            mode="remove_bg", 
+            scale=1
         )
+        ephemeral_url = rep_result.get("enhanced_url")
         
-        # 3. Save History
+        # 3. Upload to Cloudinary for permanent storage
+        final_res = await cloudinary_service.upload_from_url(url=ephemeral_url)
+        public_url = final_res.get("image_url")
+        
+        # 4. Save History
         await supabase_service.save_enhancement(
             user_id=user_id,
-            original_url=raw_res.get("image_url"),
-            enhanced_url=enh_res.get("image_url"),
+            original_url=raw_url,
+            enhanced_url=public_url,
             mode="remove-bg",
             scale=1
         )
         
-        return {"url": enh_res.get("image_url")}
+        return {"url": public_url}
     except Exception as e:
         print(f"RemBG Tool Failure: {e}")
         raise HTTPException(status_code=500, detail=str(e))
