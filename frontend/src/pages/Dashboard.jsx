@@ -42,7 +42,7 @@ export default function Dashboard() {
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-[10px] font-medium text-white/30">Ready</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-['Space_Grotesk'] tracking-tight text-white">
+          <h2 className="text-4xl sm:text-5xl font-headline tracking-tight text-white">
             {mode === 'generate' ? 'Create an image' : 'Enhance an image'}
           </h2>
           <p className="text-white/25 text-sm mt-2 max-w-md">
@@ -81,7 +81,7 @@ export default function Dashboard() {
                         <Upload className="w-6 h-6 text-white/20" />
                       </div>
                       <div>
-                        <h3 className="text-base font-['Space_Grotesk'] font-semibold text-white/60 mb-1">Upload an image</h3>
+                        <h3 className="text-base font-headline font-semibold text-white/60 mb-1">Upload an image</h3>
                         <p className="text-xs text-white/20">Click or drag to select a file</p>
                       </div>
                     </div>

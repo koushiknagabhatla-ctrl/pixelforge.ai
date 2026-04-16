@@ -59,7 +59,7 @@ export function AnimatedAIChat() {
           
           {/* Header */}
           <div className="text-center space-y-1">
-            <h1 className="text-2xl font-['Space_Grotesk'] tracking-tight text-white/90">Forge AI</h1>
+            <h1 className="text-2xl font-headline tracking-tight text-white/90">Forge AI</h1>
             <p className="text-xs text-white/20">Your creative assistant</p>
           </div>
 

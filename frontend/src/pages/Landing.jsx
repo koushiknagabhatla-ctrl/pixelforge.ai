@@ -79,7 +79,7 @@ const Landing = () => {
                 transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="space-y-6">
                 
-                <h1 className="mb-3 text-center text-6xl sm:text-7xl font-bold tracking-tighter md:text-[clamp(2rem,8vw,7rem)] font-['Space_Grotesk']">
+                <h1 className="mb-3 text-center text-6xl sm:text-7xl font-bold tracking-tighter md:text-[clamp(2rem,8vw,7rem)] font-headline">
                   <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">PIXEL</span>
                   {' '}
                   <span className="text-transparent bg-clip-text bg-gradient-to-b from-white/80 to-white/25">FORGE</span>
@@ -137,7 +137,7 @@ const Landing = () => {
       <section className="relative z-10 py-12 bg-gradient-to-b from-[#09090b] to-[#0c0c0e] border-t border-white/[0.04]">
         <FadeUp className="text-center mb-4">
           <span className="text-[11px] font-medium uppercase tracking-[0.3em] text-white/25 block mb-4">What You Can Do</span>
-          <h2 className="font-['Space_Grotesk'] text-3xl md:text-5xl text-white tracking-tight">Explore the Platform</h2>
+          <h2 className="font-headline text-3xl md:text-5xl text-white tracking-tight">Explore the Platform</h2>
           <p className="text-white/25 text-sm mt-4 max-w-lg mx-auto">Click on any node to see how each feature connects.</p>
         </FadeUp>
         <RadialOrbitalTimeline timelineData={timelineData} />
@@ -148,7 +148,7 @@ const Landing = () => {
         <div className="max-w-5xl mx-auto px-6">
           <FadeUp className="text-center mb-16">
             <span className="text-[11px] font-medium uppercase tracking-[0.3em] text-white/25 block mb-4">Features</span>
-            <h2 className="font-['Space_Grotesk'] text-3xl md:text-5xl text-white tracking-tight">Everything included</h2>
+            <h2 className="font-headline text-3xl md:text-5xl text-white tracking-tight">Everything included</h2>
             <p className="text-white/25 text-sm mt-4 max-w-md mx-auto">No feature gates, no hidden costs. Every tool is available from day one.</p>
           </FadeUp>
 
@@ -162,7 +162,7 @@ const Landing = () => {
                   <div className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center mb-4 group-hover:bg-white/[0.08] transition-colors">
                     <cap.icon className="w-4 h-4 text-white/50 group-hover:text-white/70 transition-colors" />
                   </div>
-                  <h3 className="font-['Space_Grotesk'] text-[15px] font-semibold text-white/90 mb-2">{cap.title}</h3>
+                  <h3 className="font-headline text-[15px] font-semibold text-white/90 mb-2">{cap.title}</h3>
                   <p className="text-[13px] text-white/30 leading-relaxed">{cap.desc}</p>
                 </motion.div>
               </StaggerCard>
@@ -176,7 +176,7 @@ const Landing = () => {
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-sm bg-white/30" />
-            <span className="font-['Space_Grotesk'] font-medium text-sm text-white/40">Pixel Forge</span>
+            <span className="font-headline font-medium text-sm text-white/40">Pixel Forge</span>
           </div>
           <p className="text-xs text-white/15">© 2024 Pixel Forge. All rights reserved.</p>
         </div>

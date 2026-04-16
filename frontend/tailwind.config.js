@@ -7,38 +7,38 @@ export default {
   theme: {
     extend: {
       colors: {
-        border: "rgba(255, 255, 255, 0.06)",
-        input: "rgba(255, 255, 255, 0.04)",
-        ring: "rgba(255, 255, 255, 0.1)",
-        background: "#09090b",
-        foreground: "#fafafa",
+        border: "rgba(255, 255, 255, 0.08)",
+        input: "rgba(255, 255, 255, 0.05)",
+        ring: "rgba(255, 255, 255, 0.2)",
+        background: "#010201",
+        foreground: "#ffffff",
         primary: {
-          DEFAULT: "#fafafa",
-          foreground: "#09090b",
+          DEFAULT: "#ffffff",
+          foreground: "#010201",
         },
         secondary: {
-          DEFAULT: "rgba(255, 255, 255, 0.04)",
-          foreground: "#fafafa",
+          DEFAULT: "rgba(255, 255, 255, 0.05)",
+          foreground: "#ffffff",
         },
         destructive: {
           DEFAULT: "#dc2626",
-          foreground: "#fafafa",
+          foreground: "#ffffff",
         },
         muted: {
           DEFAULT: "rgba(255, 255, 255, 0.03)",
           foreground: "#a1a1aa",
         },
         accent: {
-          DEFAULT: "rgba(255, 255, 255, 0.06)",
-          foreground: "#fafafa",
+          DEFAULT: "rgba(255, 255, 255, 0.08)",
+          foreground: "#ffffff",
         },
         card: {
           DEFAULT: "rgba(255, 255, 255, 0.02)",
-          foreground: "#fafafa",
+          foreground: "#ffffff",
         },
         popover: {
-          DEFAULT: "rgba(15, 15, 17, 0.96)",
-          foreground: "#fafafa",
+          DEFAULT: "rgba(10, 10, 12, 0.96)",
+          foreground: "#ffffff",
         },
       },
       borderRadius: {
@@ -47,14 +47,13 @@ export default {
         "3xl": "2rem",
       },
       fontFamily: {
-        sans: ['"DM Sans"', "sans-serif"],
-        headline: ['"Space Grotesk"', "sans-serif"],
-        mono: ['"JetBrains Mono"', "monospace"],
+        sans: ['"Plus Jakarta Sans"', "sans-serif"],
+        headline: ['"Clash Display"', "sans-serif"],
       },
       animation: {
         "fade-in": "fadeIn 0.6s ease-out forwards",
         "slide-up": "slideUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards",
-        "spin-slow": "spin 20s linear infinite",
+        "spin-slow": "spin 8s linear infinite",
         "star-btn": "star-btn calc(var(--duration)*1s) linear infinite",
       },
       keyframes: {

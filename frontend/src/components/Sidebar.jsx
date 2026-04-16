@@ -29,7 +29,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <div onMouseEnter={() => setIsHovered(true)} className="fixed left-0 top-0 bottom-0 w-[72px] z-[75] hidden lg:block" />
+      <div onMouseEnter={() => setIsHovered(true)} className="fixed left-0 top-0 bottom-0 w-[72px] z-[75] hidden md:block" />
 
       <motion.aside
         onMouseEnter={() => setIsHovered(true)}
@@ -40,7 +40,7 @@ export default function Sidebar() {
           borderRightColor: isHovered ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.02)'
         }}
         transition={{ type: "spring", stiffness: 400, damping: 35 }}
-        className="fixed left-0 top-0 bottom-0 z-[80] border-r hidden lg:flex flex-col p-4 pt-24 overflow-hidden"
+        className="fixed left-0 top-0 bottom-0 z-[80] border-r hidden md:flex flex-col p-4 pt-24 overflow-hidden"
         style={{
           background: isHovered ? 'rgba(9,9,11,0.97)' : 'rgba(9,9,11,0.3)',
           backdropFilter: isHovered ? 'blur(40px)' : 'blur(12px)',
@@ -53,7 +53,7 @@ export default function Sidebar() {
               <div className="w-2.5 h-2.5 rounded-sm bg-white/70" />
             </div>
             <motion.div animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : -10 }} transition={{ duration: 0.2 }}>
-              <h2 className="text-[13px] font-semibold text-white/80 font-['Space_Grotesk']">Pixel Forge</h2>
+              <h2 className="text-[13px] font-semibold text-white/80 font-headline">Pixel Forge</h2>
               <span className="text-[9px] text-white/20">Creative Studio</span>
             </motion.div>
           </div>

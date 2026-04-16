@@ -1,21 +1,28 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, MessageSquare, Sparkles, Clock } from 'lucide-react';
+import { Home, MessageSquare, Sparkles, Zap, Clock } from 'lucide-react';
 
 const navItems = [
   { name: 'Home', path: '/', icon: Home },
+  { name: 'Generate', path: '/tools?mode=generate', icon: Sparkles },
+  { name: 'Enhance', path: '/tools?mode=enhance', icon: Zap },
   { name: 'Chat', path: '/chatbot', icon: MessageSquare },
-  { name: 'Tools', path: '/tools?mode=generate', icon: Sparkles },
   { name: 'History', path: '/history', icon: Clock },
 ];
 
 const MobileNav = () => {
   const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const currentMode = searchParams.get('mode');
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[90] lg:hidden px-4 py-3 flex items-center justify-around bg-[#09090b]/95 backdrop-blur-2xl border-t border-white/[0.04]">
+    <div className="fixed bottom-0 left-0 right-0 z-[90] md:hidden px-2 py-3 flex items-center justify-around bg-[#010201]/95 backdrop-blur-2xl border-t border-white/[0.04]">
       {navItems.map((item) => {
-        const isActive = location.pathname === item.path || (item.path.startsWith('/tools') && location.pathname === '/tools');
+        let isActive = location.pathname === item.path;
+        if (item.path.startsWith('/tools')) {
+          const mode = item.path.split('=')[1];
+          isActive = location.pathname === '/tools' && currentMode === mode;
+        }
         const Icon = item.icon;
 
         return (

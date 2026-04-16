@@ -15,7 +15,7 @@ export default function History() {
       <div className="max-w-6xl mx-auto">
         <motion.div className="mb-14" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <span className="text-[11px] font-medium text-white/20 uppercase tracking-[0.3em] block mb-3">History</span>
-          <h1 className="text-4xl md:text-5xl font-['Space_Grotesk'] tracking-tight text-white">Your creations</h1>
+          <h1 className="text-4xl md:text-5xl font-headline tracking-tight text-white">Your creations</h1>
           <p className="text-white/25 text-sm mt-2">Everything you've generated and enhanced, saved automatically.</p>
         </motion.div>
 

@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { FaGithub } from 'react-icons/fa';
 import { Sparkles, Zap, MessageSquare } from 'lucide-react';
 import { useRef } from 'react';
+import { AnimatedBorderCard } from '../components/ui/animated-border-card';
 
 /* ═══ Scroll wrappers ═══ */
 const FadeUp = ({ children, delay = 0, className = '' }) => (
@@ -48,7 +49,7 @@ const About = () => {
   ];
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-[#09090b] text-white overflow-x-hidden relative">
+    <div ref={containerRef} className="min-h-screen bg-[#010201] text-white overflow-x-hidden relative">
       
       {/* Progress bar */}
       <motion.div className="fixed top-16 left-0 right-0 h-px bg-white/20 z-50 origin-left" style={{ scaleX }} />
@@ -61,7 +62,7 @@ const About = () => {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
               About
             </motion.span>
-            <h1 className="font-['Space_Grotesk'] text-5xl md:text-7xl tracking-tight mb-8">
+            <h1 className="font-headline text-5xl md:text-7xl tracking-tight mb-8">
               <motion.span className="text-white inline-block" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.8 }}>
                 The story behind
               </motion.span><br />
@@ -82,7 +83,7 @@ const About = () => {
         <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           <SlideIn direction="left">
             <span className="text-[11px] font-medium uppercase tracking-[0.3em] text-white/20 block mb-4">Why we built this</span>
-            <h2 className="font-['Space_Grotesk'] text-3xl md:text-4xl text-white tracking-tight mb-6">Good tools shouldn't be complicated</h2>
+            <h2 className="font-headline text-3xl md:text-4xl text-white tracking-tight mb-6">Good tools shouldn't be complicated</h2>
             <div className="space-y-5 text-white/35 text-[15px] leading-[1.8]">
               <p>Most AI image tools feel like they were built for engineers. You need to understand model architectures, configure environments, and wrestle with command-line interfaces just to generate a single image.</p>
               <p>We thought that was backwards. The technology should adapt to the user, not the other way around. So we built Pixel Forge to be the simplest path from "I have an idea" to "here's the finished image."</p>
@@ -92,7 +93,7 @@ const About = () => {
 
           <SlideIn direction="right" delay={0.15}>
             <div className="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-8 space-y-7">
-              <h3 className="font-['Space_Grotesk'] font-semibold text-base text-white/80">What makes this different</h3>
+              <h3 className="font-headline font-semibold text-base text-white/80">What makes this different</h3>
               {[
                 { num: '01', text: "No downloads, no setup. Everything works directly in your browser." },
                 { num: '02', text: "Your images are saved automatically. No more losing work because you forgot to export." },
@@ -101,7 +102,7 @@ const About = () => {
               ].map((item, i) => (
                 <motion.div key={i} className="flex gap-4" initial={{ opacity: 0, x: 16 }} whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }} transition={{ delay: 0.1 * i + 0.2, duration: 0.5 }}>
-                  <span className="text-white/15 font-semibold text-sm font-['Space_Grotesk'] shrink-0">{item.num}</span>
+                  <span className="text-white/15 font-semibold text-sm font-headline shrink-0">{item.num}</span>
                   <p className="text-white/30 text-sm leading-relaxed">{item.text}</p>
                 </motion.div>
               ))}
@@ -115,28 +116,26 @@ const About = () => {
         <div className="max-w-4xl mx-auto">
           <FadeUp className="text-center mb-16">
             <span className="text-[11px] font-medium uppercase tracking-[0.3em] text-white/20 block mb-4">The toolkit</span>
-            <h2 className="font-['Space_Grotesk'] text-3xl md:text-4xl text-white tracking-tight">Three tools, one platform</h2>
+            <h2 className="font-headline text-3xl md:text-4xl text-white tracking-tight">Three tools, one platform</h2>
           </FadeUp>
 
-          <div className="space-y-5">
+          <div className="space-y-6">
             {platformTools.map((tool, i) => (
               <ScaleReveal key={i} delay={i * 0.1}>
-                <ParallaxSection>
-                  <motion.div
-                    className="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-8 group hover:bg-white/[0.035] hover:border-white/[0.08] transition-all duration-500"
-                    whileHover={{ y: -3 }} transition={{ duration: 0.25 }}>
-                    <div className="flex flex-col md:flex-row gap-6 items-start">
+                <ParallaxSection className="h-full">
+                  <AnimatedBorderCard className="p-8">
+                    <div className="flex flex-col md:flex-row gap-6 items-start w-full">
                       <motion.div
                         className="w-11 h-11 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shrink-0 group-hover:bg-white/[0.08] transition-colors"
                         whileHover={{ scale: 1.1, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }}>
-                        <tool.icon className="w-5 h-5 text-white/40 group-hover:text-white/60 transition-colors" />
+                        <tool.icon className="w-5 h-5 text-white/40 group-hover:text-white/80 transition-colors" />
                       </motion.div>
                       <div>
-                        <h3 className="font-['Space_Grotesk'] text-lg font-semibold text-white/90 mb-2 group-hover:text-white transition-colors">{tool.title}</h3>
-                        <p className="text-white/30 text-[15px] leading-[1.8] group-hover:text-white/40 transition-colors">{tool.desc}</p>
+                        <h3 className="font-headline text-lg font-semibold text-white/90 mb-2">{tool.title}</h3>
+                        <p className="text-white/40 text-[15px] leading-[1.8] group-hover:text-white/50 transition-colors">{tool.desc}</p>
                       </div>
                     </div>
-                  </motion.div>
+                  </AnimatedBorderCard>
                 </ParallaxSection>
               </ScaleReveal>
             ))}
@@ -149,7 +148,7 @@ const About = () => {
         <div className="max-w-4xl mx-auto">
           <FadeUp className="text-center mb-16">
             <span className="text-[11px] font-medium uppercase tracking-[0.3em] text-white/20 block mb-4">Under the hood</span>
-            <h2 className="font-['Space_Grotesk'] text-3xl md:text-4xl text-white tracking-tight">Built with modern tools</h2>
+            <h2 className="font-headline text-3xl md:text-4xl text-white tracking-tight">Built with modern tools</h2>
           </FadeUp>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -157,7 +156,7 @@ const About = () => {
               <ScaleReveal key={i} delay={i * 0.08}>
                 <motion.div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-6 hover:bg-white/[0.035] transition-all duration-400"
                   whileHover={{ y: -3 }} transition={{ duration: 0.25 }}>
-                  <h3 className="font-['Space_Grotesk'] font-semibold text-xs text-white/35 uppercase tracking-wider mb-4">{stack.label}</h3>
+                  <h3 className="font-headline font-semibold text-xs text-white/35 uppercase tracking-wider mb-4">{stack.label}</h3>
                   <div className="flex flex-wrap gap-2">
                     {stack.items.map((item, j) => (
                       <motion.span key={j}
@@ -189,7 +188,7 @@ const About = () => {
                   <FaGithub className="w-7 h-7 text-white/40 group-hover:text-black transition-colors duration-400" />
                 </motion.div>
                 <div>
-                  <h3 className="font-['Space_Grotesk'] text-xl font-semibold text-white mb-1">Koushik Nagabhatla</h3>
+                  <h3 className="font-headline text-xl font-semibold text-white mb-1">Koushik Nagabhatla</h3>
                   <p className="text-xs text-white/25">Developer & Designer</p>
                 </div>
               </div>
