@@ -71,8 +71,8 @@ const Landing = () => {
         </div>
 
         <div className="relative z-10 w-full">
-          <div className="relative border border-zinc-800/50 p-2 w-full mx-auto max-w-3xl">
-            <main className="relative border border-zinc-800/50 py-10 overflow-hidden backdrop-blur-sm bg-black/20">
+          <div className="relative w-full mx-auto max-w-3xl">
+            <main className="relative py-10 overflow-hidden z-10 w-full">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
