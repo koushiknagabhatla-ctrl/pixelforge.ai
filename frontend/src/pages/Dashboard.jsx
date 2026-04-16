@@ -43,10 +43,10 @@ export default function Dashboard() {
             <span className="text-[10px] font-medium text-white/30">Ready</span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-headline tracking-tight text-white">
-            {mode === 'generate' ? 'Create an image' : 'Enhance an image'}
+            {mode === 'generate' ? 'Create an image' : mode === 'remove-bg' ? 'Remove Background' : 'Enhance an image'}
           </h2>
           <p className="text-white/25 text-sm mt-2 max-w-md">
-            {mode === 'generate' ? 'Describe what you want to see and the AI will generate it.' : 'Upload an image and the AI will sharpen and upscale it.'}
+            {mode === 'generate' ? 'Describe what you want to see and the AI will generate it.' : mode === 'remove-bg' ? 'Upload an image and the AI will extract the subject instantly.' : 'Upload an image and the AI will sharpen and upscale it.'}
           </p>
         </motion.div>
 
@@ -103,7 +103,7 @@ export default function Dashboard() {
               {isGenerating ? (
                 <><div className="w-4 h-4 border-2 border-white/10 border-t-white/40 rounded-full animate-spin" /> Processing...</>
               ) : (
-                <><Sparkles className="w-4 h-4" /> {mode === 'generate' ? 'Generate' : 'Enhance'}</>
+                <><Sparkles className="w-4 h-4" /> {mode === 'generate' ? 'Generate' : mode === 'remove-bg' ? 'Remove BG' : 'Enhance'}</>
               )}
             </motion.button>
           </motion.div>
@@ -135,11 +135,11 @@ export default function Dashboard() {
                   </button>
                 </div>
                 <div className="relative rounded-xl overflow-hidden bg-black/20 border border-white/[0.04]">
-                  {mode === 'enhance' && previewUrl ? (
-                    <div className="w-full relative aspect-video rounded-xl overflow-hidden">
+                  {(mode === 'enhance' || mode === 'remove-bg') && previewUrl ? (
+                    <div className="w-full relative aspect-video rounded-xl overflow-hidden bg-[url('https://i.postimg.cc/QtxYq9Q7/checkerboard.png')] bg-repeat">
                       <ReactCompareSlider
-                        itemOne={<ReactCompareSliderImage src={previewUrl} alt="Original" className="object-contain w-full h-full" />}
-                        itemTwo={<ReactCompareSliderImage src={resultImage} alt="Enhanced" className="object-contain w-full h-full" />}
+                        itemOne={<ReactCompareSliderImage src={previewUrl} alt="Original" className={`object-contain w-full h-full ${mode === 'remove-bg' ? 'bg-[#010201]' : ''}`} />}
+                        itemTwo={<ReactCompareSliderImage src={resultImage} alt="Result" className="object-contain w-full h-full bg-transparent" />}
                         className="w-full h-full rounded-xl" />
                     </div>
                   ) : (

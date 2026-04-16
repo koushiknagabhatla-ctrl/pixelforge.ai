@@ -1,13 +1,13 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, MessageSquare, Sparkles, Zap, Clock } from 'lucide-react';
+import { Home, MessageSquare, Sparkles, Zap, Clock, Scissors } from 'lucide-react';
 
 const navItems = [
   { name: 'Home', path: '/', icon: Home },
   { name: 'Generate', path: '/tools?mode=generate', icon: Sparkles },
   { name: 'Enhance', path: '/tools?mode=enhance', icon: Zap },
+  { name: 'Rem BG', path: '/tools?mode=remove-bg', icon: Scissors },
   { name: 'Chat', path: '/chatbot', icon: MessageSquare },
-  { name: 'History', path: '/history', icon: Clock },
 ];
 
 const MobileNav = () => {

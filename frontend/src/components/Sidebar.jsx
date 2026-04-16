@@ -1,6 +1,6 @@
 import { NavLink, useLocation, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Home, Sparkles, Zap, MessageSquare, Clock, LogOut, ChevronRight } from 'lucide-react'
+import { Home, Sparkles, Zap, MessageSquare, Clock, LogOut, ChevronRight, Scissors } from 'lucide-react'
 import useAuthStore from '../store/useAuthStore'
 import { useState } from 'react'
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar'
@@ -9,6 +9,7 @@ const navigation = [
   { name: 'Home', path: '/', icon: Home },
   { name: 'Generate', path: '/tools?mode=generate', icon: Sparkles, mode: 'generate' },
   { name: 'Enhance', path: '/tools?mode=enhance', icon: Zap, mode: 'enhance' },
+  { name: 'Remove BG', path: '/tools?mode=remove-bg', icon: Scissors, mode: 'remove-bg' },
   { name: 'Forge AI', path: '/chatbot', icon: MessageSquare },
   { name: 'Archives', path: '/history', icon: Clock },
 ]

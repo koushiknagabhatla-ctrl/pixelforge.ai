@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
-import { Home, Info, Wrench, MessageSquare, LogOut, Sparkles, Zap } from 'lucide-react';
+import { Home, Info, Wrench, MessageSquare, LogOut, Sparkles, Zap, Scissors } from 'lucide-react';
 import useAuthStore from '../store/useAuthStore';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import {
@@ -87,6 +87,7 @@ const Navbar = () => {
             {[
               { label: 'Generate', mode: 'generate', icon: Sparkles },
               { label: 'Enhance', mode: 'enhance', icon: Zap },
+              { label: 'Remove BG', mode: 'remove-bg', icon: Scissors },
             ].map(({ label, mode, icon: MIcon }) => {
               const isActive = new URLSearchParams(location.search).get('mode') === mode;
               return (
